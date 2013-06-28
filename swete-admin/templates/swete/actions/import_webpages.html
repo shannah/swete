@@ -1,0 +1,57 @@
+{**
+ * SWeTE Server: Simple Website Translation Engine
+ * Copyright (C) 2012  Web Lite Translation Corp.
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *}{use_macro file="Dataface_Main_Template.html"}
+
+
+	{fill_slot name="main_section"}
+		{assign var=settingsRec value=$settings->getRecord()}
+		<h2>Refresh <span title="{$settings->getSiteUrl|escape}">{$settings->getSiteUrl()|truncate:60|escape}</span> [{$settingsRec->val('website_id')|escape}]</h2>
+		
+		<div class="formHelp">This form allows you to import and refresh webpages from the source website at <span title="{$settings->getSiteUrl()|escape}">{$settings->getSiteUrl()|truncate:60|escape}</span> into your 
+		proxy sites.</div>
+		
+		<fieldset class="import-webpage-form" data-swete-settings-id="{$settingsRec->val('website_id')|escape}">
+			<legend>Refresh Settings</legend>
+			
+			<table cellpadding="5">
+				<tr>
+					<td align="right" class="tdlabel"><label>Starting Point</label></td>
+					<td>
+						<input class="startingPoint" type="text" value="{$crawlStartingPoint|escape}" size="60"/>
+						<div class="formHelp">Enter the URL of the web page that you would like to start crawling from.</div>
+					</td>
+				</tr>
+				<tr>
+					<td align="right" class="tdlabel"><label>Depth</label></td>
+					<td>
+						<input type="text" class="depth" value="{$crawlDepth|escape}" size="3"/>
+						<div class="formHelp">The depth of the crawl.  E.g. Depth of 1 means only load the starting point. Depth of 2 means load the starting point and all pages linked from it.</div>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2" align="center">
+						<button class="cancel"  onclick="window.history.back(1);">Cancel</button>
+						<button class="submit">Start Refresh Now</button>
+						
+					</td>
+				</tr>
+			
+			</table>
+		
+		</fieldset>
+	{/fill_slot}
+{/use_macro}

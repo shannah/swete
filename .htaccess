@@ -1,0 +1,3 @@
+RewriteEngine On
+RewriteRule ^swete-admin/ - [L,NC]
+RewriteRule . swete-admin/index.php?-action=swete_handle_request [L]

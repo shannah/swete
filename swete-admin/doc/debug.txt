@@ -1,0 +1,8 @@
+QDir::readDirEntries: Cannot read the directory: /Applications/XAMPP/xamppfiles/htdocs/swete-server/roombooker/modules/testrunner
+QDir::readDirEntries: Cannot read the directory: /Applications/XAMPP/xamppfiles/htdocs/swete-server/roombooker/modules/testrunner
+QDir::readDirEntries: Cannot read the directory: /Applications/XAMPP/xamppfiles/htdocs/swete-server/roombooker/modules/testrunner
+QDir::readDirEntries: Cannot read the directory: /Applications/XAMPP/xamppfiles/htdocs/swete-server/roombooker/modules/testrunner
+QDir::readDirEntries: Cannot read the directory: /Applications/XAMPP/xamppfiles/htdocs/swete-server/roombooker/modules/testrunner
+QDir::readDirEntries: Cannot read the directory: /Applications/XAMPP/xamppfiles/htdocs/swete-server/roombooker/modules/testrunner
+QDir::readDirEntries: Cannot read the directory: /Applications/XAMPP/xamppfiles/htdocs/swete-server/roombooker/modules/testrunner
+QDir::readDirEntries: Cannot read the directory: /Applications/XAMPP/xamppfiles/htdocs/swete-server/roombooker/modules/testrunner

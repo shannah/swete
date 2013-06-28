@@ -1,0 +1,28 @@
+.import-webpage-form {
+	border: none;
+	background-color: #edf3fe;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+
+.import-webpage-form legend {
+	background-color: #edf3fe;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	color: #1a54e1;
+}
+
+.import-webpage-form table td.tdlabel {
+	text-align: right !important;
+	vertical-align: top;
+	padding-top: 8px;
+
+}
+
+.import-webpage-form table td.tdlabel label {
+	white-space: nowrap;
+	text-align: right;
+	font-weight: normal;
+	display: inline;
+
+}

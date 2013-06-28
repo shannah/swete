@@ -1,0 +1,121 @@
+{**
+ * SWeTE Server: Simple Website Translation Engine
+ * Copyright (C) 2012  Web Lite Translation Corp.
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *}{use_macro file="Dataface_Main_Template.html"}
+	{fill_slot name="head_slot"}
+		<style>
+		{literal}
+		html {
+			overflow: hidden;
+		}
+		
+		#swete-toolbar {
+		
+			overflow: hidden;
+			height: 25px;
+			background-color: rgb(187,204,255);
+			
+		}
+		
+		#swete-toolbar #menu {
+			padding: 0;
+			margin: 0;
+			height: 25px;
+		}
+		
+		#swete-toolbar #menu li {
+			list-style-type: none;
+			list-style-image: none;
+			float: left;
+			height: 25px;
+			margin:0;
+			padding:0;
+			border-left: 1px solid #ccc;
+			border-right: 1px solid #ccc;
+			
+		}
+		
+		#swete-toolbar #menu li span.status {
+			float: left;
+			height: 19px;
+			display: block;
+			padding:0;
+			margin: 0;
+			padding: 3px 10px 3px 10px;
+			color: rgb(34,73, 158);
+			
+		}
+		
+		#swete-toolbar #menu li a {
+			display: block;
+			height: 19px;
+			padding: 3px 10px 3px 10px;
+			text-decoration: underline;
+			text-align: center;
+			float: left;
+			color: black;
+
+			
+		}
+		
+		
+		#swete-toolbar.capturing li.start-capture {
+			display: none;
+		}
+		
+		#swete-toolbar li.end-capture {
+			display: none;
+		}
+		
+		#swete-toolbar.capturing li.end-capture {
+			display: block;
+		}
+		
+		#iframe {
+			overflow: hidden;
+		}
+		
+		#iframe, iframe {
+			width: 100%;
+			height: 100%;
+		}
+		{/literal}
+		</style>
+	{/fill_slot}
+
+	{fill_slot name="html_body"}
+		<div id="swete-toolbar" data-website-id="{$website->val('website_id')|escape}" class="{if $website->val('log_translation_misses')}capturing{/if}">
+			
+			<ul id="menu">
+				<li class="exit">
+					<a href="{$website->getURL('-action=view')|escape}" title="Return to admin console">Exit</a>
+				</li>
+				<li class="start-capture">
+					<span class="status">String capturing is currently turned off</span>
+					<a href="#" title="Turn on string capturing">Turn On</a>
+				</li>
+				<li class="end-capture">
+					<span class="status">String capturing is currently turned on</span>
+					<a href="#" title="Turn off string capturing">Turn Off</a>
+				</li>
+			</ul>
+			
+		</div>
+		<iframe id="iframe" src="{$websiteWrapper->getProxyUrl()|escape}"></iframe>
+		
+		{block name="after_global_footer"}
+	{/fill_slot}
+{/use_macro}

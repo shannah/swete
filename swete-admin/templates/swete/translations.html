@@ -1,0 +1,56 @@
+{**
+ * SWeTE Server: Simple Website Translation Engine
+ * Copyright (C) 2012  Web Lite Translation Corp.
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *}
+<table class="translations" id="result_list">
+	<thead>
+	<tr>
+		<th>Phrase:<br/>
+			<input type="text" size="90" id="phrase" value=""></th>
+		<th>Status:<br/>
+			<select id="status">
+				<option value="all">all</option>
+				<option value="translated previously">translated previously</option>
+				<option value="new translation">new translation</option>
+				<option value="not translated">not translated</option>
+			</select>
+		</th>
+	</tr>
+	</thead>
+	<tbody>
+	{foreach from=$translations item=t}
+		<tr class="translation-row">
+			<td class="phrase">
+				<table class="phrase">
+					<tr><td class="label source">Source</td>
+						<td colspan=2  class="phrase source">{$t.source}</td></tr>
+					{if isset($t.previous)}
+						<tr><td class="label previous">Previous</td>
+							<td colspan=2 class="phrase previous">{$t.previous}</td></tr>
+					{/if}
+					{if isset($t.new)}
+						<tr><td class="label new">New</td><td class="phrase new">{$t.new}</td>
+							<td class="user">by {$t.new_user} on {$t.new_date}</td>
+						</tr>
+					{/if}
+				</table>
+			</td>
+			
+			<td class="status">{$t.status}</td>
+		</tr>
+	{/foreach}
+	</tbody>
+</table>

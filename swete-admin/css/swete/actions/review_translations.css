@@ -1,0 +1,53 @@
+table.translations th {
+	border-width: 1px;
+	
+	color: #666;
+	font-weight: bold;
+	vertical-align: top;
+	text-align:left;
+}
+
+table.translations td {
+	
+	background-color: #f7f7f7;
+	border: 1px solid #C4CFE5;
+	margin: 2px 0px 2px 0;
+	padding: 2px 10px;
+}
+
+table.phrase {
+	width: 100%;
+	text-align:left;
+}
+
+table.phrase td {
+	width: 100%;
+}
+
+
+td.label {
+	color: #666;
+	font-weight: bold;
+	vertical-align: top;
+}
+
+td.status {
+	font-style:italic;
+	width: 100px;
+}
+
+td.user {
+	font-style:italic;
+}
+
+table.phrase td.previous {
+	background-color: #FFFFE3
+}
+
+table.phrase td.new {
+	background-color: #FFDFF8
+}
+
+table.phrase td.source{
+	background-color: #fff
+}

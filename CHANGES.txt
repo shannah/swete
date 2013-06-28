@@ -1,0 +1,48 @@
+SWeTE Server - 0.2.3
+May 29, 2013
+============
+
+    - Fixed issue with cookies replacing '.' with '_' in keys.  Necessary for compatibility
+      with .Net applications.
+    - Updated Xataface to 2.0.x branch with latest bug fixes and security patches.
+
+SWeTE Server - 0.2.2
+====================
+
+- 0001122: [Bugs] DOM Error while string capturing
+SWeTE Server - 0.2.1
+====================
+- 0001104: [Bugs] Turn off debugging for live cache and proxy client in release (shannah) - resolved.
+- 0001117: [Bugs] Extra nested span tag after translation replacement (shannah) - resolved.
+- 0001114: [Bugs] Multiple Cookies Not Being propagated (shannah) - resolved.
+- 0001113: [Bugs] Proxying Xataface sites have conflicts (shannah) - resolved.
+- 0001111: [Bugs] Error with javascript include files (pippa) - resolved.
+- 0001112: [Bugs] Cookie Domains need to be proxified (shannah) - resolved.
+- 0001097: [Bugs] Job Approval not working (pippa) - resolved.
+- 0001103: [Bugs] Tar file extracts contents of the swete-server directory and not the directory itself. (kevinchow) - resolved.
+- 0001089: [Feature Requests] Pippa 0.2.0 Review (pippa) - resolved.
+- 0001110: [Bugs] FastCGI Support (shannah) - resolved.
+- 0001109: [Bugs] apache_request_headers() not defined. (shannah) - resolved.
+- 0001101: [Documentation] User manual admin password wrong (shannah) - resolved.
+- 0001108: [Bugs] URLs inside scripts are not proxified (shannah) - resolved.
+- 0001106: [Bugs] XHTML handled improperly. (shannah) - resolved.
+- 0001085: [Bugs] Dashboard Summary 'Words Translated' not displayed when 0 (pippa) - resolved.
+
+SWeTE Server - 0.2
+==================
+- 0000975: [Feature Requests] Review Job Translations (pippa) - resolved.
+- 0001080: [Bugs] Live Cache not refreshing after deleting and recreating site with same base URL (shannah) - resolved.
+- 0001078: [Feature Requests] Create new SWeTE website (shannah) - resolved.
+- 0001077: [Feature Requests] Create Custom XSL Stylesheet for HTML version of manual (shannah) - resolved.
+- 0001076: [Feature Requests] Swap out Xataface logo for SWeTE logo (shannah) - resolved.
+- 0001075: [Feature Requests] Create screencast for chapter 1 manual tutorial (shannah) - resolved.
+- 0001074: [Feature Requests] Add screenshots to chapter 1 of manual (shannah) - resolved.
+- 0001072: [Feature Requests] Create "Dashboard" Tab (shannah) - resolved.
+- 0001071: [Bugs] Add Progress To Google API Action (shannah) - resolved.
+- 0001067: [Feature Requests] create production build ant target (shannah) - resolved.
+- 0001081: [Bugs] Deactivate Google API key (shannah) - resolved.
+
+SWeTE Server - 0.1
+==================
+- 0000951: [Feature Requests] Filter webpages in job form webpage lookups (shannah) - resolved.
+- 0000938: [Feature Requests] Jobs notes list (pippa) - resolved.

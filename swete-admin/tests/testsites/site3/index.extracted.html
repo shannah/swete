@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><meta charset="UTF-8"><title>{{$0$}}</title><meta name="author" content="Karelia Software"><meta name="keywords" content="{{$95$}}"><meta name="description" content="{{$96$}}"><meta name="robots" content="all"><meta name="generator" content="Sandvox 2.6.2"><meta name="viewport" content="width=1000"><meta http-equiv="X-UA-Compatible" content="IE=100"><meta name="google-site-verification" content="EV1ceZm9Eyo8ePgnVR7M6nuuVh2wqfG49U3ySvJC_YA"><link rel="Shortcut Icon" type="image/x-icon" href="../favicon.ico"><link rel="stylesheet" type="text/css" href="../sandvox_KareliaLarge/main.css" title="Karelia Large"><!--
+		Photo credits for this website's design: <http://www.karelia.com/sandvox_KareliaLarge/Credits.rtf>
+		Licensing for this website's design:     <http://www.karelia.com/sandvox_KareliaLarge/License.rtf>
+		--><script src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-1.5.2.min.js"></script><script>
+if (typeof jQuery === 'undefined') document.write('<script src="../_Resources/jquery-1.5.2.min.js"><\/script>');
+</script><link href="/scripts/buttonstyles.css" rel="stylesheet" type="text/css"><!-- Popup download button courtesy of Sofa, http://www.madebysofa.com/ --><script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-1619058-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script></head><body class="sandvox has-page-title no-sidebar has-custom-banner no-navigation no-IR" id="www_karelia_com">
+<div id="sandvox-page">
+		<div id="page-container">
+			<div id="page">
+				<div id="page-top" class="has-logo no-title has-tagline">
+					<div id="title">
+						<a href="../" class="imageLink"><span id="logo-container"><img id="logo" width="510" height="301" src="../_Media/icon_and_logotype_med.png" alt="icon and logotype"></span></a>
+						<h1 class="title hidden"><a href="../">{{$1$}}</a></h1>
+						<p id="tagline"><span class="in">{{$3$}}<br></span></p>
+					</div><!-- title -->
+					<div id="sitemenu-container">
+						<div id="sitemenu">
+	<h2 class="hidden">{{$4$}}</h2>
+	<div id="sitemenu-content">
+		<ul><li class="i1 o"><a href="../" title="Karelia Software"><span class="in">{{$5$}}</span></a></li>
+			<li class="i2 e currentPage"><span class="in">{{$1$}}</span></li>
+			<li class="i3 o"><a href="../imedia/" title="The Karelia iMedia Browser"><span class="in">{{$6$}}</span></a></li>
+			<li class="i4 e"><a href="../how_do_i/" title="How do I...?"><span class="in">{{$7$}}</span></a></li>
+			<li class="i5 o"><a href="../about_karelia.html" title="About Karelia"><span class="in">{{$8$}}</span></a></li>
+			<li class="i6 e"><a href="../news/" title="The Karelia Blog"><span class="in">{{$9$}}</span></a></li>
+			<li class="i7 o last"><a href="../buy_now/" title="The Karelia Store"><span class="in">{{$10$}}</span></a></li>
+		</ul></div> <!-- /sitemenu-content -->
+</div> <!-- /sitemenu -->
+					</div> <!-- sitemenu-container -->
+				</div> <!-- page-top -->
+				<div class="clear below-page-top"></div>
+				<div id="page-content" class="no-navigation">
+					
+					<div id="main">
+						<div id="main-top"></div>
+                            						<div id="main-content">
+							<h2 class="title"><span class="in">{{$11$}}</span></h2>
+							<div class="article">
+								<div class="article-content">
+	<div class="RichTextElement">
+		<div>
+			<div class="first wide center">
+				<div style="" class="graphic">
+					<div class="figure-content HTMLElement">
+						<script type="text/javascript">
+<!--
+
+// jquery image preload plugin
+// http://www.mattfarina.com/2007/02/01/preloading_images_with_jquery
+jQuery.preloadImages = function(){
+	for(var i = 0; i<arguments.length; i++){
+		jQuery("<img>").attr("src", arguments[i]);
+}}
+
+
+$(document).ready(function(){
+
+	// images that need to be preloaded
+	$.preloadImages("http://www.karelia.com/scripts/pop.png", "http://www.karelia.com/scripts/popbutton.png");
+
+});
+
+// End hiding JavaScript -->
+</script><script type="text/javascript">
+<!--
+
+function startDownloading(href,title)
+{
+	if (title == '') {
+		var parts = href.substr(href.indexOf('?') + 1).split('&');
+		for (var i = 0; i < parts.length; i++) {
+			var tmp = parts[i].split('=', 2);
+			if (tmp[0] == 'app') {
+				title = decodeURIComponent(tmp[1]).replace(/\+/g, ' ');
+			}
+			else if (tmp[0] == 'protected') {
+				return false;	// bail out - popup not for protected files
+			}
+		}
+	}
+	
+	$("#downloaded").val(title);	// note that download was started.
+	$("#dl").fadeIn(300);
+	$("#dlpopname").html(title);
+	$("#dlrestart").attr('href', href + '&link=restart');
+	$("#dlpop").append("<iframe src=\"" + href + "&iframe=1\" width=\"0px\" height=\"0px\" style=\"display:none;\">");
+	return true;
+}
+
+
+$(document).ready(function(){
+
+    $('#dlpop').bind('dragstart',   function() { return false; } );
+    $('#dlpop').bind('selectstart', function() { return false; } );
+
+	// AUTOMATICALLY START DOWNLOADING IF 'DOWNLOAD' GET VARIABLE IS SET.
+
+	
+	// Attach download popup to all anchors going to "downloading.html"
+	$("a[href*='downloading.html']").click(function () {
+		return ! startDownloading($(this).attr('href'), $(this).attr('title'));
+	});
+	$("#dlbutton, #dlbackdrop").click(function () {
+		$("#dl").hide();
+	});
+	
+});
+
+// End hiding JavaScript -->
+</script><!-- download popup --><div id="dl" class="hiddenpop">
+	<div id="dlpop" class="pop">
+		<p><a id="dlrestart">{{$12$}}</a></p>
+		<p>{{$13$}}</p>
+		<div id="dlbutton" class="popbutton">{{$14$}}</div>
+
+		<p class="popinfo loadingMsg" style="width:80%; margin:auto;">{{$16$}}</p>
+	</div>
+	<div class="popbackdrop" id="dlbackdrop"></div>
+</div>
+<div id="sandvox-links" class="sandvox-links">
+	<a href="http://www.karelia.com/download/downloading.html?app=Sandvox" class="download-trial">{{$17$}}</a>
+	<a href="https://secure.karelia.com/buy_now/" class="buy-sandvox">{{$10$}}</a>
+</div>
+
+<script type="text/javascript">
+<!--
+
+function emailValidate(address) {
+	// see http://en.wikipedia.org/wiki/E-mail_address  ... a loose check.
+   var reg = /^([A-Za-z0-9!\#\$\%\&\'\*\+\-\/\=\?\^\_\`\{\|\}\~\.])+\@([A-Za-z0-9\-\.])+\.([A-Za-z]{2,9})$/;
+   return reg.test(address);
+}
+
+$(document).ready(function(){
+	
+    $('#supop').bind('dragstart',   function() { return false; } );
+    $('#supop').bind('selectstart', function() { return false; } );
+
+	// hide the signup alert and backdrop when clicked.
+	$("#subutton, #subackdrop").click(function () {
+		$("#su").hide();
+		$("#sumessage").html('');
+		$("#popinfo").html('');
+	});
+	
+	// enabled/disable the email submit button when the input field is changed
+	$("#email").keyup( function() {
+		var email = $("#email").val();
+		var placeholder = $("#email").attr('title');
+ 		var isEmpty = ((placeholder == email) || (email == '') );
+		$("#susubmit").attr("disabled", isEmpty); 
+	});
+	// Replace email input with a placeholder if we leave it empty
+	$("#email").blur( function () {
+		if ($(this).val() == '') {
+			$(this).val($(this).attr('title'));
+			$(this).addClass('disabledInput');
+			$(this).removeClass('enabledInput');
+		}
+	} );
+	// Prepare email input field for input when we click in it
+	$("#email").focus( function (event) {
+		$(this).addClass('enabledInput');
+		$(this).removeClass('disabledInput');
+		if ($(this).val() == $(this).attr('title')) {
+			$(this).val('');
+		}
+	} );
+
+	$("#signup").hover(
+		function() { $("#email").focus(); },
+		function() { }
+	);
+
+	$('#suform').submit(function() {
+
+		$.ajax({
+			data:{
+				subject: '',
+				messsage: '',
+				email: $("#email").val(),
+				downloaded: $("#downloaded").val(),
+				referer: 'direct',
+				from: $("#from").val(),
+				refid: '',
+				bot: '1',
+			},
+			type: "POST",
+			timeout: 20000,
+			url: "/scripts/subscribe3.php",
+			cache:false,
+			dataType: 'text',
+			beforeSend: function(request){
+				$("#subutton").html('Cancel');
+				$("#susubmit").attr("disabled", "true"); 
+				var email = $("#email").val();
+				var placeholder = $("#email").attr('title');
+				if (email == '' || email == placeholder)
+				{
+					alert("Please enter your email address.");
+					$("#email").focus();
+					return false;
+				}
+				if (!emailValidate(email))
+				{
+					alert("Please enter a valid email address, like john@domain.com");
+					$("#email").focus();
+					return false;
+				}
+				$("#su").fadeIn(300); $("#sumessage").addClass('loadingMsg'); $("#sumessage").html( 'Submitting....' )
+			}, //show loading just when link is clicked
+			complete: function(request, textStatus){
+			}, //stop showing loading when the process is complete
+			success: function(data, textStatus){ //so, if data is retrieved, store it in html
+				$("#subutton").html('OK');
+				$("#sumessage").removeClass('loadingMsg');
+				if (data.substring(0,3) == 'OK ') {
+					$("#sumessage").addClass('successMsg');
+					$("#sumessage").html("Thank you for signing up!");
+					if (data.substring(3) == 'updated')
+					{
+						popinfo = 'You were already subscribed at <i>' + $("#email").val() + ' (but we have sent you a fresh message).';
+					}
+					else if (data.substring(3) == 'toomany')
+					{
+						$("#sumessage").addClass('errorMsg');
+						$("#sumessage").html("Message Not Sent &mdash;<br />We have already sent several messages.");
+						popinfo = 'Our messages to <i>' + $("#email").val() + ' have not been confirmed. Please find a previous message and <b>click on the confirmation link. (Perhaps our messages have been caught by a spam filter?)<br /><br /><i>To prevent abuse, we will not send any more confirmation messages for a week or so.';
+					}
+					else
+					{
+						popinfo = 'We have sent a confirmation email message to <i>' + $("#email").val() + '.  Please check your inbox in a few minutes.<br /><br /><b>You will need to confirm your email address by clicking on a link in the email message.';
+					}
+					$("#popinfo").html(popinfo); //show the html inside .content div
+				}
+				else	// some sort of processing error
+				{
+					$("#sumessage").addClass('errorMsg');
+					$("#sumessage").html("There was an error submitting your email address.");
+					$("#popinfo").html(data);	// hopefully that's a good error message from our script
+				}
+				$("#email").val('');
+				$("#supop").append("<iframe src=\"http://www.karelia.com/download/signedup.html?iframe=1\" width=\"0px\" height=\"0px\" style=\"display:none;\">");
+
+
+			},
+			error: function(request, textStatus, errorThrown){
+				$("#susubmit").removeAttr("disabled");	// stop disabling the button so they can try again 
+				$("#sumessage").addClass('errorMsg');
+				$("#sumessage").removeClass('loadingMsg');
+				$("#subutton").html('OK');
+				
+				$("#sumessage").html("There was an error submitting your email address.");
+				if (textStatus =='error') { textStatus = "error code " + request.status; }
+				if (textStatus == 'timeout') {
+					textStatus = "<b>We're so sorry! Your browser was unable to reach our server. Please try again.";
+				}
+				$("#popinfo").html(textStatus);	// hopefully that's a good error message.
+			}
+		 }); //close $.ajax(
+		 return false;		// for the button
+	 }); //close click(
+
+});
+
+// End hiding JavaScript -->
+</script><!-- signed-up popup --><div id="su" class="hiddenpop">
+	<div id="supop" class="pop">
+		<p id="sumessage">&nbsp;</p>
+		<p id="popinfo" class="popinfo"></p>
+		<div id="subutton" class="popbutton">{{$18$}}</div>
+	</div>
+	<div class="popbackdrop" id="subackdrop"></div>
+</div>
+<div id="sandvox-signup">
+	<div class="signup-info">{{$19$}}</div>
+	<form id="suform" method="post" action="https://secure.karelia.com/x/subscribe3.php">
+			<div class="hidden">
+				<label for="subject_input">{{$20$}}</label>
+				<input id="subject_input" type="text" name="subject"><br><label for="message_input">{{$20$}}</label>
+				<textarea id="message_input" name="message" rows="3" cols="20"></textarea></div>
+		<input type="email" class="email-field" id="email" name="email" placeholder="Email Address"><div class="submit-container"><input type="submit" class="submit-button" value="Sign Up"></div>
+		<input type="hidden" name="redirect" value="http://www.karelia.com/download/signedup.html"></form>
+</div>
+					</div>
+				</div>
+			</div>
+			<div class="not-first-item graphic-container wide left">
+				<div style="" class="general-index graphic">
+					<div class="figure-content"><!-- sandvox.GeneralIndex -->
+						<div class="article i1 o">
+							<h3 class="index-title"></h3>
+							<div class="article-summary"><p><img width="333" height="270" src="../_Media/macbook_med.png" alt="MacBook running Sandvox" class="first narrow right graphic-container"></p><p>{{$21$}}</p><p>{{$22$}}</p><p><br></p><p><br></p><p><br></p><p><br></p><img width="715" height="1" src="../_Media/feathered_separator_line_med.png" alt="feathered separator line" class="not-first-item narrow right graphic-container"><br></div>
+							<div class="article-info"></div>
+						</div>
+						<div class="article i2 e">
+							<h3 class="index-title"></h3>
+							<div class="article-summary"><img width="439" height="364" src="../_Media/folklift_med.png" alt="Forklift lifting the Sandvox icon" class="first narrow left graphic-container"><div class="not-first-item graphic-container wide right">
+									<div style="" class="general-index graphic">
+										<div class="figure-content"><!-- sandvox.GeneralIndex -->
+											<div class="article i1 o">
+												<h3 class="index-title"><span class="in">{{$23$}}</span></h3>
+												<div class="article-summary"><p>{{$24$}}</p></div>
+												<div class="article-info"></div>
+											</div>
+											<div class="article i2 e">
+												<h3 class="index-title"><span class="in">{{$25$}}</span></h3>
+												<div class="article-summary"><p>{{$26$}}</p></div>
+												<div class="article-info"></div>
+											</div>
+											<div class="article i3 o last-item">
+												<h3 class="index-title"><span class="in">{{$27$}}</span></h3>
+												<div class="article-summary"><p>{{$28$}}</p></div>
+												<div class="article-info"></div>
+											</div>
+											<div class="general-index-bottom"></div><!-- /sandvox.GeneralIndex -->
+										</div>
+									</div>
+								</div>
+
+								<div class="not-first-item callout-container">
+									<div class="callout">
+										<div class="callout-content">
+											<div class="pagelet blockquote-container titled i1 o">
+													
+												<h4 class="title pagelet-title"><span class="in">{{$29$}}</span></h4>
+    <div class="pagelet-body">
+
+
+												<blockquote>
+													<p>{{$30$}}</p>
+
+												</blockquote>    </div>
+</div>
+											<div class="pagelet blockquote-container titled i2 e">
+													
+												<h4 class="title pagelet-title"><span class="in">{{$31$}}</span></h4>
+    <div class="pagelet-body">
+
+
+												<blockquote>
+													<p>{{$32$}}</p>
+
+												</blockquote>    </div>
+</div>
+											<div class="pagelet blockquote-container titled i3 o last-item">
+													
+												<h4 class="title pagelet-title"><span class="in">{{$33$}}</span></h4>
+    <div class="pagelet-body">
+
+
+												<blockquote>
+													<p>{{$34$}}</p>
+
+												</blockquote>    </div>
+</div>
+										</div>
+									</div>
+								</div>
+								<div class="not-first-item wide right">
+									<div style="width:200px;" class="graphic">
+<div class="RichTextElement">
+    
+										<div class="figure-content">
+											<p style="text-align: right; "><a href="http://www.karelia.com/sandvox/what_our_customers_are_sayi.html">{{$35$}}</a></p>
+
+										</div>
+</div>
+</div>
+								</div>
+
+							</div>
+							<div class="article-info"></div>
+						</div>
+						<div class="article i3 o">
+							<h3 class="index-title"><span class="in">{{$36$}}</span></h3>
+							<div class="article-summary">
+								<div class="first graphic-container wide center ImageElement">
+									<div class="graphic">
+										<div class="figure-content"><!-- sandvox.ImageElement --><img width="720" height="377" src="../_Media/design_samples_med.png" alt="Different Sandvox Designs"><!-- /sandvox.ImageElement --></div>
+									</div>
+								</div>
+
+								<div class="not-first-item graphic-container wide center">
+									<div style="" class="general-index graphic">
+										<div class="figure-content"><!-- sandvox.GeneralIndex -->
+											<div class="article i1 o">
+												<h3 class="index-title"><span class="in">{{$37$}}</span></h3>
+												<div class="article-summary">
+													<div class="first graphic-container wide left ImageElement">
+														<div class="graphic">
+															<div class="figure-content"><!-- sandvox.ImageElement --><img width="212" height="208" src="../_Media/choose_design_image_med.png" alt="Sandvox Design Picker"><!-- /sandvox.ImageElement --></div>
+														</div>
+													</div><p>{{$38$}}</p>
+
+												</div>
+												<div class="article-info"></div>
+											</div>
+											<div class="article i2 e">
+												<h3 class="index-title"><span class="in">{{$39$}}</span></h3>
+												<div class="article-summary">
+													<div class="first graphic-container wide left ImageElement">
+														<div class="graphic">
+															<div class="figure-content"><!-- sandvox.ImageElement --><img width="253" height="209" src="../_Media/add_content_image_med.png" alt="Sandvox Website Editor"><!-- /sandvox.ImageElement --></div>
+														</div>
+													</div><p>{{$40$}}</p>
+
+												</div>
+												<div class="article-info"></div>
+											</div>
+											<div class="article i3 o">
+												<h3 class="index-title"><span class="in">{{$41$}}</span></h3>
+												<div class="article-summary">
+													<div class="first graphic-container wide left ImageElement">
+														<div class="graphic">
+															<div class="figure-content"><!-- sandvox.ImageElement --><img width="213" height="187" src="../_Media/go_live_image_med.png" alt="Sandvox Publication Setup Dialogue"><!-- /sandvox.ImageElement --></div>
+														</div>
+													</div><p>{{$42$}}</p>
+
+												</div>
+												<div class="article-info"></div>
+											</div>
+											<div class="article i4 e last-item">
+												<h3 class="index-title"><span class="in">{{$43$}}</span></h3>
+												<div class="article-summary">
+													<div class="first graphic-container wide left ImageElement">
+														<div class="graphic">
+															<div class="figure-content"><!-- sandvox.ImageElement --><img width="252" height="174" src="../_Media/change_add_play_image_med.png" alt="Sandvox Windows"><!-- /sandvox.ImageElement --></div>
+														</div>
+													</div><p>{{$44$}}</p>
+
+												</div>
+												<div class="article-info"></div>
+											</div>
+											<div class="general-index-bottom"></div><!-- /sandvox.GeneralIndex -->
+										</div>
+									</div>
+								</div>
+
+								<div class="not-first-item callout-container">
+									<div class="callout">
+										<div class="callout-content">
+											<div class="pagelet blockquote-container bordered untitled i1 o">
+												
+    <div class="pagelet-body">
+
+
+												<blockquote>
+													<p>{{$45$}}<img width="98" height="30" src="../_Media/macworld_logo_med.png" alt="Macworld Logo" class="first narrow right graphic-container"></p>
+												</blockquote>    </div>
+</div>
+											<div class="pagelet blockquote-container bordered untitled i2 e">
+												
+    <div class="pagelet-body">
+
+
+												<blockquote>
+													<p>{{$46$}}<img width="113" height="26" src="../_Media/maclife_logo_med.png" alt="MacLife Logo" class="first narrow right graphic-container"></p>
+												</blockquote>    </div>
+</div>
+											<div class="pagelet blockquote-container bordered untitled i3 o">
+												
+    <div class="pagelet-body">
+
+
+												<blockquote>
+													<p>{{$47$}}<img width="39" height="40" src="../_Media/cnet_logo_fixed_med.png" alt="CNET Logo" class="first narrow right graphic-container"></p>
+												</blockquote>    </div>
+</div>
+											<div class="pagelet blockquote-container bordered untitled i4 e last-item">
+												
+    <div class="pagelet-body">
+
+
+												<blockquote>
+													<p>{{$48$}}<img width="113" height="22" src="../_Media/mactech_logo_med.png" alt="MacTech Logo" class="first narrow right graphic-container"></p>
+												</blockquote>    </div>
+</div>
+										</div>
+									</div>
+								</div>
+								<div class="not-first-item wide right">
+									<div style="width:200px;" class="graphic">
+<div class="RichTextElement">
+    
+										<div class="figure-content">
+											<p style="text-align: right; "><a href="http://www.karelia.com/sandvox/reviews/">{{$49$}}</a></p>
+
+										</div>
+</div>
+</div>
+								</div>
+
+							</div>
+							<div class="article-info"></div>
+						</div>
+						<div class="article i4 e">
+							<h3 class="index-title"><span class="in">{{$51$}}</span></h3>
+							<div class="article-summary"><p><img width="295" height="148" src="../_Media/iweb_med.png" alt="" class="first narrow left graphic-container">{{$52$}}</p><p>{{$53$}}</p><p>{{$54$}}</p><p><br></p>
+
+								<div class="not-first-item graphic-container wide center ImageElement">
+									<div class="graphic">
+										<div class="figure-content"><!-- sandvox.ImageElement --><img width="720" height="15" src="../_Media/feathered_seperator_line_med.png" alt="feathered seperator line"><!-- /sandvox.ImageElement --></div>
+									</div>
+								</div><br></div>
+							<div class="article-info"></div>
+						</div>
+						<div class="article i5 o last-item">
+							<h3 class="index-title"></h3>
+							<div class="article-summary"><p><br></p>
+								<div class="first wide center">
+									<div style="" class="graphic">
+										<div class="figure-content HTMLElement">
+											<div id="lastsection" class="columns-3">
+
+<div class="column i1">
+	<h3>{{$55$}}</h3>
+	<a href="http://www.karelia.com/sandvox/screencast.html">
+		<img src="/images/video_tutorial_image.png" alt="screenshot of video tutorial" width="267" height="227"></a>
+</div>
+
+<div class="column i2">
+	<h3>{{$56$}}</h3>
+	<ul><li>{{$57$}}</li>
+		<li>{{$58$}}</li>
+	</ul><p>
+<br><br></p>
+	<p style="font-family:'Helvetica Neue',Helvetica,sans-serif; text-align:center; font-size: 18px; margin-top:20px;">{{$59$}}<br>{{$60$}}</p>
+</div>
+
+
+<div class="column i3">
+	<div style="top: 0px; left: 5px; margin:0;" class="sandvox-links">
+		<a href="http://www.karelia.com/download/downloading.html?app=Sandvox" class="download-trial">{{$17$}}</a>
+		<a href="https://secure.karelia.com/buy_now/" class="buy-sandvox">{{$10$}}</a>
+	</div>
+	<img alt="Sandvox Icon" src="/images/sandvox_logo.png" width="287" height="174" style="display:block; margin-top: 80px;"></div>
+</div>
+										</div>
+									</div>
+								</div>
+
+							</div>
+							<div class="article-info"></div>
+						</div>
+						<div class="general-index-bottom"></div><!-- /sandvox.GeneralIndex -->
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div> <!-- /article-content -->
+								<div class="article-info">
+								</div> <!-- /article-info -->
+							</div> <!-- /article -->
+						</div> <!-- main-content -->
+						<div id="main-bottom"></div>
+					</div> <!-- main -->
+				</div> <!-- content -->
+				<div class="clear below-content"></div>
+				<div id="page-bottom">
+					<div id="page-bottom-contents">
+						<div><span class="first HTMLElement"><div>
+
+<div class="column1">
+<h3>{{$61$}}</h3>
+<ul><li>{{$62$}}</li>
+        <li>{{$63$}}</li>
+        <li>{{$64$}}</li>
+        <li>{{$65$}}</li>
+        <li>{{$66$}}</li>
+        <li>{{$67$}}</li>
+        <li>{{$68$}}</li>
+        <li>{{$69$}}</li>
+        <li>{{$70$}}</li>
+        <li>{{$71$}}</li>
+        <li>{{$72$}}</li>
+        <li>{{$73$}}</li>
+        <li>{{$74$}}</li>
+        <li>{{$75$}}</li>
+        <li>{{$76$}}</li>
+        <li>{{$77$}}</li>
+        <li>{{$78$}}</li>
+        <li>{{$79$}}</li>
+</ul></div>
+
+<div class="column2">
+<h3>{{$80$}}</h3>
+<ul><li><a href="http://www.karelia.com/sandvox/whats-new-in-sandvox-2.html">{{$81$}}</a></li>
+        <li><a href="http://www.karelia.com/sandvox/screencast.html">{{$82$}}</a></li>
+        <li><a href="http://www.karelia.com/sandvox/from-iweb-to-sandvox.html">{{$83$}}</a></li>
+        <li><a href="http://www.karelia.com/sandvox/reviews/">{{$84$}}</a></li>
+        <li><a href="http://www.karelia.com/sandvox/what_our_customers_are_sayi.html">{{$85$}}</a></li>
+        <li><a href="http://www.karelia.com/sandvox/faq/">{{$86$}}</a></li>
+        <li>{{$88$}}</li>
+        <li>{{$89$}}</li>
+        <li><a href="http://www.karelia.com/sandvox/get_your_site_noticed_and_b.html">{{$90$}}</a></li>
+        <li>{{$91$}}</li>
+</ul><div>
+<img alt="Apple Design Award Runner Up 2007" src="/images/white_ada_logo.png" width="246" height="67" style="margin: 10px 0 15px 0;"></div>
+<div style="position:relative; top:-15px; left:57px; font-size:9px; color:#666;">{{$92$}}</div>
+<div>
+<a href="/about_karelia.html"><img alt="Karelia Logo" src="/images/karelia_reversed_logo.png" width="350" height="91"></a>
+</div>
+<p class="copyright">{{$93$}}</p>
+</div>
+<div class="clear"></div>
+</div></span><br></div>
+						<div class="hidden"> <a rel="nofollow" href="#title">{{$94$}}</a></div>
+					</div>
+				</div> <!-- page-bottom -->
+			</div> <!-- container -->
+			<div id="extraDiv1"><span></span></div><div id="extraDiv2"><span></span></div><div id="extraDiv3"><span></span></div><div id="extraDiv4"><span></span></div><div id="extraDiv5"><span></span></div><div id="extraDiv6"><span></span></div>
+		</div> <!-- specific body type -->
+</div>
+	</body></html>

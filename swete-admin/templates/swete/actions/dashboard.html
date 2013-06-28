@@ -1,0 +1,163 @@
+{use_macro file="Dataface_Main_Template.html"}
+	{fill_slot name="left_column"}
+	{/fill_slot}
+	{fill_slot name="head_slot"}
+		<link rel="stylesheet" type="text/css" href="{$ENV.DATAFACE_SITE_URL}/css/swete/actions/dashboard.css"/>
+	{/fill_slot}
+	
+	{fill_slot name="main_section"}
+		<h1 class="logo"><span>SWeTE Server</span></h1>
+		
+		
+		<div id="summary-stats" class="block">
+			<h2>Summary</h2>
+			<table>
+				<tr>
+					<th>Websites</th><td>{$systemStats.numSites|escape}</td>
+				</tr>
+				{if $ENV.APPLICATION.enable_static}
+					<tr>
+						<th>Static Webpages</th><td>{$systemStats.numPages|escape}</td>
+					</tr>
+				{/if}
+				<tr>
+					<th>Phrases</th><td><span>Translated: {$systemStats.translatedPhrases|escape}</span>,<br/> <span>Untranslated: {$systemStats.untranslatedPhrases|escape}</span>, <br/><span>Total: {$systemStats.numPhrases|escape}</span></td>
+				</tr>
+				<tr>
+					<th>Words</th><td><span>Translated: {$systemStats.translatedWords|escape}</span>,<br/> <span>Untranslated: {$systemStats.untranslatedWords|escape}</span>, <br/><span>Total: {$systemStats.numWords|escape}</span></td>
+				</tr>
+				
+			</table>
+		</div>
+		<div class="block" id="websites-block">
+		
+			<h2>Websites</h2>
+			<table>
+			{foreach from=$results item=row}
+				<tr>
+					<th>{$row->website_name|escape}</th>
+					<td>
+						<a target="_blank" href="{$row->website_url|escape}">
+							{$row->source_label|escape}
+						</a>
+					</td>
+					<td>
+						<a target="_blank" href="{$row->proxy_url|escape}">
+							{$row->target_label|escape}
+						</a>
+					</td>
+					<td>
+						<ul class="dropdown-menu">
+							<li class="actions-menu-item-wrapper">
+								<a href="#" class="actions-menu-item">
+									<span>Actions</span>
+								</a>
+								<ul class="menuitems">
+									<li>
+										<a href="{$ENV.DATAFACE_SITE_HREF}?-action=edit&amp;-table=websites&amp;website_id={$row->website_id|escape}">Edit</a>
+									</li>
+									<li>
+										<a href="{$ENV.DATAFACE_SITE_HREF}?-action=swete_tool_bar&amp;-table=websites&amp;website_id={$row->website_id|escape}">Capture Strings</a>
+									</li>
+									<li>
+										<a href="{$ENV.DATAFACE_SITE_HREF}?-action=list&amp;-table=translation_miss_log&amp;website_id={$row->website_id|escape}">Translate Strings</a>
+									</li>
+								</ul>
+							</li>
+						</ul>
+						
+						
+					</td>
+					<td>
+						<a href="#" class="site-stats" title="View the stats for this site"><span>Info</span></a>
+						<div class="popup-panel site-stats-panel">
+							<div class="panel-bar">
+								<a class="close-panel" href="#"><span>Close</span></a>
+							</div>
+							<div class="content-pane">
+								<table>
+									{if $ENV.APPLICATION.enable_static}
+										<tr>
+											<th># Pages</th>
+											<td class="right">
+												<a href="{$ENV.DATAFACE_SITE_HREF}?-action=list&amp;-table=webpages&website_id={$row->website_id|escape}">
+													{$row->numpages|escape}
+												</a>
+											</td>
+										</tr>
+									{/if}
+									<tr>
+										<th># Phrases</th>
+										<td class="right">
+											<a href="{$ENV.DATAFACE_SITE_HREF}?-action=list&amp;-table=translation_miss_log&amp;website_id={$row->website_id|escape}">
+												{$row->numphrases|escape}
+											</a>
+										</td>
+									</tr>
+									<tr>
+										<th># Words</th>
+										<td class="right">
+											<a href="{$ENV.DATAFACE_SITE_HREF}?-action=list&amp;-table=translation_miss_log&amp;website_id={$row->website_id|escape}">
+												{$row->numwords|escape}
+											</a>
+										</td>
+									</tr>
+									<tr>
+										<th># Translated Phrases</th>
+										<td class="right">
+											<a href="{$ENV.DATAFACE_SITE_HREF}?-action=list&amp;-table=translation_miss_log&amp;website_id={$row->website_id|escape}&amp;normalized_translation_value=&gt;">	
+												{$row->translated_phrases|escape}
+											</a>
+										</td>
+									</tr>
+									<tr>
+										<th># Untranslated Phrases</th>
+										<td class="right">
+											<a href="{$ENV.DATAFACE_SITE_HREF}?-action=list&amp;-table=translation_miss_log&amp;website_id={$row->website_id|escape}&amp;normalized_translation_value==">
+												{$row->untranslated_phrases|escape}
+											</a>
+										</td>
+									</tr>
+									<tr>
+										<th># Translated Words</th>
+										<td class="right">
+											<a href="{$ENV.DATAFACE_SITE_HREF}?-action=list&amp;-table=translation_miss_log&amp;website_id={$row->website_id|escape}&amp;normalized_translation_value=&gt;">
+												{$row->translated_words|escape}
+											</a>
+										</td>
+									</tr>
+									<tr>
+										<th># Untranslated Words</th>
+										<td class="right">
+											<a href="{$ENV.DATAFACE_SITE_HREF}?-action=list&amp;-table=translation_miss_log&amp;website_id={$row->website_id|escape}&amp;normalized_translation_value==">
+												{$row->untranslated_words|escape}
+											</a>
+										</td>
+									</tr>
+										
+								</table>
+							</div>
+						
+						</div>
+					</td>
+					<td>
+						{if $row->log_translation_misses}
+							<a href="#" class="log-translation-miss-warning" title="String capturing is currently enabled.  Please disable this as soon as you have finished capturing strings."><span>Warning</span></a>
+						{/if}
+					</td>
+				</tr>
+			{/foreach}
+			</table>
+			<div class="buttons">
+				<button id="create-new-website" onclick="window.location.href='{$ENV.DATAFACE_SITE_HREF}?-table=websites&amp;-action=new';">Create New Website</button>
+			</div>
+		</div>
+	
+		
+	
+		<div style="clear:both">&nbsp;</div>
+		<div class="swete-version">
+			Currently running SWeTE version {$swete_version}
+		</div>
+	{/fill_slot}
+{/use_macro}

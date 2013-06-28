@@ -1,0 +1,1256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+"http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<chapter>
+  <title>Introduction</title>
+
+  <section>
+    <title>What is SWeTE Server?</title>
+
+    <para><application>SWeTE</application> stands for Simple Website
+    Translation Engine. It is a reverse HTTP proxy that provides
+    internationalization of the content that it serves. It allows you to
+    easily convert your web site (or web application) from one language into
+    another. It also provides a full administration console with forms to
+    translate your site content. In addition it provides some powerful
+    developer tools to allow you to manipulate the look and feel of your site
+    in locale-specific ways using CSS, HTML, and Javascript.</para>
+  </section>
+
+  <section>
+    <title>How it works</title>
+
+    <para><application>SWeTE</application> would generally be set up on a web
+    server and configured to proxy content from another site. For example, if
+    we wanted to translate the site <uri>xataface.com</uri> into French, we
+    might set up <application>SWeTE</application> in the directory
+    <uri>xataface.com/fr/</uri>. Then, if we point our web browser to
+    <uri>http://xataface.com/fr/index.html</uri> it would serve the page
+    located at h<uri>ttp://xataface.com/index.html</uri> except that it would
+    be translated into French. The translation itself is performed by parsing
+    the HTML of the requested page into individual strings, then checking a
+    translation memory for translations of those strings.</para>
+
+    <para/>
+  </section>
+
+  <section id="requirements">
+    <title>Requirements</title>
+
+    <orderedlist>
+      <listitem>
+        <para>PHP 5.2 or higher</para>
+      </listitem>
+
+      <listitem>
+        <para>MySQL 5.0 or higher</para>
+      </listitem>
+
+      <listitem>
+        <para>PHP DOM extension.</para>
+      </listitem>
+
+      <listitem>
+        <para>PHP MBString extension.</para>
+      </listitem>
+
+      <listitem>
+        <para>Apache Web Server with mod_rewrite installed and enabled.</para>
+      </listitem>
+    </orderedlist>
+  </section>
+
+  <section id="features">
+    <title>Features</title>
+
+    <para><application>SWeTE</application> combines two simple, yet powerful,
+    concepts to great effect: HTTP reverse proxying, and Translation Memories.
+    These two concepts extrapolate into enormous feature potential as a
+    platform, but they all boil down to a few key areas:</para>
+
+    <para/>
+
+    <orderedlist>
+      <listitem>
+        <para>Content translation</para>
+      </listitem>
+
+      <listitem>
+        <para>Content versioning</para>
+      </listitem>
+
+      <listitem>
+        <para>Content localization</para>
+      </listitem>
+
+      <listitem>
+        <para>Content Hosting &amp; Proxing</para>
+      </listitem>
+    </orderedlist>
+
+    <section>
+      <title>Translation Features</title>
+
+      <para>Translation features are those features that facilitate the actual
+      translation of site content into other languages. Some of these features
+      include:<itemizedlist>
+          <listitem>
+            <para><emphasis>Translation memories</emphasis> - All strings are
+            saved inside a translation memory. The translation memory is used
+            to dictate how strings that are encountered by the proxy should be
+            translated.</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>Translation forms</emphasis> - SWeTE provides
+            powerful, built-in translation forms for translating the contents
+            of webpages and translation memories.</para>
+          </listitem>
+        </itemizedlist><itemizedlist>
+          <listitem>
+            <para><emphasis>Importing and Exporting</emphasis> - Translation
+            memories can be exported to and from many popular formats
+            including XLIFF, CSV, and XML. Similarly they can be imported from
+            these formats.</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>String Capturing</emphasis> - SWeTE allows you to
+            capture the content that requires translation by simply enabling
+            content capturing, then crawling through the site. With content
+            capturing enabled, all strings encountered as you navigate the
+            site, are saved so that you can translate them later. Once they
+            are translated, the next time you visit the same pages, you will
+            see the translated content.</para>
+          </listitem>
+        </itemizedlist></para>
+    </section>
+
+    <section>
+      <title>Versioning Features</title>
+
+      <para>Translation memories store strings down to the sentence/paragraph
+      level. However you may want to be able to save versions of your content
+      at the block or page level. <application>SWeTE</application> provides a
+      number of features to help you version your content in this way. Some of
+      these features include:</para>
+
+      <para/>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Webpage Versioning</emphasis> - Keep versions of
+          your static webpages locked so that they will not be affected by
+          changes to the source content. When you are happy with the
+          translation, then you can make a new version the "active"
+          version.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Block-level Versioning</emphasis> - On dynamic sites
+          it may not be possible to lock an entire page contents. In such
+          cases, <application>SWeTE</application> allows you to mark certain
+          sections of the page to be treated as "blocks" so that they can be
+          locked, saved, and versioned independently of the rest of the
+          page.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Localization Features</title>
+
+      <para>Preparing a website to serve different language markets involves
+      more than just translation. It may require changes to layout,
+      flow-control, dates, times, photos, and currencies.
+      <application>SWeTE</application>, as a development platform, enables you
+      to customize the output of your translated site in any way you see fit.
+      Some features in this area include:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Custom CSS</emphasis> -
+          <application>SWeTE</application> adds CSS classes to the
+          <literal>&lt;body&gt;</literal> tag of all output which allows
+          stylesheets to be targeted directly to a specific language. If you
+          want different color schemes or images for your French site than you
+          have in your English site, you can do this easily using CSS.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Custom Javascript </emphasis>- The CSS classes added
+          to the <literal>&lt;body&gt;</literal> can also be used by
+          Javascript to perform different functionality for translated sites
+          than for the source site. This leads to infinite possiblities for
+          divergence between different translations of your site.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Pre-processing and Post-processing</emphasis> -
+          <application>SWeTE</application> allows you to also write PHP
+          extensions that manipulate the HTML and DOM structure of pages
+          before they are rendered. This gives you an opportunity to make
+          changes to the source content on the fly using pattern matching and
+          your own business logic.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Strings with Variables</emphasis> -
+          <application>SWeTE</application> allows you to mark certain parts of
+          strings as "variables" so that multiple strings with the same format
+          can be translated as a single string. For example, if you have a
+          shopping cart that shows the string "Welcome to the cart, Steve"
+          when Steve logs in, and "Welcome to the cart, Ivan" when Ivan logs
+          in, then you can wrap the name in a special tag to tell
+          <application>SWeTE</application> to treat these as the same strings.
+          This can mean the difference between translating thousands of
+          similar strings and having to only translate one string.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Text filters</emphasis> -
+          <application>SWeTE</application> allows you to specify regular
+          expression pattern replacements to your content to help prepare it
+          for <application>SWeTE</application> to process it. This can be used
+          for such things as finding parts of strings that should be marked as
+          variables, or wrapping dates and numbers with variables.
+          <application>SWeTE</application> comes with some default filters
+          that wrap dates and numbers into variables.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Date and Time Formatting</emphasis> - With
+          appropriate markup, <application>SWeTE</application> can also
+          convert dates from one format into another that is more acceptable
+          to the target locale.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Hosting and Proxying Features</title>
+
+      <para><application>SWeTE Server</application> includes a built-in
+      reverse proxy that allows you to easily host your localized website
+      anywhere on the internet. You can set up the proxy to run on the same
+      host as your main website, or on a separate server. You can choose to
+      run your proxy site on a different domain (e.g.
+      <uri>fr.yourdomain.com</uri>), or in a subdirectory of your main site
+      (e.g. <uri>yourdomain.com/fr/</uri>).</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Installation</title>
+
+    <para><application>SWeTE server</application> is a typical
+    <acronym>LAMP</acronym> (Linux-Apache-PHP-MySQL) application. If you
+    already have a server that meets the requirements (<xref
+    linkend="requirements"/>), you can just proceed with the following
+    installation instructions. If you need help to set up a compatible server,
+    see xxx.</para>
+
+    <section>
+      <title>Downloading the Application</title>
+
+      <para>Before you can install <application>SWeTE</application>, you need
+      to download the application. The two most common distribution methods
+      are:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>The ZIP/Tarball downloadable archive.</para>
+        </listitem>
+
+        <listitem>
+          <para>The <application>Subversion</application> source-code
+          repository. This is handy for keeping up-to-date with patches and
+          security updates.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para/>
+
+      <section>
+        <title>Method 1: Downloading the ZIP/Tarball Distribution</title>
+
+        <para>The most common format for obtaining <application>SWeTE
+        server</application> is the ZIP and Tarball distributions. You can
+        download the entire application as either a ZIP file or a Tar.gz file,
+        then extract the contents somewhere on your webserver.</para>
+
+        <para>You can download the latest version from
+        <uri>http://swete.weblite.ca/download</uri>. If you decide to download
+        the ZIP distribution, you will end up with a file named
+        <filename>swete-server-x.y.z.zip</filename> (where x.y.z are the
+        version number). If you download the Tar.Gzip distribution, the file
+        will be called <filename>swete-server-x.y.z.tar.gz</filename>.</para>
+
+        <para>Once you have downloaded this file, you will need to extract it
+        and copy it to your web server (the order of these steps may be
+        different depending on what kind of access you have on your web
+        server). Upon completion you should have a
+        <filename>swete-server</filename> directory located somewhere on your
+        server in a web-accessible directory. For the remainder of these
+        instructions, we'll assume that you have installed it at
+        <filename>/var/www/swete-server</filename>.</para>
+      </section>
+
+      <section>
+        <title>Method 2: Checking out from Subversion Repository</title>
+
+        <para>Web Lite Solutions also hosts subversion repositories for each
+        version-branch of <application>SWeTE</application>. The benefit of
+        installing <application>SWeTE</application> form the subversion
+        repository is that it allows you to, more easily, stay up-to-date with
+        bug fixes and patches. There is a repository branch for each major
+        release of <application>SWeTE</application>. These branches will only
+        include backward compatible bug-fixes so you can be sure that updating
+        to the latest version of your chosen branch will not cause your
+        application to break.</para>
+
+        <para>You can view the available branches at
+        <uri>http://weblite.ca/svn/swete-swerver/branches</uri>. If you want
+        to stay up-to-date with the latest in development you might also want
+        to check out the source directly from the trunk. The following are
+        some example URLs to the various repositories:</para>
+
+        <para/>
+
+        <itemizedlist>
+          <listitem>
+            <para><uri>http://weblite.ca/svn/swete-swerver/trunk/</uri> - The
+            trunk and location of the bleeding edge of
+            <application>SWeTE</application> development.</para>
+          </listitem>
+
+          <listitem>
+            <para><uri>http://weblite.ca/svn/swete-swerver/branches/0.1.x</uri>
+            - The 0.1.x branch. This contains a snapshot of the 0.1 release of
+            <application>SWeTE</application> and will be maintained to include
+            critical bug fixes in the future.</para>
+          </listitem>
+        </itemizedlist>
+
+        <section>
+          <title>Requirements for Working with Subversion Repository</title>
+
+          <para>When working off of the subversion repository, you need to
+          have a few tools installed on your web server. This is because the
+          source code, as it is in the repository, is incomplete, and must be
+          "built" to include some other necessary components like
+          <application>Xataface</application> and various modules. The
+          <application>SWeTE</application> root directory contains a build.xml
+          file, which is an <application>ANT</application> build script. This
+          script contains all of the instructions necessary to update all of
+          the components in <application>SWeTE</application> to a consistent
+          version. Therefore, in order to build
+          <application>SWeTE</application> from source, you will need at least
+          the following tools installed on your web server.</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><application>Subversion</application>.
+              <uri>http://subversion.tigris.org/</uri></para>
+            </listitem>
+
+            <listitem>
+              <para><application>ANT</application>.
+              <uri>http://ant.apache.org/</uri></para>
+            </listitem>
+
+            <listitem>
+              <para>Your web server will need to have provide
+              <application>SSH</application> access so that you can run the
+              <application>svn</application> and
+              <application>ant</application> applications from the
+              command-line.</para>
+            </listitem>
+          </itemizedlist>
+        </section>
+
+        <section>
+          <title>Checking Out The Source Initially</title>
+
+          <para/>
+
+          <orderedlist>
+            <listitem>
+              <para>SSH into your web server and navigate to the parent
+              directory of where you would like to install
+              <application>SWeTE</application>. E.g. if you want
+              <application>SWeTE</application> to be installed at
+              /var/www/swete-server, you would navigate to the /var/www
+              directory:</para>
+
+              <screen>$ cd /var/www</screen>
+            </listitem>
+
+            <listitem>
+              <para>Check out the branch from the
+              <application>SVN</application> repository. You will need to
+              decide which branch you want to check out. If you are working
+              with a production application you should check out the latest
+              stable branch. If you are wanted to work with the latest
+              developments, then you can check out the trunk. The following
+              example shows us checking out the 0.2.x branch:</para>
+
+              <screen>$ svn co http://weblite.ca/svn/swete-swerver/branches/0.2.x swete-server</screen>
+
+              <para>What this command says is that we're checking out the
+              repository located at
+              <uri>http://weblite.ca/svn/swete-swerver/branches/0.2.x</uri>,
+              into a new directory named <filename>swete-server</filename>
+              inside the current directory. After hitting
+              <keycode>enter</keycode>, you should see a long list of files
+              being downloaded:</para>
+
+              <screen>A    swete-server/testdb.sql
+A    swete-server/.htaccess
+A    swete-server/README.txt
+A    swete-server/swete-admin
+A    swete-server/swete-admin/include
+A    swete-server/swete-admin/include/functions.inc.php
+A    swete-server/swete-admin/livecache
+A    swete-server/swete-admin/livecache/.htaccess
+A    swete-server/swete-admin/conf
+A    swete-server/swete-admin/conf/Installer.php
+A    swete-server/swete-admin/conf/ApplicationDelegate.php
+A    swete-server/swete-admin/conf/tables
+A    swete-server/swete-admin/conf/tables/xf_tm_translation_memories
+A    swete-server/swete-admin/conf/tables/xf_tm_translation_memories/xf_tm_translation_memories.php
+A    swete-server/swete-admin/changes.txt
+A    swete-server/swete-admin/doc.prepare.php
+A    swete-server/swete-admin/css
+A    swete-server/swete-admin/css/swete
+
+etc ...</screen>
+
+              <para>If you don't see a stream of file paths like this, you
+              should check to make sure that you don't have a typo in your
+              command. One (possibly) confusing thing is that in the
+              repository path it is "<filename>swete-swerver</filename>" and
+              not "<filename>swete-server</filename>". This was a typo that
+              was introduced early on in development, and it has just been
+              retained through the versions.</para>
+            </listitem>
+
+            <listitem>
+              <para>Navigate to the swete-server directory that was just
+              created, and run the ant build script. This will install all of
+              the dependencies.</para>
+
+              <screen>$ cd swete-server
+$ ant</screen>
+
+              <para>This should result in a stream of feedback to the console
+              as all of the dependent projects are checked out.</para>
+            </listitem>
+          </orderedlist>
+        </section>
+
+        <section>
+          <title>Updating Source Code</title>
+
+          <para>Once the source code has been installed, you should
+          periodically rerun the ant build script to ensure that you obtain
+          all of the latest bug fixes and patches. You can update the source
+          at any time by:</para>
+
+          <orderedlist>
+            <listitem>
+              <para>Navigate to the <filename>swete-server</filename>
+              directory.</para>
+
+              <screen>$ cd /var/www/swete-server</screen>
+            </listitem>
+
+            <listitem>
+              <para>Run the <application>ant</application> script:</para>
+
+              <screen>$ ant</screen>
+
+              <para>This will update the <filename>swete-server</filename>
+              source and all of its dependencies to the latest consistent
+              version within your current branch.</para>
+            </listitem>
+          </orderedlist>
+        </section>
+      </section>
+    </section>
+
+    <section>
+      <title>Configuring SWeTE for the First Time</title>
+
+      <para>Once you have downloaded the source code for
+      <application>SWeTE</application>, you will need to set up the database,
+      and edit some of the configuration files in
+      <application>SWeTE</application> to customize it for your
+      environment.</para>
+
+      <section>
+        <title>Setting up the Cache Directories</title>
+
+        <para><application>SWeTE</application> includes two cache directories,
+        both of which need to be made writable by the web server. These
+        directories are:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><filename>/var/www/swete-server/templates_c</filename> .
+            This holds the compiled Smarty templates for the
+            application.</para>
+          </listitem>
+
+          <listitem>
+            <para><filename>/var/www/swete-server/livecache</filename> . This
+            stores the cached web content for the proxy.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>You need to make sure that both of these directories exist, and
+        that they are writable by the web server. You can make them writable
+        using the chmod command:</para>
+
+        <screen>$ chmod 1777 templates_c livecache</screen>
+      </section>
+
+      <section>
+        <title>Setting up the Database</title>
+
+        <para><application>SWeTE</application> uses a
+        <application>MySQL</application> database to store all of its settings
+        and translations. Before firing up <application>SWeTE</application>,
+        you need to:</para>
+
+        <orderedlist>
+          <listitem>
+            <para>Create a database for <application>SWeTE</application> on
+            your <application>MySQL</application> server.</para>
+          </listitem>
+
+          <listitem>
+            <para>Create a <application>MySQL</application> user for
+            <application>SWeTE</application> to connect to your new
+            database.</para>
+          </listitem>
+
+          <listitem>
+            <para>Rename the
+            <filename>swete-admin/conf.db.ini.sample</filename> file to be
+            <filename>swete-admin/<filename>conf.db.ini</filename></filename>,
+            and modify it with the connection settings for your
+            database.</para>
+          </listitem>
+        </orderedlist>
+
+        <section>
+          <title>Creating the Database</title>
+
+          <para>Depending on the tool that you are using to manage your
+          <application>MySQL</application> database, the steps to create a new
+          database will vary. If you are working directly from the
+          command-line, you would use the <ulink
+          url="http://dev.mysql.com/doc/refman/5.0/en/create-database.html">CREATE
+          DATABASE</ulink> command. Another popular application for managing
+          <acronym>SQL</acronym> databases is <ulink
+          url="http://www.phpmyadmin.net/">PHPMyAdmin</ulink>. Many hosting
+          providers include their own tool for creating databases. You should
+          refer to your hosting provider the steps to do this if you are
+          unsure.</para>
+        </section>
+
+        <section>
+          <title>Creating the MySQL User</title>
+
+          <para>It is best practice to create a different
+          <application>MySQL</application> user for each database in
+          <application>MySQL</application>. This is to minimize the damage
+          caused by a security breach in any one database. Just as steps vary
+          for creating a database, the steps will also vary for creating users
+          depending on which tool you are using. If you are working directly
+          on the command line, you would use the <ulink
+          url="http://dev.mysql.com/doc/refman/5.1/en/create-user.html">CREATE
+          USER</ulink> command, and then use the <ulink
+          url="http://dev.mysql.com/doc/refman/5.1/en/grant.html">GRANT</ulink>
+          command to grant them access to your database.</para>
+
+          <para>If you are using <application>PHPMyAdmin</application>, the
+          steps will be different. If you are using a tool provided by your
+          hosting provider, the steps will be different still.</para>
+
+          <para>You will need to flush permissions after adding the user or
+          your new user won't be recognized. A full discussion of adding users
+          is contained in the <ulink
+          url="http://dev.mysql.com/doc/refman/5.1/en/adding-users.html">MySQL
+          manual</ulink>.</para>
+        </section>
+
+        <section>
+          <title>Setting up the conf.db.ini file</title>
+
+          <para>Once you have set up your user account and your database, you
+          just need to make a copy of the
+          <filename>conf.db.ini.sample</filename> file (in the
+          <filename>swete-admin</filename> directory) to be
+          <filename>conf.db.ini</filename> and change some of the connection
+          settings. The default content will be:</para>
+
+          <programlisting>[_database]
+    host=localhost
+    name="database name here"
+    user="database username here"
+    password="password"</programlisting>
+
+          <para>Just change the values on the right hand side of the
+          "<literal>=</literal>" sign to reflect the values that you set up
+          for your database and user.</para>
+        </section>
+      </section>
+
+      <section>
+        <title>Running the Install</title>
+
+        <para>At this point you have an empty database with nothing in it. To
+        populate it with the tables and views that are required for SWeTE to
+        work, you just need to point your web browser to the
+        swete-admin/index.php file (i.e.
+        http://yourdomain.com/swete-server/swete-admin/index.php), and let it
+        run. SWeTE will automatically update the database to the latest
+        version whenever it runs. You should receive a message saying that
+        "The database has been successfully updated to version XXXX". If,
+        instead you receive an error or a blank white screen, then you will
+        need to do some troubleshooting to find out the problem. The first
+        step in troubleshooting is always to check the error log for
+        clues.</para>
+
+        <para>If everything went as planned, then SWeTE should be installed
+        now and ready to go.</para>
+
+        <para>The next step will be to log in and create a new website in the
+        administration section of SWeTE.</para>
+      </section>
+    </section>
+  </section>
+
+  <section>
+    <title>Setting Up Your First Website</title>
+
+    <para>Once you have <application>SWeTE</application> installed, you can go
+    ahead and set up a proxy website. As an example, let's set up Wikipedia as
+    our first translated website. We'll create a French version of Wikipedia
+    using <application>SWeTE</application>. The steps are as follows:</para>
+
+    <orderedlist>
+      <listitem>
+        <para>Log into swete using the default admin account. By default the
+        admin account username is "admin" and password is "password".</para>
+      </listitem>
+
+      <listitem>
+        <para>Change the admin password to something else for security
+        reasons:</para>
+
+        <orderedlist numeration="loweralpha">
+          <listitem>
+            <para>Select <guimenuitem>admin</guimenuitem> &gt;
+            "<guisubmenu>Change Password</guisubmenu>" (in the upper right
+            menu).</para>
+
+            <screenshot>
+              <screeninfo>The user menu in the top right. Includes option to
+              change your password.</screeninfo>
+
+              <mediaobject>
+                <imageobject>
+                  <imagedata contentdepth="50%" contentwidth="50%"
+                             fileref="images/ch01.usermenu.changepass.png"
+                             scalefit="1"/>
+                </imageobject>
+              </mediaobject>
+            </screenshot>
+          </listitem>
+
+          <listitem>
+            <para>Fill in the resulting form with your new password.</para>
+
+            <screenshot>
+              <screeninfo>The Change Password Form</screeninfo>
+
+              <mediaobject>
+                <imageobject>
+                  <imagedata contentdepth="50%" contentwidth="50%"
+                             fileref="images/ch01.changepass.png" scalefit="1"/>
+                </imageobject>
+              </mediaobject>
+            </screenshot>
+          </listitem>
+        </orderedlist>
+      </listitem>
+
+      <listitem>
+        <para>Click the <guimenuitem>Dashboard</guimenuitem> link on the
+        top-left menu. This should take you to the dashboard as shown
+        below:</para>
+
+        <screenshot>
+          <screeninfo>The dashboard</screeninfo>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata contentdepth="50%" contentwidth="50%"
+                         fileref="images/ch01.dashboard1.png" scalefit="1"/>
+            </imageobject>
+          </mediaobject>
+        </screenshot>
+      </listitem>
+
+      <listitem>
+        <para>Click the <guibutton>Create New Website</guibutton> button in
+        the webpages section.</para>
+
+        <screenshot>
+          <screeninfo>The New Website Form</screeninfo>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata contentdepth="50%" contentwidth="50%"
+                         fileref="images/ch01.newsiteform.png" scalefit="1"/>
+            </imageobject>
+          </mediaobject>
+        </screenshot>
+      </listitem>
+
+      <listitem>
+        <para>Fill in the <guilabel>New Site</guilabel> form as
+        follows:</para>
+
+        <orderedlist numeration="lowerroman">
+          <listitem>
+            <para>Enter "Wikipedia French" in the <guilabel>Site
+            Name</guilabel> field.</para>
+          </listitem>
+
+          <listitem>
+            <para>Enter "http://en.wikipedia.org/" in the <guilabel>Website
+            URL</guilabel> field.</para>
+          </listitem>
+
+          <listitem>
+            <para>Select "English" in the "<guilabel>Source
+            Language</guilabel>" field.</para>
+          </listitem>
+
+          <listitem>
+            <para>Select "French" in the "<guilabel>Target
+            Language</guilabel>" field.</para>
+          </listitem>
+
+          <listitem>
+            <para>Leave the Publish Host field as its default value.</para>
+          </listitem>
+
+          <listitem>
+            <para>Append "wikipedia-fr/" to the Publish basepath field so that
+            it is "/path/to/swete-server/wikipedia-fr/"</para>
+          </listitem>
+
+          <listitem>
+            <para>At this point the form should appear as shown below:</para>
+
+            <screenshot>
+              <screeninfo>New Site Form, filled in with details for our first
+              site.</screeninfo>
+
+              <mediaobject>
+                <imageobject>
+                  <imagedata contentdepth="50%" contentwidth="50%"
+                             fileref="images/ch01.newsiteform-filled.png"
+                             scalefit="1"/>
+                </imageobject>
+              </mediaobject>
+            </screenshot>
+
+            <para>Click the <guibutton>Save</guibutton> button at the bottom
+            of the form.</para>
+          </listitem>
+
+          <listitem>
+            <para>After saving, you should see a message that says "Record
+            Successfully Saved", and you will be returned to the
+            <guilabel>Edit</guilabel> form for that site you just
+            created.</para>
+          </listitem>
+        </orderedlist>
+      </listitem>
+    </orderedlist>
+
+    <section>
+      <title>Testing Your Website</title>
+
+      <para>Now that you've created a website in the administration console,
+      it is time to test it out to make sure that it works. Click on the
+      "<guimenuitem>Dashboard</guimenuitem>" link in the top left, to return
+      to the Dashboard. You should now see your new site listed in the
+      <guilabel>Websites</guilabel> block as shown below:</para>
+
+      <screenshot>
+        <screeninfo>The Websites section of the dashboard after adding
+        Wikipedia as a proxy site.</screeninfo>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata contentdepth="50%" contentwidth="50%"
+                       fileref="images/ch01.dashboard-websites.png"
+                       scalefit="1"/>
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+
+      <para>Click on the "<guibutton>French</guibutton>" link to go to our
+      proxy site's URL:
+      <uri>http://yourdomain.com/swete-server/wikipedia-fr/</uri>. You should
+      see the wikipedia homepage here exactly as it appears on the actual
+      Wikipedia site (i.e. <uri>http://en.wikipedia.org/</uri>).</para>
+
+      <screenshot>
+        <screeninfo>Wikipedia as viewed through the proxy url.</screeninfo>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata contentdepth="50%" contentwidth="50%"
+                       fileref="images/ch01.wikipedia-proxy.png" scale="-"
+                       scalefit="1"/>
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+
+      <para>If you do not see this, then you may have some problems with
+      either your server settings or your site settings. Some common errors
+      include:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>A <quote>404 Not Found</quote> Error</emphasis>. If
+          you see a <errorcode>404</errorcode> error, then your server
+          probably doesn't have <application>mod_rewrite</application>
+          installed or it is not configured to work with your website.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>A blank white page</emphasis>. Likely there is a
+          server error. You should check your error log to see what the error
+          is before proceeding.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>If you see the Wikipedia home page, you are ready to proceed to
+      the next step: <emphasis>Translating Website Content</emphasis></para>
+    </section>
+
+    <section>
+      <title>Translating Website Content</title>
+
+      <para>At this point you may be underwhelmed by the results as you now
+      just have a proxy version of Wikipedia working at your own local
+      address. You may be wondering why none of the content has been
+      translated into French. <application>SWeTE</application> doesn't
+      translate website content automatically. You need to first capture the
+      strings in the website and then either have the strings translated by a
+      professional translator, translate them yourself, or submit them to
+      Google to be translated by a machine. Once the strings have been
+      translated, then <application>SWeTE</application> will be able to apply
+      the translations to webpages that it displays.</para>
+
+      <para>In any case, the first step you must take is to capture the
+      strings that you would like to translate.</para>
+
+      <section>
+        <title>Capturing Strings</title>
+
+        <para>In order to capture the strings that you would like to
+        translate, first return to the dashboard. In the Webpages block, to
+        the right of the "Wikipedia French" listing, you should see an
+        "Actions" button with the following icon:</para>
+
+        <para><inlinemediaobject>
+            <imageobject>
+              <imagedata fileref="images/ch01.actions-button-icon.png"/>
+            </imageobject>
+          </inlinemediaobject></para>
+
+        <para>Click on this icon to reveal a contextual menu of actions you
+        can perform on this site:</para>
+
+        <screenshot>
+          <screeninfo>Actions contextual menu for the Wikipedia French
+          site.</screeninfo>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata contentdepth="75%" contentwidth="75%"
+                         fileref="images/ch01.site-actions-menu.png"
+                         scalefit="1"/>
+            </imageobject>
+          </mediaobject>
+        </screenshot>
+
+        <para>Click on the "Capture Strings" option in this menu.</para>
+
+        <para>This should take you to a page with a toolbar at the top, and
+        the Wikipedia homepage at the bottom. The toolbar contains an
+        "<guimenu>Exit</guimenu>" link, and a string that says "String
+        capturing is currently turned off". Click the "<guimenuitem>Turn
+        On</guimenuitem>" link to the right to turn it on.</para>
+
+        <screenshot>
+          <screeninfo>Capturing Strings for Wikipedia</screeninfo>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata contentdepth="50%" contentwidth="50%"
+                         fileref="images/ch01.capture-strings-1.png" scale="-"
+                         scalefit="1" width="50%"/>
+            </imageobject>
+          </mediaobject>
+        </screenshot>
+
+        <para><remark>Remember to turn string capturing back off after you
+        have finished capturing all of the strings. Capturing strings is an
+        expensive operation as it requires quite a bit of extra processing by
+        SWeTE so you should keep it turned off unless you are in the process
+        of capturing strings.</remark></para>
+
+        <para>Once string capturing is turned on, you can start navigating the
+        site. Each time you load a page, the strings on it will be parsed and
+        imported into <application>SWeTE</application> for translation. For
+        now, let's just load the homepage. Because string capturing was
+        disabled when we first loaded it, we'll need to reload the page. You
+        can do this by clicking "<guibutton>Refresh</guibutton>" in your web
+        browser to reload the page.</para>
+
+        <para>After you have finished refreshing the homepage, turn string
+        capturing back off by clicking the "<guimenuitem>Turn
+        off</guimenuitem>" link on the top toolbar. Then click
+        "<guibutton>Exit</guibutton>" to return to the details page for our
+        site in the administration console.</para>
+
+        <section>
+          <title>Reviewing the Captured Strings</title>
+
+          <para>You can view the strings that have been captured in the system
+          at any time by clicking on the "<guimenuitem>Strings</guimenuitem>"
+          link in the top left menu bar. This will show you all of the strings
+          that have been captured by the system.</para>
+
+          <para/>
+
+          <screenshot>
+            <screeninfo>Strings list</screeninfo>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata contentdepth="40%" contentwidth="40%"
+                           fileref="images/ch01.strings-list.png" scalefit="1"/>
+              </imageobject>
+            </mediaobject>
+          </screenshot>
+
+          <para>You can search this list by keyword, webpage URL, website,
+          whether it has been translated, or by many other criteria. You can
+          also select one or more strings from this list to translate, either
+          manually or automatically using the <ulink
+          url="https://developers.google.com/translate/">Google Translation
+          API</ulink>.</para>
+        </section>
+      </section>
+
+      <section>
+        <title>Translating Strings Manually</title>
+
+        <para>The process for manually translating strings that have been
+        captured is as follows:</para>
+
+        <orderedlist>
+          <listitem>
+            <para>Go to the "<guilabel>Strings</guilabel>" section by clicking
+            the "<guimenuitem>Strings</guimenuitem>" link in the top left menu
+            bar.</para>
+          </listitem>
+
+          <listitem>
+            <para>Filter the set of strings as necessary using searching and
+            sorting to find the strings that you want to translate.</para>
+          </listitem>
+
+          <listitem>
+            <para>Check the box beside each string that you want to translate.
+            You can check all of the currently shown strings by checking the
+            box in the table header. <screenshot>
+                <screeninfo>Checking strings on the strings list to prepare to
+                translate them.</screeninfo>
+
+                <mediaobject>
+                  <imageobject>
+                    <imagedata contentdepth="50%" contentwidth="50%"
+                               fileref="images/ch01.check-strings.png"
+                               scalefit="1"/>
+                  </imageobject>
+                </mediaobject>
+              </screenshot></para>
+          </listitem>
+
+          <listitem>
+            <para>Click the "<guibutton>Translate</guibutton>" button on the
+            top menu bar. This will bring up a translation form that allows
+            you to translate all of the strings that were selected.
+            <screenshot>
+                <screeninfo>Translation Form</screeninfo>
+
+                <mediaobject>
+                  <imageobject>
+                    <imagedata contentdepth="40%" contentwidth="40%"
+                               fileref="images/ch01.translation-form.png"
+                               scalefit="1"/>
+                  </imageobject>
+                </mediaobject>
+              </screenshot></para>
+          </listitem>
+
+          <listitem>
+            <para>Fill in the translation form. Translations are automatically
+            saved as you tab out of the field.</para>
+          </listitem>
+        </orderedlist>
+      </section>
+
+      <section>
+        <title>Translating Strings with the Google Translation API</title>
+
+        <para><application>SWeTE</application> allows you to use the Google
+        Translation API to translate strings as well. In order to activate
+        this functionality, you must have a Google API Key. For information on
+        obtaining a key, check out the <ulink
+        url="https://developers.google.com/translate/v2/faq#access">Google
+        Translation API FAQ</ulink>. If you have a key, you can configure
+        <application>SWeTE</application> to use it by doing the
+        following:</para>
+
+        <orderedlist>
+          <listitem>
+            <para>Navigate to the <guilabel>Edit Site</guilabel> form for the
+            website you want to set up. (i.e. Go to the dashboard, click the
+            "Actions" button next to the website in the "Websites" block, and
+            select "Edit").</para>
+
+            <screenshot>
+              <screeninfo>Edit option of the actions menu for a
+              website.</screeninfo>
+
+              <mediaobject>
+                <imageobject>
+                  <imagedata contentdepth="50%" contentwidth="50%" depth="-"
+                             fileref="images/ch01.dashboard-website-edit.png"
+                             scalefit="1"/>
+                </imageobject>
+              </mediaobject>
+            </screenshot>
+
+            <para/>
+          </listitem>
+
+          <listitem>
+            <para>Expand the "<guilabel>More Details</guilabel>" section at
+            the bottom of the form.</para>
+
+            <screenshot>
+              <screeninfo>More options expandable heading</screeninfo>
+
+              <mediaobject>
+                <imageobject>
+                  <imagedata contentdepth="50%" contentwidth="50%"
+                             fileref="images/ch01.site-edit-more-details.png"
+                             scalefit="1"/>
+                </imageobject>
+              </mediaobject>
+            </screenshot>
+          </listitem>
+
+          <listitem>
+            <para>In the "<guilabel>Google API Key</guilabel>" field, enter
+            your Google API key.</para>
+
+            <screenshot>
+              <screeninfo>More details section expanded.</screeninfo>
+
+              <mediaobject>
+                <imageobject>
+                  <imagedata contentdepth="40%" contentwidth="40%"
+                             fileref="images/ch01.site-edit-more-details-expanded.png"
+                             scalefit="1"/>
+                </imageobject>
+              </mediaobject>
+            </screenshot>
+          </listitem>
+
+          <listitem>
+            <para>Click the "<guibutton>Save</guibutton>" button at the bottom
+            of the form.</para>
+          </listitem>
+        </orderedlist>
+
+        <para>Once you have entered your key in the site profile, you can
+        return to the "<guilabel>Strings</guilabel>" section of the
+        application and begin to translate the strings using the Google
+        Translation API. To continue our example site from earlier
+        (Wikipedia), we'll translate the strings in the first page of
+        wikipedia as follows:</para>
+
+        <orderedlist>
+          <listitem>
+            <para>Click the "<guibutton>Strings</guibutton>" link on the
+            top-left toolbar.</para>
+          </listitem>
+
+          <listitem>
+            <para>Check the box beside a few strings that we want to
+            translate.</para>
+
+            <screenshot>
+              <screeninfo>Checking strings on the strings list to prepare to
+              translate them.</screeninfo>
+
+              <mediaobject>
+                <imageobject>
+                  <imagedata contentdepth="50%" contentwidth="50%"
+                             fileref="images/ch01.check-strings.png"
+                             scalefit="1"/>
+                </imageobject>
+              </mediaobject>
+            </screenshot>
+          </listitem>
+
+          <listitem>
+            <para>Click the "<guibutton>Google Translate</guibutton>" button
+            on the top button bar. The will process for a moment and then pop
+            up with a message saying that the translations completed. If there
+            was a problem (e.g. invalid API key), it will let you know.</para>
+
+            <screenshot>
+              <screeninfo>Google translate progress bar.</screeninfo>
+
+              <mediaobject>
+                <imageobject>
+                  <imagedata contentdepth="50%" contentwidth="50%"
+                             fileref="images/ch01.google-translate-progress.png"
+                             scalefit="1"/>
+                </imageobject>
+              </mediaobject>
+            </screenshot>
+          </listitem>
+        </orderedlist>
+      </section>
+
+      <section>
+        <title>Checking The Translations</title>
+
+        <para>After performing some translations, you should be able to view
+        your proxy (translated) site again, but this time you should see the
+        translations incorporated into the page. You may recall the steps to
+        view your site from earlier:</para>
+
+        <orderedlist>
+          <listitem>
+            <para>Click on "Dashboard" in the upper left menu to go to the
+            dashboard. Then click the "French" link next to the Wikipedia site
+            in the "Webpages" block.<screenshot>
+                <screeninfo>The Websites section of the dashboard after adding
+                Wikipedia as a proxy site.</screeninfo>
+
+                <mediaobject>
+                  <imageobject>
+                    <imagedata contentdepth="50%" contentwidth="50%"
+                               fileref="images/ch01.dashboard-websites.png"
+                               scalefit="1"/>
+                  </imageobject>
+                </mediaobject>
+              </screenshot></para>
+          </listitem>
+
+          <listitem>
+            <para>You may need to refresh your browser to see the changes as
+            your browser may have the page cached from before it was
+            translated.</para>
+          </listitem>
+
+          <listitem>
+            <para>You should see the Wikipedia main page translated into
+            French using your translations.</para>
+
+            <screenshot>
+              <screeninfo>Wikipedia after performing a few
+              translations</screeninfo>
+
+              <mediaobject>
+                <imageobject>
+                  <imagedata contentdepth="40%" contentwidth="40%"
+                             fileref="images/ch01.wikipedia-semi-translated.png"
+                             scalefit="1"/>
+                </imageobject>
+              </mediaobject>
+            </screenshot>
+          </listitem>
+        </orderedlist>
+      </section>
+    </section>
+  </section>
+
+  <section>
+    <title>Summary</title>
+
+    <para>This chapter introduced SWeTE Server as a reverse-proxy that
+    provides seamless content translation and localization. SWeTE will run on
+    a fairly typical LAMP server stack (Linux, Apache, PHP, MySQL). It can be
+    downloaded either as an archived, all-in-one distribution or via the
+    subversion repository. The Subversion repository is recommended for
+    keeping up-to-date with patches and bug fixes.</para>
+
+    <para>We listed many of the features of SWeTE in <xref
+    linkend="features"/>. The core functionality centers around the
+    translation and serving of web content. It includes an advanced
+    translation memory that can be used to import and export to many formats,
+    including XLIFF, TMX, CSV, and XML.</para>
+
+    <para>The chapter also includes a step-by-step tutorial on:</para>
+
+    <orderedlist>
+      <listitem>
+        <para>Downloading and Installing SWeTE</para>
+      </listitem>
+
+      <listitem>
+        <para>Setting up a proxy website for Wikipedia to translate it from
+        English to French.</para>
+      </listitem>
+
+      <listitem>
+        <para>Capturing strings from the website that need to be
+        translated.</para>
+      </listitem>
+
+      <listitem>
+        <para>Translating strings manually.</para>
+      </listitem>
+
+      <listitem>
+        <para>Translating strings using the Google translation API.</para>
+      </listitem>
+    </orderedlist>
+
+    <para>At this point we have only scratched the surface. The remaining
+    chapters will go through the features of SWeTE in greater depth. The
+    initial release (0.2) is also meant to be a bare-bones starting point for
+    development. Development is active and ongoing, and many more features are
+    planned.</para>
+  </section>
+</chapter>
