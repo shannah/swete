@@ -52,7 +52,6 @@
   <target name="update-git">
 	<exec dir="${sourceDir}" executable="git">
 	   <arg value="pull"/>
-	   <arg path="."/>
 	</exec>
 	<exec dir="${sourceDir}" executable="git">
 	    <arg value="submodule"/>
