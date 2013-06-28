@@ -1,0 +1,3 @@
+[submodule "swete-admin/modules/g2"]
+	path = swete-admin/modules/g2
+	url = https://github.com/shannah/xataface-module-g2.git
