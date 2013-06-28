@@ -1,5 +1,5 @@
 SWeTE Server
-Copyright (c) 2012, Web Lite Translation Corp., All rights reserved
+Copyright (c) 2012-2013, Web Lite Translation Corp., All rights reserved
 
 Synopsis
 ========
