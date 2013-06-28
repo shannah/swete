@@ -10,13 +10,8 @@
       <property name="modulesDir" value="${adminDir}/modules"/>
 
 	<property file="build-conf.properties"/>
-      
-      <condition property="missingDataface">
-	  <not>
-			<available file="${datafaceDir}"/>
-	  </not>
-      </condition>
-      <available file="${datafaceDir}" property="datafaceExists"/>
+
+
       <condition property="templates_c.missing">
 	  <not>
 		<available file="${adminDir}/templates_c"/>
@@ -27,27 +22,7 @@
 		<available file="${adminDir}/livecache"/>
 	  </not>
       </condition>
-      <condition property="modules.missing">
-		<not>
-			<available file="${adminDir}/modules"/>
-		</not>
-      </condition>
-      <condition property="g2.missing">
-		<not>
-			<available file="${modulesDir}/g2"/>
-		</not>
-      </condition>
-      <condition property="ckeditor.missing">
-		<not>
-			<available file="${modulesDir}/ckeditor"/>
-		</not>
-      </condition>
-      <condition property="tm.missing">
-		<not>
-			<available file="${modulesDir}/ckeditor"/>
-		</not>
-      </condition>
-      
+
      
       
       
@@ -58,31 +33,15 @@
    <target name="clean" depends="init">
 	  
    </target>
-   
-  <target name="create-dataface" if="missingDataface">
-	  <exec dir="${sourceDir}" executable="svn">
-		 <arg value="co"/>
-		 <arg value="${datafaceSvnUrl}"/>
-		 <arg path="${datafaceDir}"/>
-	  </exec>
-  
-  </target>
-  
-  <target name="update-dataface" depends="update-svn, create-dataface">
-  
-		<exec dir="${sourceDir}" executable="svn">
-		   <arg value="update"/>
-		   <arg path="${datafaceDir}"/>
-		</exec>
-  </target>
-  <target name="create-templates_c" if="templates_c.missing" depends="update-svn">
+
+  <target name="create-templates_c" if="templates_c.missing" depends="update-git">
 		<mkdir dir="${adminDir}/templates_c"/>
   </target>
   
   <target name="update-templates_c" depends="create-templates_c">
 		<chmod dir="${adminDir}/templates_c" perm="777"/>
   </target>
-  <target name="create-livecache" if="livecache.missing" depends="update-svn">
+  <target name="create-livecache" if="livecache.missing" depends="update-git">
 		<mkdir dir="${adminDir}/livecache"/>
   </target>
   <target name="update-livecache" depends="create-livecache">
@@ -90,64 +49,25 @@
 		<chmod file="${adminDir}/livecache/.htaccess" perm="644"/>
   </target>
   
-  <target name="update-svn">
-	<exec dir="${sourceDir}" executable="svn">
-	   <arg value="update"/>
+  <target name="update-git">
+	<exec dir="${sourceDir}" executable="git">
+	   <arg value="pull"/>
 	   <arg path="."/>
 	</exec>
-  
-  </target>
-  
-  <target name="init-modules" depends="update-svn" if="modules.missing">
-	  <mkdir dir="${adminDir}/modules"/>
-  </target>
-  
-  <target name="init-g2" depends="init-modules" if="g2.missing">
-		<exec dir="${sourceDir}" executable="svn">
-		   <arg value="co"/>
-		   <arg value="${g2SvnUrl}"/>
-		   <arg path="${modulesDir}/g2"/>
-		</exec>
-		
-  </target>
-  <target name="update-g2" depends="init-g2">
-		<exec dir="." executable="svn">
-		   <arg value="update"/>
-		   <arg path="${modulesDir}/g2"/>
-		</exec>
-  </target>
-
-  <target name="init-tm" depends="init-modules" if="tm.missing">
-	<exec dir="${sourceDir}" executable="svn">
-	   <arg value="co"/>
-	   <arg value="${tmSvnUrl}"/>
-	   <arg path="${modulesDir}/tm"/>
+	<exec dir="${sourceDir}" executable="git">
+	    <arg value="submodule"/>
+	    <arg value="init"/>
 	</exec>
-  </target>
+	<exec dir="${sourceDir}" executable="git">
+	    <arg value="submodule"/>
+	    <arg value="update"/>
+	</exec>
   
-  <target name="update-tm" depends="init-tm">
-		<exec dir="." executable="svn">
-		   <arg value="update"/>
-		   <arg path="${modulesDir}/tm"/>
-		</exec>
   </target>
-  
-  <target name="init-ckeditor" depends="init-modules" if="ckeditor.missing">
-		<exec dir="${sourceDir}" executable="svn">
-		   <arg value="co"/>
-		   <arg value="${ckeditorSvnUrl}"/>
-		   <arg path="${modulesDir}/ckeditor"/>
-		</exec>
-  </target>
-  <target name="update-ckeditor" depends="init-ckeditor">
-		<exec dir="." executable="svn">
-		   <arg value="update"/>
-		   <arg path="${modulesDir}/ckeditor"/>
-		</exec>
-  </target>
+
   
 
-  <target name="update" depends="clean, update-svn, update-dataface, update-templates_c, update-livecache, update-tm, update-g2, update-ckeditor">
+  <target name="update" depends="clean, update-git, update-templates_c, update-livecache">
 	
 	
 	
