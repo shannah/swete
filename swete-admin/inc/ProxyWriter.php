@@ -39,7 +39,16 @@ require_once 'lib/http_build_url.php';
  */
 class ProxyWriter {
 
+	/**
+	 * @brief The locale for parsing dates.  E.g. en_CA
+	 * @type string
+	 */
     public $sourceDateLocale = null;
+    
+    /**
+     * @brief The locale for writing dates.  E.g. fr_CA
+     * @type string
+     */
     public $targetDateLocale = null;
 
     /** Whether we should try to unproxify resource paths so they are loaded

@@ -611,7 +611,41 @@ class ProxyClientPreprocessor implements ProxyClientDelegate {
 	private $siteId;
 	private $prefilters = null;
 	public static $db = null;
+	private $delegate = null;
 	
+	
+	protected function delegate($delegate = null){
+		if ( isset($delegate) ){
+			$this->delegate = $delegate;
+			return $this;
+		} else {
+			if ( isset($this->delegate) ){
+				return $this->delegate;
+			} else {
+				$s = DIRECTORY_SEPARATOR;
+				$base = defined('DATAFACE_SITE_PATH') ? DATAFACE_SITE_PATH:'.';
+				$path = $base.$s.'sites'.$s.basename($this->siteId).$s.'Delegate.php';
+				$class = 'sites_'.intval($this->siteId).'_Delegate';
+				if ( !class_exists($class) ){
+					if ( file_exists($path) ){
+						require_once($path);
+						if ( !class_exists($class) ){
+							error_log('Loaded '.$path.' but no class '.$class.' was found... skipping preprocessing.');
+							return null;
+						}	
+					}
+				}
+				$obj = null;
+				if ( class_exists($class) ){
+					$obj = new $class;
+					$this->delegate = $obj;
+					return $this->delegate;
+					
+				}
+				return null;
+			}
+		}
+	}
 	
 	
 	private function &getPrefilters(){
@@ -650,7 +684,12 @@ class ProxyClientPreprocessor implements ProxyClientDelegate {
 		return $res;
 	}
 	
-	
+	public function preprocessHeaders(&$headers){
+		$obj = $this->delegate();
+		if ( isset($obj) and method_exists($obj, 'preprocessHeaders') ){
+			$obj->preprocessHeaders($headers);
+		}
+	}
 	
 	protected function _processText($string, $index, &$count){
 		$filters =& $this->getPrefilters();
@@ -680,26 +719,9 @@ class ProxyClientPreprocessor implements ProxyClientDelegate {
 	
 	
 	public function preprocess($html){
-		$s = DIRECTORY_SEPARATOR;
-		$base = defined('DATAFACE_SITE_PATH') ? DATAFACE_SITE_PATH:'.';
-		$path = $base.$s.'sites'.$s.basename($this->siteId).$s.'Delegate.php';
-		$class = 'sites_'.intval($this->siteId).'_Delegate';
-		if ( !class_exists($class) ){
-			if ( file_exists($path) ){
-				require_once($path);
-				if ( !class_exists($class) ){
-					error_log('Loaded '.$path.' but no class '.$class.' was found... skipping preprocessing.');
-					return $html;
-				}	
-			}
-		}
-		$obj = null;
-		if ( class_exists($class) ){
-			$obj = new $class;
-			if ( method_exists($obj, 'fixHtml') ){
-				$html = $obj->fixHtml($html);
-			}
-			
+		$obj = $this->delegate();
+		if ( isset($obj) and method_exists($obj, 'fixHtml') ){
+			$html = $obj->fixHtml($html);
 		}
 		require_once 'inc/SweteTools.php';
 		try {
@@ -710,7 +732,6 @@ class ProxyClientPreprocessor implements ProxyClientDelegate {
 		
 		
 		if ( isset($obj) and method_exists($obj, 'preprocess') ){
-			//$obj = new $class;
 			$obj->preprocess($doc);
 		}
 		$xpath = new DOMXPath($doc);
@@ -723,45 +744,13 @@ class ProxyClientPreprocessor implements ProxyClientDelegate {
 				$count = 0;
 				$nodeValue = $this->_processText(htmlspecialchars($txtEl->nodeValue), 0, $count);
 				
-				// $nodeValue co
-				/*
-				$pieces = explode('<', $txtEl->nodeValue);
-				foreach ($pieces as $i=>$piece ){
-					if ( $i === 0 ){
-						$pieces[$i] = $this->_processText($piece, 0, $count);
-					} else {
-						$pieceParts = explode('>', $piece);
-						$numPieceParts = count($pieceParts);
-						if ( $numPieceParts > 1 ){
-							$pieceParts[$numPieceParts-1] = $this->_processText($pieceParts[$numPieceParts-1], 0, $count);
-							$pieces[$i] = implode('>', $pieceParts);
-						} else {
-							$pieces[$i] = $this->_processText($piece, 0, $count );
-						}
-						
-					}
-				}
-				*/
 				if ( $count > 0 ){
-					
 					$f = $doc->createDocumentFragment();
-					//$impl = implode('<', $pieces);
-					//error_log($impl);
 					$fres = $f->appendXML($nodeValue);
-						
-					
-					
 					$txtEl->parentNode->replaceChild($f, $txtEl);
 				}
-				
-				
 			}
 		}	
-			//return (string)$dom;
-		//echo $doc->saveHtml();echo "here";exit;
-		return $doc->saveHtml();
-		
-		
-		
+		return $doc->saveHtml();	
 	}
 }

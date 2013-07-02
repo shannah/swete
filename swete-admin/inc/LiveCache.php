@@ -548,13 +548,15 @@ class LiveCache {
 			$isHtml = preg_match('/html|xml/', $this->client->contentType);
 			$isCSS = preg_match('/css/', $this->client->contentType);
 			$proxyWriter = $this->getProxyWriter();
+			ProxyClientPreprocessor::$db = $this->dbConnect();
+			$delegate = new ProxyClientPreprocessor($this->siteId);
+			$delegate->preprocessHeaders($this->client->headers);
 			$headers = $proxyWriter->proxifyHeaders($this->client->headers, true);
 			$locHeaders = preg_grep('/^Location:/i', $headers);
 			if ( !$locHeaders and ($isHtml or $isCSS) ){
 				if ( $isHtml ){
 
-					ProxyClientPreprocessor::$db = $this->dbConnect();
-					$delegate = new ProxyClientPreprocessor($this->siteId);
+					
 					$this->mark('Preprocessing page content');
 					$this->client->content = $delegate->preprocess($this->client->content);
 					$this->mark('Finished preprocessing');

@@ -313,6 +313,8 @@ class ProxyServer {
 		
 		$isHtml = preg_match('/html|xml/', $client->contentType);
 		$isCSS = preg_match('/css/', $client->contentType);
+		$delegate = new ProxyClientPreprocessor($this->site->getRecord()->val('website_id'));
+		$delegate->preprocessHeaders($client->headers);
 		$headers = $proxyWriter->proxifyHeaders($client->headers, true);
 		$locHeaders = preg_grep('/^Location:/i', $headers);
 		// Let's see if this should be a passthru
@@ -344,7 +346,7 @@ class ProxyServer {
 		}
 		$stats = array();
 		if ( $isHtml and !$locHeaders ){
-			$delegate = new ProxyClientPreprocessor($this->site->getRecord()->val('website_id'));
+			
 			$this->mark('Preprocessing page content');
 			$client->content = $delegate->preprocess($client->content);
 			$this->mark('Finished preprocessing');
