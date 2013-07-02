@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+require_once 'modules/tm/lib/TMTools.php';
 class tables_translation_miss_log {
 
 	function block__custom_javascripts(){
@@ -55,6 +56,15 @@ class tables_translation_miss_log {
 		$app->addHeadContent('<style type="text/css">#total-words-found {float:right;width: 200px;}</style>');
 		echo '<div id="total-words-found">Total Words: '.$row[0].'</div>';
 		Dataface_JavascriptTool::getInstance()->import('swete/actions/batch_google_translate.js');
+	}
+	
+	
+	function normalized_string__csvValue(Dataface_Record $record){
+	    return TMTools::encode($record->val('string'), $params);
+	}
+	
+	function normalized_translation_value__csvValue(Dataface_Record $record){
+	    return $record->val('normalized_translation_value');
 	}
 	
 	
