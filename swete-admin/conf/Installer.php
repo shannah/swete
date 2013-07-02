@@ -1326,4 +1326,38 @@ class conf_Installer {
         } catch ( Exception $ex){}
         
     }
+    
+    function update_4638(){
+        // Create a directory to store the uploads
+        mkdir('livecache/string_imports');
+        
+        // Create the string_imports table for handling the importing of 
+        // CSV files, etc...
+        $sql[] = "CREATE  TABLE `string_imports` (
+            `string_import_id` INT(11) NOT NULL AUTO_INCREMENT ,
+            `file` VARCHAR(255) NULL ,
+            `file_mimetype` VARCHAR(45) NULL ,
+            `file_format` ENUM('CSV') NULL ,
+            `target_translation_memory_uuid` VARCHAR(45) NULL ,
+            `log` LONGTEXT NULL,
+            `status` ENUM('COMPLETE','FAILED','PENDING') DEFAULT 'PENDING',
+            PRIMARY KEY (`string_import_id`) );
+          ";
+        try {
+            df_q($sql);
+            df_clear_views();
+            df_clear_cache();
+        } catch ( Exception $ex){}
+        
+    }
+    
+    function update_4640(){
+        
+        $sql[] = "ALTER TABLE `string_imports` ADD `succeeded` INT(11) UNSIGNED NULL, ADD `failed` INT(11) UNSIGNED NULL";
+        try {
+            df_q($sql);
+            df_clear_views();
+            df_clear_cache();
+        } catch ( Exception $ex){}      
+    }
 }
