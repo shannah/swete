@@ -85,8 +85,9 @@ class CSVStringImporter {
             $strRec = XFTranslationMemory::addString($string, $translationMemory->getSourceLanguage());
             
             $res = df_q(sprintf(
-                "select string_id from translation_miss_log where string_id=%d",
-                $strRec->val('string_id')
+                "select string_id from translation_miss_log where string_id=%d and translation_memory_id=%d",
+                $strRec->val('string_id'),
+                $translationMemory->getRecord()->val('translation_memory_id')
             ));
             
             if ( mysql_num_rows($res) == 0 ){
