@@ -150,7 +150,8 @@ class sites_429_Delegate {
         
         $html = preg_replace(
             '/Logged in as &lt;b&gt;([^&lt;]*)&lt;\/b&gt;/', 
-            'Logged in as &lt;span data-swete-translate="0" style="font-weight:bold"&gt;$1&lt;/span&gt;',
+            'Logged in as &lt;span data-swete-translate="0" '.
+            'style="font-weight:bold"&gt;$1&lt;/span&gt;',
             $html
         );
         
@@ -164,35 +165,45 @@ class sites_429_Delegate {
     function preprocessHeaders(&amp;$headers){
         foreach ( $headers as $k=&gt;$h ){
             // WARNING:  This rule is ONLY FOR DEVELOPMENT MODE
-            // When we go live we should remove this rule and make the proxy so that it will
-            // work properly with HTTPS
-            $headers[$k] = preg_replace('#https://www.example.com.com#', 'http://www.example.com', $h);
+            // When we go live we should remove this rule and 
+            // make the proxy so that it will work properly with 
+            // HTTPS
+            $headers[$k] = preg_replace(
+                '#https://www.example.com.com#', 
+                'http://www.example.com', 
+                $h
+            );
         }
     }
     
 
     /**
-     * Preprocesses the DOM before it is run through SWeTE's processor for translation and
-     * proxification.
+     * Preprocesses the DOM before it is run through SWeTE's 
+     * processor for translation and proxification.
      */
     function preprocess(DOMDocument $dom){
         
         // We don't need to translate building locations
         $xpath = new DOMXPath($dom);
-        $buildLocations = $xpath-&gt;query("//select[@id='buildLocations']/option[@value!='']");
+        $buildLocations = $xpath-&gt;query(
+            "//select[@id='buildLocations']/option[@value!='']"
+        );
         foreach ($buildLocations as $o){
             $o-&gt;setAttribute('notranslate','1');
         }
         
         
-        // We don't need to translate employee names that appear in the employee dropdown
-        $employees = $xpath-&gt;query("//select[@id='employee']/option[@value!='']");
+        // We don't need to translate employee names that appear 
+        // in the employee dropdown
+        $employees = $xpath-&gt;query(
+            "//select[@id='employee']/option[@value!='']"
+        );
         foreach ( $employees as $o ){
             $o-&gt;setAttribute('notranslate','1');
         }
         
-        // The product list page includes a p-id div for each product that is hidden.
-        // There is no need to translate this
+        // The product list page includes a p-id div for each 
+        // product that is hidden. There is no need to translate this
         $pids = $xpath-&gt;query("//div[@id='p-id']");
         foreach ($pids as $pid){
             $pid-&gt;setAttribute('notranslate', '1');
@@ -200,11 +211,14 @@ class sites_429_Delegate {
         
         // Order Review Page
         
-        $shippingAddresses = $xpath-&gt;query("//td[@class='CheckoutReviewShipTo']");
+        $shippingAddresses = $xpath-&gt;query(
+            "//td[@class='CheckoutReviewShipTo']"
+        );
         foreach ( $shippingAddresses as $a ){
             $a-&gt;setAttribute('notranslate', '1');
         }
         
+
         $billToTable = $xpath-&gt;query("//table[@id='BillToTable']");
         foreach ( $billToTable as $b){
             $b-&gt;setAttribute('notranslate', '1');
