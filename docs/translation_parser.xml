@@ -957,7 +957,7 @@
         <literal>data-date-format-target</literal> attributes.</para>
       </section>
 
-      <section>
+      <section id="automatic-date-wrapping">
         <title>Automatic Date Wrapping</title>
 
         <para>Wrapping dates explicitly in your source HTML may be cumbersome,

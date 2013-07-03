@@ -127,11 +127,16 @@
       <programlisting>&lt;?php
 /**
  * @param string $content The content to be translated.
- * @param string $url The URL of the SWeTE proxy site.  Can be any URL in the proxy
- *      but will be treated as the Base HREF for the page content.
- * @param string $password The webservice secret key.  Should match the value of 
- *      the webservice_secret_key field of the website in SWeTE.
- * @returns string Translated version of $html.
+ *
+ * @param string $url The URL of the SWeTE proxy site.  
+ *      Can be any URL in the proxy but will be treated 
+ *      as the Base HREF for the page content.
+ *
+ * @param string $password The webservice secret key.  
+ *      Should match the value of the webservice_secret_key 
+ *     field of the website in SWeTE.
+ *
+ * @returns string Translated version of $content.
  */
 function translateContent($content, $url, $password, $contentType='text/html'){
     // Salt should be current time (unix timestamp).
@@ -285,5 +290,21 @@ Bonjour Monde</screen>
         to match the content exactly.</para>
       </section>
     </section>
+  </section>
+
+  <section>
+    <title>How It Works</title>
+
+    <para>REST requests are processed by SWeTE in exactly the same way that
+    regular web requests are processed. The only difference is that the
+    content to be translated is fetched from the POST parameters instead of
+    making a background request to the equivalent page on the source site.
+    This means that the content provided in a REST request goes through all of
+    the same preprocessing steps that standard content goes through. It also
+    means that string capturing works exactly the same way also. I.e. if you
+    have "log translation misses" enabled in the site configuration, then you
+    perform a REST API request with some content that hasn't yet been
+    translated, then the untranslated strings will be added to the translation
+    miss log and appear under the "strings" tab to be translated.</para>
   </section>
 </chapter>
