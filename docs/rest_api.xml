@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+"http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<chapter>
+  <title>Using the REST Translation API</title>
+
+  <para>As of version 0.3, SWeTE now includes a REST (Representational State
+  Transfer) web service API for translating strings. Using this API, you can
+  pass HTML or plain text content to SWeTE over HTTP and retrieve translated
+  versions of the content as output.</para>
+
+  <section>
+    <title>Enabling the REST API</title>
+
+    <para>Before you can start using the REST API for a website, you'll need
+    to create a secret web-service key for the site in the site profile. This
+    key will be used by your REST clients as a sort of password to access the
+    API.</para>
+
+    <para>The steps are as follows:</para>
+
+    <orderedlist>
+      <listitem>
+        <para>Log into your SWeTE instance's administration console (e.g.
+        http://example.com/swete-admin/index.php).</para>
+      </listitem>
+
+      <listitem>
+        <para>From the "Dashboard", click on the "Tools" icon </para>
+
+        <para><inlinemediaobject>
+            <imageobject>
+              <imagedata fileref="images/ch01.menu-icon.png" valign="middle"/>
+            </imageobject>
+          </inlinemediaobject></para>
+
+        <para> next to the site you want to activate, then select "Edit" from
+        the contextual menu.</para>
+      </listitem>
+
+      <listitem>
+        <para>Click the "More Details" section header to see the advanced
+        options on the edit form. This should reveal some additional fields
+        including "Webservice secret key".</para>
+      </listitem>
+
+      <listitem>
+        <para>Enter a phrase into this field. It may contain letters, numbers,
+        punctuation, or special characters, and it can be up to 255 characters
+        in length.</para>
+
+        <para><inlinemediaobject>
+            <imageobject>
+              <imagedata fileref="images/webservice-secret-key-field.png"/>
+            </imageobject>
+          </inlinemediaobject></para>
+      </listitem>
+
+      <listitem>
+        <para>Click "Save"</para>
+      </listitem>
+    </orderedlist>
+  </section>
+
+  <section>
+    <title>Using the REST API</title>
+
+    <para>Once you have activated the REST API for a site, you should be able
+    to sent HTTP requests to the service with strings that you wish to
+    translate. The HTTP requests should be POST requests to a URL in the proxy
+    site with the following POST parameters:</para>
+
+    <table frame="box" rules="all">
+      <caption>POST Parameters for REST API</caption>
+
+      <thead>
+        <tr align="center">
+          <th>Key</th>
+
+          <th>Description</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td>swete:input</td>
+
+          <td>The content that you wish to have translated. This may be an
+          HTML page, an HTML fragment, or plain text.</td>
+        </tr>
+
+        <tr>
+          <td>swete:content-type</td>
+
+          <td>The type of the content provided in swete:input. Default is
+          <literal>text/html</literal>, but if you pass plain text, then you
+          should set this parameter to <literal>text/plain</literal>.</td>
+        </tr>
+
+        <tr>
+          <td>swete:salt</td>
+
+          <td>A seed unix time stamp (i.e. number of seconds since epoch).
+          This should reflect the time that the request was initiated. If this
+          timestamp is more than 1 hour different than the server's time, then
+          the request will be denied.</td>
+        </tr>
+
+        <tr>
+          <td>swete:key</td>
+
+          <td>This should be a SHA1 hash of the concatenation of the
+          swete:salt parameter and your web site's secret web service
+          key.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <para/>
+
+    <section>
+      <title>Sample PHP Client</title>
+
+      <para>Below is a sample PHP client that is set to use the REST
+      API:</para>
+
+      <programlisting>&lt;?php
+/**
+ * @param string $content The content to be translated.
+ * @param string $url The URL of the SWeTE proxy site.  Can be any URL in the proxy
+ *      but will be treated as the Base HREF for the page content.
+ * @param string $password The webservice secret key.  Should match the value of 
+ *      the webservice_secret_key field of the website in SWeTE.
+ * @returns string Translated version of $html.
+ */
+function translateContent($content, $url, $password, $contentType='text/html'){
+    // Salt should be current time (unix timestamp).
+    $salt = time();
+    
+    // Key should be sha1 hash of salt concatenated with password
+    $key = sha1($salt.$password);
+    
+    // POST parameters to pass to the web service
+    $data = array(
+        'swete:input' =&gt; $content,
+        'swete:salt' =&gt; $salt,
+        'swete:key' =&gt; $key,
+        'swete:content-type' =&gt; $contentType
+    );
+    
+    // use key 'http' even if you send the request to https://...
+    $options = array(
+        'http' =&gt; array(
+            'header'  =&gt; "Content-type: application/x-www-form-urlencoded\r\n",
+            'method'  =&gt; 'POST',
+            'content' =&gt; http_build_query($data),
+        )
+    );
+    $context  = stream_context_create($options);
+    $result = file_get_contents($url, false, $context);
+    return $result;
+}
+
+function translatePlainText($text, $url, $password){
+    return translateContent($text, $url, $password, 'text/plain');
+}
+
+function translateHtml($html, $url, $password){
+    return translateContent($html, $url, $password, 'text/html');
+}
+
+</programlisting>
+
+      <para>This client is very simple. It creates a POST request and sends it
+      to a SWeTE proxy site. Let's take a moment to go through this example so
+      that it is clear what is happening.</para>
+
+      <para/>
+
+      <itemizedlist>
+        <listitem>
+          <para>It begins by getting the current time in seconds. This will be
+          used for the <literal>swete:salt</literal> parameter, and for
+          building the swete:key parameter.</para>
+
+          <warning>
+            <para>Make sure that your salt represents the number of *seconds*
+            since epoch and not some other figure. Many language provide
+            current time functions that return milliseconds. If you provide a
+            salt that is in milliseconds, the request will fail because the
+            server expects to receive it in seconds.</para>
+          </warning>
+        </listitem>
+
+        <listitem>
+          <para>Next it creates a key (to be used as the
+          <literal>swete:key</literal> parameter by concatenating the salt
+          with the password.</para>
+
+          <note>
+            <para>In this example the <varname>$password</varname> parameter
+            is expected to match the web service secret key value that was
+            entered into the site profile in SWeTE.</para>
+          </note>
+        </listitem>
+
+        <listitem>
+          <para>Next it creates the payload by placing all of the relevant
+          parameters into an associative array.</para>
+        </listitem>
+
+        <listitem>
+          <para>When the actual HTTP request is made, it is a POST request.
+          This is important. GET requests will be completely ignored.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>This example client is written in PHP, but you could write a
+      client in any language (e.g. Python, Ruby, Java, C#, C, etc...) that
+      allows you to make HTTP requests.</para>
+
+      <section>
+        <title>Example usage of PHP Client</title>
+
+        <para>The following snippet shows a couple of simple examples of using
+        the PHP client that we created above. The first usage translates an
+        HTML snippet. The second translates some plain text content:</para>
+
+        <programlisting>$result = translateContent(
+&lt;&lt;&lt;END
+    &lt;h3&gt;Hello World&lt;/h3&gt;
+    &lt;p&gt;Hello, my name is &lt;span data-swete-translate="0"&gt;Steve Hannah&lt;/span&gt;.  
+       The &lt;span data-swete-translate="1"&gt;Blue Jays&lt;/span&gt; are my favourite team.
+    &lt;/p&gt;
+END
+,
+    'http://example.com/demosite4/index.html',
+    'foobar'
+);
+
+echo "First Result:\n";
+echo $result;
+
+
+$result2 = translatePlainText(
+    'Hello World', 
+    'http://test.swetedemo.weblite.ca/demosite4/index.html', 
+    'foobar' 
+);
+
+
+echo "\r\n\r\nSecond Result:\n";
+echo $result2;</programlisting>
+
+        <para>The output of this snippet would be as follows:</para>
+
+        <screen>First Result:
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" 
+"http://www.w3.org/TR/REC-html40/loose.dtd"&gt;
+&lt;html&gt;
+    &lt;body class=" x-swete-translation-fr"&gt;
+        &lt;h3&gt;Bonjour Monde&lt;/h3&gt;
+        &lt;p&gt;Bonjour, mon nom est 
+            &lt;span data-swete-translate="0"&gt;Steve Hannah&lt;/span&gt; . 
+            Les &lt;span data-swete-translate="1"&gt;Blue Jays&lt;/span&gt; 
+            sont mon equippe favorite.
+        &lt;/p&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+
+
+Second Result:
+Bonjour Monde</screen>
+
+        <note>
+          <para>Some of the HTML formatting has been changed to fit the page
+          better in print mode, but the document structure is accurate.</para>
+        </note>
+
+        <para>One important thing to notice here is that
+        <literal>&lt;!doctype&gt;</literal> and
+        <literal>&lt;html&gt;</literal> tags have been added to the HTML
+        output, even though the input was just a snippet. Keep this in mind as
+        you may need to parse out just the body of the response if you want to
+        to match the content exactly.</para>
+      </section>
+    </section>
+  </section>
+</chapter>

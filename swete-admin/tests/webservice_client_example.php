@@ -42,7 +42,7 @@ function translatePlainText($text, $url, $password){
 function translateHtml($html, $url, $password){
     return translateContent($html, $url, $password, 'text/html');
 }
-
+/*
 $result = translateContent(
 <<<END
     <h3>Writing with non-translatables</h3>
@@ -61,3 +61,30 @@ var_dump($result);
 
 $result2 = translatePlainText('Hello World', 'http://test.swetedemo.weblite.ca/demosite4/index.html', 'foobar' );
 echo "Result : ".$result2;
+ *
+ */
+$result = translateContent(
+<<<END
+    <h3>Hello World</h3>
+    <p>Hello, my name is <span data-swete-translate="0">Steve Hannah</span>.  
+       The <span data-swete-translate="1">Blue Jays</span> are my favourite team.
+    </p>
+END
+,
+    'http://test.swetedemo.weblite.ca/demosite4/index.html',
+    'foobar'
+);
+
+echo "First Result:\n";
+echo $result;
+
+
+$result2 = translatePlainText(
+    'Hello World', 
+    'http://test.swetedemo.weblite.ca/demosite4/index.html', 
+    'foobar' 
+);
+
+
+echo "\r\n\r\nSecond Result:\n";
+echo $result2;

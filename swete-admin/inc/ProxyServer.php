@@ -447,7 +447,7 @@ class ProxyServer {
 			//$this->header('Cache-Control: max-age=3600');
 		}
 		if ( $this->inputContentType === 'text/plain' ){
-                    $client->content = strip_tags($client->content);
+                    $client->content = trim(strip_tags($client->content));
                 }
 		$this->output( $client->content );
 		if ( !$this->buffer ){
