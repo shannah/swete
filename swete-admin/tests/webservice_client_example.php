@@ -7,7 +7,7 @@
  *      the webservice_secret_key field of the website in SWeTE.
  * @returns string Translated version of $html.
  */
-function translateContent($html, $url, $password){
+function translateContent($html, $url, $password, $contentType='text/html'){
     // Salt should be current time (unix timestamp).
     $salt = time();
     
@@ -18,7 +18,8 @@ function translateContent($html, $url, $password){
     $data = array(
         'swete:input' => $html,
         'swete:salt' => $salt,
-        'swete:key' => $key
+        'swete:key' => $key,
+        'swete:content-type' => $contentType
     );
     
     // use key 'http' even if you send the request to https://...
@@ -32,6 +33,14 @@ function translateContent($html, $url, $password){
     $context  = stream_context_create($options);
     $result = file_get_contents($url, false, $context);
     return $result;
+}
+
+function translatePlainText($text, $url, $password){
+    return translateContent($text, $url, $password, 'text/plain');
+}
+
+function translateHtml($html, $url, $password){
+    return translateContent($html, $url, $password, 'text/html');
 }
 
 $result = translateContent(
@@ -48,3 +57,7 @@ END
 
 
 var_dump($result);
+
+
+$result2 = translatePlainText('Hello World', 'http://test.swetedemo.weblite.ca/demosite4/index.html', 'foobar' );
+echo "Result : ".$result2;
