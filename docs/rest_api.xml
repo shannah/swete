@@ -66,7 +66,7 @@
     <title>Using the REST API</title>
 
     <para>Once you have activated the REST API for a site, you should be able
-    to sent HTTP requests to the service with strings that you wish to
+    to send HTTP requests to the service with strings that you wish to
     translate. The HTTP requests should be POST requests to a URL in the proxy
     site with the following POST parameters:</para>
 
@@ -186,20 +186,19 @@ function translateHtml($html, $url, $password){
         <listitem>
           <para>It begins by getting the current time in seconds. This will be
           used for the <literal>swete:salt</literal> parameter, and for
-          building the swete:key parameter.</para>
+          building the <literal>swete:key</literal> parameter.</para>
 
           <warning>
             <para>Make sure that your salt represents the number of *seconds*
-            since epoch and not some other figure. Many language provide
-            current time functions that return milliseconds. If you provide a
-            salt that is in milliseconds, the request will fail because the
-            server expects to receive it in seconds.</para>
+            since epoch and not some other figure. Many languages provide
+            "current time" functions that return milliseconds. If you provide
+            a salt that is in milliseconds, the request will fail.</para>
           </warning>
         </listitem>
 
         <listitem>
           <para>Next it creates a key (to be used as the
-          <literal>swete:key</literal> parameter by concatenating the salt
+          <literal>swete:key</literal> parameter) by concatenating the salt
           with the password.</para>
 
           <note>
@@ -216,7 +215,7 @@ function translateHtml($html, $url, $password){
 
         <listitem>
           <para>When the actual HTTP request is made, it is a POST request.
-          This is important. GET requests will be completely ignored.</para>
+          GET requests will be completely ignored.</para>
         </listitem>
       </itemizedlist>
 
@@ -301,8 +300,8 @@ Bonjour Monde</screen>
     making a background request to the equivalent page on the source site.
     This means that the content provided in a REST request goes through all of
     the same preprocessing steps that standard content goes through. It also
-    means that string capturing works exactly the same way also. I.e. if you
-    have "log translation misses" enabled in the site configuration, then you
+    means that string capturing works exactly the same way. I.e. if you have
+    "log translation misses" enabled in the site configuration, then you
     perform a REST API request with some content that hasn't yet been
     translated, then the untranslated strings will be added to the translation
     miss log and appear under the "strings" tab to be translated.</para>
