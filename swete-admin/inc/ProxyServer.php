@@ -43,6 +43,13 @@ class ProxyServer {
      * If this is provided then it is used instead of trying to load the source page.
      */
     public $inputContent;
+    
+    /**
+     * @brief Mimetype of input content (if content to be translated was passed
+     *  via POST.
+     * @var string
+     */
+    public $inputContentType="text/html";
 
 	public $enableProfiling = false;
 
@@ -439,7 +446,9 @@ class ProxyServer {
 		if ( !$cacheControlSet and  class_exists('Xataface_Scaler') and !@Dataface_Application::getInstance()->_conf['nocache'] ){
 			//$this->header('Cache-Control: max-age=3600');
 		}
-		
+		if ( $this->inputContentType === 'text/plain' ){
+                    $client->content = strip_tags($client->content);
+                }
 		$this->output( $client->content );
 		if ( !$this->buffer ){
 			while (@ob_end_flush());

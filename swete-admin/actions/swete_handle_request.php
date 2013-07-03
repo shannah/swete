@@ -86,6 +86,9 @@ class actions_swete_handle_request{
 		                    $key = sha1($_POST['swete:salt'].$password);
 		                    if ( $key === $_POST['swete:key'] ){
 		                        $server->inputContent = $_POST['swete:input'];
+                                        if ( @$_POST['swete:content-type'] ){
+                                            $server->inputContentType = $_POST['swete:content-type'];
+                                        }
 		                    } else {
 		                        die("Incorrect Key");
 		                    }
