@@ -1,0 +1,27 @@
+{use_macro file="Dataface_Main_Template.html"}
+    {fill_slot name="main_column"}
+    <h1>Import Translations</h1>
+    
+    <div id="import-form-progress" style="display:none">
+        Importing translations. Please wait ...<img src="{$ENV.DATAFACE_URL}/images/progress.gif"/>
+    </div>
+    
+    <div id="import-form-wrapper"></div>
+    
+    <div id="import-form-results-wrapper" style="display:none">
+        <h3>Import is Complete</h3>
+        
+        <p class="succeeded-p"><span data-kvc="succeeded">x</span> strings were successfully imported.</p>
+        <p class="failed-p"><span data-kvc="failed">y</span> strings could not be imported.  Check Import log for details.</p>
+        <h4>Import log</h4>
+        
+        <textarea class="import-log" rows="8" data-kvc="log"></textarea>
+        
+        <div class="buttons">
+            <button id="view-strings-btn" title="View strings in the imported translation memory">View Translations</button>
+            <button id="import-more-strings-btn" title="Import another file">Import Another Translation File</button>
+        </div>
+        
+    </div>
+    {/fill_slot}
+{/use_macro}

@@ -51,7 +51,7 @@ class tables_string_imports {
                         "Failed: ".$importer->failed."\r\n".
                         "Error Log:\r\n===========\r\n";
                 
-                foreach ( $importer->errors as $error ){
+                foreach ( $importer->errors as $row ){
                     $log .= "Import Row: ".implode(",", $row['row'])."\r\n".
                             "Error Message: ".$row['message'];
                 }
