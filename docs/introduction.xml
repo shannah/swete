@@ -865,7 +865,7 @@ $ ant</screen>
       <para>In any case, the first step you must take is to capture the
       strings that you would like to translate.</para>
 
-      <section>
+      <section id="capturing-strings">
         <title>Capturing Strings</title>
 
         <para>In order to capture the strings that you would like to
@@ -965,7 +965,7 @@ $ ant</screen>
         </section>
       </section>
 
-      <section>
+      <section id="translating-strings-manually">
         <title>Translating Strings Manually</title>
 
         <para>The process for manually translating strings that have been
@@ -1024,7 +1024,7 @@ $ ant</screen>
         </orderedlist>
       </section>
 
-      <section>
+      <section id="google-translation-api">
         <title>Translating Strings with the Google Translation API</title>
 
         <para><application>SWeTE</application> allows you to use the Google

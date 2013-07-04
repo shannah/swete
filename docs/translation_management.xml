@@ -1,0 +1,515 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+"http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<chapter>
+  <title>Translation Management</title>
+
+  <para>One of the most difficult aspects of managing a multilingual web site
+  is managing the translation of the content. This includes such activities
+  as:</para>
+
+  <itemizedlist>
+    <listitem>
+      <para>Monitoring the source site for changes that require translation or
+      retranslation.</para>
+    </listitem>
+
+    <listitem>
+      <para>Providing access to people who are qualified to translate the
+      content.</para>
+    </listitem>
+
+    <listitem>
+      <para>Translating the content.</para>
+    </listitem>
+
+    <listitem>
+      <para>Approving the translated content.</para>
+    </listitem>
+
+    <listitem>
+      <para>Publishing the translated content on the live site.</para>
+    </listitem>
+  </itemizedlist>
+
+  <para>SWeTE provides several features that can help to make these activities
+  painless (or at least less painful than they would normally be). Some of
+  these include:</para>
+
+  <itemizedlist>
+    <listitem>
+      <para>A web-based translation form for editing translations directly
+      inside SWeTE.</para>
+    </listitem>
+
+    <listitem>
+      <para>Importing and exporting translations to CSV and XLIFF format, so
+      that other computer assisted translation (CAT) tools can be used to
+      perform the translations.</para>
+    </listitem>
+
+    <listitem>
+      <para>Google translation support.</para>
+    </listitem>
+
+    <listitem>
+      <para>Translation "miss" logging to easily track when new strings are
+      added that require translation. </para>
+    </listitem>
+
+    <listitem>
+      <para>RSS support to be notified when strings are added to the
+      translation miss log.</para>
+    </listitem>
+
+    <listitem>
+      <para>Pluggable translation memories allow you to easily copy
+      translations from one site to another.</para>
+    </listitem>
+  </itemizedlist>
+
+  <para>This chapter presents some of SWeTE's translation management features
+  and suggests some strategies managing translations in different types of web
+  sites and applications.</para>
+
+  <section>
+    <title>Translation Memories</title>
+
+    <para>One of the most fundamental concepts in SWeTE is the translation
+    memory. A translation memory is just a dictionary that maps strings in one
+    language to the equivalent string in another language. A translation
+    memory may include more than one translation for a string, but only one of
+    those translations can be active at a time. When SWeTE processes web
+    requests, it parses out all of the strings in the page and compares them
+    to the site's translation memory. If it finds any matching translations,
+    it replaces the original string with its translation, and then outputs the
+    page to the client.</para>
+
+    <para>SWeTE assigns one translation memory per website. It is possible to
+    share the same translation memory between two websites as long as those
+    websites have the same source and target languages. Future versions of
+    SWeTE may add the ability to use more than one translation memory in a
+    single site (e.g. different translation memory for different pages), but
+    currently (as of version 0.3) you are limited to a single translation
+    memory. This should be sufficient for most websites.</para>
+
+    <para/>
+
+    <section>
+      <title>Browsing Translation Memories</title>
+
+      <para>You can see the available translation memories in your SWeTE
+      instance by clicking on the "Translation Memories" link in the top menu
+      bar. This will bring you to a list of translation memories in the
+      system. Typically there will be one translation memory for each website
+      you have.</para>
+
+      <para><inlinemediaobject>
+          <imageobject>
+            <imagedata contentwidth="40%"
+                       fileref="images/ch04.translation_memories.png"/>
+          </imageobject>
+        </inlinemediaobject></para>
+
+      <para>You can see more details about an individual translation memory by
+      clicking on any of the text in its row.</para>
+
+      <para><inlinemediaobject>
+          <imageobject>
+            <imagedata contentwidth="40%"
+                       fileref="images/c04.translation_memories.details.png"/>
+          </imageobject>
+        </inlinemediaobject></para>
+
+      <para>Some of the key properties of a translation memory include:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Translation memory uuid</emphasis>. This is a
+          globally unique ID for the translation memory so that you can keep
+          translation memories in separate SWeTE installations in sync. This
+          is used mostly for exporting and importing so that you can be sure
+          that you are inserting translations into the correct memory.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Translation memory name</emphasis>. A user-friendly
+          name for the translation memory. Typically this will be named
+          <literal>&lt;Website Name&gt; Dictionary</literal>, but you can
+          change it to anything you like. </para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Source language</emphasis>. The language of the
+          source web site. (i.e. the language from which we are
+          translating).</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Target language</emphasis>. The language of the
+          translated web site. (i.e. the language to which we are
+          translating).</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>You can also view the current translations in a translation memory
+      by clicking on the "Translations" tab under the translation memory
+      heading.</para>
+
+      <para><inlinemediaobject>
+          <imageobject>
+            <imagedata contentwidth="40%"
+                       fileref="images/ch04.translation_memories.translations.png"/>
+          </imageobject>
+        </inlinemediaobject></para>
+
+      <para/>
+
+      <note>
+        <para>Only strings that have been translated appear in the
+        "Translations" tab of a translation memory. This is different than
+        what you see in the global "Strings" tab which, essentially, shows the
+        translation miss log.</para>
+      </note>
+    </section>
+  </section>
+
+  <section>
+    <title>The Translation Miss Log (i.e. the "Strings" Tab)</title>
+
+    <para><inlinemediaobject>
+        <imageobject>
+          <imagedata contentwidth="40%"
+                     fileref="images/ch04.translation_miss_log.png"/>
+        </imageobject>
+      </inlinemediaobject></para>
+
+    <para>The "Strings" tab of SWeTE shows all of the strings that have been
+    loaded into the system. This table is sometimes referred to as the
+    "Translation Miss Log" because the primary way that strings are loaded
+    into it is by SWeTE inserting strings for which it cannot find a
+    translation during its web page translation cycle. Over time it became
+    apparent that this "log" was very useful for being able to manage strings
+    in the system, so the tab label was changed to "Strings". Some of the
+    useful activities that can be performed in this tab include:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Searching/filtering and sorting strings based on keywords, dates
+        entered, web sites, web page URLs (from which the string was loaded),
+        and translation memories.</para>
+      </listitem>
+
+      <listitem>
+        <para>Exporting strings to CSV or XLIFF format so that they can be
+        sent to a translator for translation.</para>
+      </listitem>
+
+      <listitem>
+        <para>Importing strings from a CSV file (and possibly other formats in
+        the future).</para>
+      </listitem>
+
+      <listitem>
+        <para>Translating groups of strings in SWeTE's web-based translation
+        form.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The translation miss log is insulated from the actual translation
+    memories. If you delete a string from the log, it won't have any effect on
+    the string's translation, which is stored inside a translation memory. In
+    fact you can delete the entire translation miss log table (i.e. every
+    record in the "Strings" tab), and your proxy site will still function
+    perfectly. </para>
+  </section>
+
+  <section>
+    <title>Capturing Strings</title>
+
+    <para>There are three ways to add new "strings" and translations into
+    SWeTE:</para>
+
+    <orderedlist>
+      <listitem>
+        <para>Enter them manually into a translation memory or in the
+        translation log. You will almost never do this.</para>
+      </listitem>
+
+      <listitem>
+        <para>Import them in a CSV or XLIFF file that have been generated by
+        another SWeTE instance.</para>
+      </listitem>
+
+      <listitem>
+        <para>Capture them in the process of translating a web page.</para>
+      </listitem>
+    </orderedlist>
+
+    <para>CSV and XLIFF importing will be covered in a later section. In this
+    section I will focus on how the capture process works (when translating a
+    web page).</para>
+
+    <para/>
+
+    <section>
+      <title>Enabling String Capturing</title>
+
+      <para>Under normal circumstances, if you request a web page through
+      SWeTE, it will try to translate each of the strings that it finds, and
+      will just leave them untranslated if no appropriate translation is
+      found. It doesn't log the failures and makes no effort to notify you
+      that it failed to translate a string. Its priority is just to publish
+      the page as quickly and lightly as possible. You can instruct SWeTE to
+      log these translation failures by enabling the "Log Translation Misses"
+      flag in your website settings. With this feature activated, SWeTE will
+      insert all "untranslated" strings it encounters during the translation
+      of a web page into the translation miss log (i.e. the "Strings"
+      tab).</para>
+
+      <warning>
+        <para>You should only leave the "Log Translation Misses" feature
+        activated while you are capturing strings. It causes SWeTE to use far
+        more resources and your site will perform much slower than it does
+        normally.</para>
+      </warning>
+
+      <para>The steps to enable string capturing are as follows:</para>
+
+      <orderedlist>
+        <listitem>
+          <para>Click on the "Sites" tab on the top menu bar.</para>
+        </listitem>
+
+        <listitem>
+          <para>Click on the website for which you want to enable string
+          capturing. </para>
+        </listitem>
+
+        <listitem>
+          <para>Click on the "Edit" button on the top button bar to access the
+          "Edit" form for the website.</para>
+        </listitem>
+
+        <listitem>
+          <para>Click the [+] icon next to the "More Details" subheading to
+          expand the advanced options.</para>
+        </listitem>
+
+        <listitem>
+          <para>Check the box labelled "Log translation misses"</para>
+
+          <para><inlinemediaobject>
+              <imageobject>
+                <imagedata contentwidth="60%"
+                           fileref="images/ch04.log_translation_misses.png"/>
+              </imageobject>
+            </inlinemediaobject></para>
+        </listitem>
+
+        <listitem>
+          <para>Click "Save"</para>
+        </listitem>
+      </orderedlist>
+
+      <para>See also <xref linkend="capturing-strings"/> for further
+      instructions on enabling string capturing.</para>
+
+      <para>Once you have string capturing enabled, you can just load any of
+      the pages in your proxy site (i.e. the translated version of the
+      website) and any strings for which there is no translation will be
+      automatically be added to the "Strings" tab so that you can translate
+      them.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Translating Strings</title>
+
+    <para>There are 3 primary ways to translate strings in SWeTE:</para>
+
+    <orderedlist>
+      <listitem>
+        <para>Send them to Google for machine translation. See <xref
+        linkend="google-translation-api"/> for an example of this
+        process.</para>
+      </listitem>
+
+      <listitem>
+        <para>Exporting them to CSV or XLIFF format, sending it to a
+        translator, the importing the translated results.</para>
+      </listitem>
+
+      <listitem>
+        <para>Translating them directly using SWeTE translation form. See
+        <xref linkend="translating-strings-manually"/> for an example of this
+        process.</para>
+      </listitem>
+    </orderedlist>
+  </section>
+
+  <section>
+    <title>Exporting Strings and Translations</title>
+
+    <para>If your translator prefers to use his own CAT (computer assisted
+    translation) tool for translating site content you will need to export the
+    strings you wish to have translated to an external file format. SWeTE
+    allows you to export in CSV (comma-separated value) and XLIFF (XML
+    Localisation Interchange File Format). Your choice of format will depend
+    on the tool-chain you and your translator intend to use. CSV is handy
+    because it is simple. It can be opened and edited by any spread-sheet
+    program.</para>
+
+    <para>XLIFF is an XML-based format created to standardize the way
+    localizable data are passed between tools during the localization process.
+    The problem with XLIFF is that it isn't yet fully supported by many of the
+    most popular CAT tools. SWeTE uses XLIFF standard placeholder tags in
+    place of HTML tags that may be embedded in its strings and translations.
+    These placeholders need to be maintained throughout the translation
+    process if you want to be able to import the resulting translations back
+    into SWeTE and have them "work" properly. If your CAT tool only supports
+    XLIFF as an import source and export target, then these tags are likely to
+    get lost in translation (pardon the pun). Even if the CAT tool is
+    advertised to work with XLIFF natively it may not support the full
+    specification, and thus may strip out these special tags.</para>
+
+    <warning>
+      <para>Before you commit to a translation workflow, make sure you test
+      out the round-trip process with a small set of translations before you
+      proceed with the bulk of the work. There is nothing worse than receiving
+      a corrupted file from a translator, and having to paste the translations
+      back into SWeTE one-by-one.</para>
+    </warning>
+
+    <section>
+      <title>Exporting Strings as CSV</title>
+
+      <para>Exporting strings to CSV format is quite simple. In the "Strings"
+      tab, you can just perform a search for the subset of strings that you
+      want to export. Once you are happy with your found set, simply select
+      "Export" &gt; "Export CSV". </para>
+
+      <para><inlinemediaobject>
+          <imageobject>
+            <imagedata fileref="images/ch04.export-csv-menu.png"/>
+          </imageobject>
+        </inlinemediaobject></para>
+
+      <para>This will cause a CSV file named
+      "translation_miss_log_results_xxxx.csv" to be downloaded to your
+      browser.</para>
+
+      <note>
+        <para>For large found sets it may take some time to generate and
+        download the CSV file. You will need to be patient.</para>
+      </note>
+
+      <para>The format of this file is exactly the same format that is
+      required by the Import CSV form. You can open this file in any
+      spreadsheet program (e.g. MS Excel, Open Office, etc..).</para>
+
+      <para><inlinemediaobject>
+          <imageobject>
+            <imagedata contentwidth="40%" fileref="images/ch04.csv-export.png"/>
+          </imageobject>
+        </inlinemediaobject></para>
+
+      <para>Notice that the first row serves as the field names. These
+      correspond exactly with the field names in the translation_miss_log
+      table of the database. The exact columns are as follows:</para>
+
+      <table frame="box" rules="all">
+        <caption>Columns in the CSV file produced by "Export CSV" in the
+        Strings tab</caption>
+
+        <thead>
+          <tr align="center">
+            <th>Field Name</th>
+
+            <th>Description</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>normalized_string</td>
+
+            <td>The source string normalized and encoded so that all HTML tags
+            are replaced with the appropriate &lt;g&gt;, &lt;x&gt;, and
+            &lt;v&gt; placeholders.</td>
+          </tr>
+
+          <tr>
+            <td>normalized_translation_value</td>
+
+            <td>The current translation (may be blank) for the string
+            normalized and encoded so that HTML tags are replaced with the
+            appropriate &lt;g&gt;, &lt;x&gt;, and &lt;v&gt; placeholders.</td>
+          </tr>
+
+          <tr>
+            <td>num_words</td>
+
+            <td>The number of words in the source string.</td>
+          </tr>
+
+          <tr>
+            <td>translation_memory_uuid</td>
+
+            <td>The UUID (universal ID) of the translation memory to which the
+            string belongs.</td>
+          </tr>
+
+          <tr>
+            <td>string_id</td>
+
+            <td>The string ID of the string within the xf_tm_strings table.
+            Two strings which are identical should share the same string ID.
+            (i.e. Strings are immutable).</td>
+          </tr>
+
+          <tr>
+            <td>source_language</td>
+
+            <td>The language code of the source language of the string. (E.g.
+            en for English, fr for French, etc...).</td>
+          </tr>
+
+          <tr>
+            <td>destination_language</td>
+
+            <td>The language code of the translation language. (e.g. en for
+            English, fr for French, etc...).</td>
+          </tr>
+
+          <tr>
+            <td>webpage_id</td>
+
+            <td>Not used currently.</td>
+          </tr>
+
+          <tr>
+            <td>request_url</td>
+
+            <td>If the string was captured from a particular web page, the URL
+            to this page may be here. The URL reflects the URL within the
+            proxy site, not the source site. This may be blank if the string
+            was inserted by some other method.</td>
+          </tr>
+
+          <tr>
+            <td>website_id</td>
+
+            <td>The website ID to which this string belongs.</td>
+          </tr>
+
+          <tr>
+            <td>date_inserted</td>
+
+            <td>The date that the string was inserted.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </section>
+</chapter>
