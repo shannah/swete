@@ -10,3 +10,6 @@
 [submodule "swete-admin/modules/ckeditor"]
 	path = swete-admin/modules/ckeditor
 	url = https://github.com/shannah/xataface-module-ckeditor.git
+[submodule "swete-admin/modules/uitk"]
+	path = swete-admin/modules/uitk
+	url = https://github.com/shannah/xataface-module-uitk.git
