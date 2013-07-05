@@ -21,7 +21,7 @@ function translateContent($html, $url, $password, $contentType='text/html'){
         'swete:key' => $key,
         'swete:content-type' => $contentType
     );
-    
+    echo "\nKey is ".$key."\n";
     // use key 'http' even if you send the request to https://...
     $options = array(
         'http' => array(

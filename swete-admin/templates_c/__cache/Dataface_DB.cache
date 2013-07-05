@@ -1,0 +1,61 @@
+<?php
+			$cache = array();
+			$cache['en']['SELECT length(`users`.`username`) as `__username_length`,`users`.`username`,length(`users`.`role_id`) as `__role_id_length`,`users`.`role_id`,length(`users`.`password`) as `__password_length`,length(`users`.`email`) as `__email_length`,`users`.`email` FROM `users` WHERE `users`.`username` = \'_1_\' LIMIT 1'][] = 'SELECT length(`users`.`username`) as `__username_length`,`users`.`username`,length(`users`.`role_id`) as `__role_id_length`,`users`.`role_id`,length(`users`.`password`) as `__password_length`,length(`users`.`email`) as `__email_length`,`users`.`email` FROM `users` WHERE `users`.`username` = \'_1_\' LIMIT 1';
+							$cache['en']['select count(`translation_miss_log_id`) from `translation_miss_log`'][] = 'select count(`translation_miss_log_id`) from `translation_miss_log`';
+							$cache['en']['SELECT COUNT(*) as num FROM (select tml.*,
+	s.num_words,
+	t.normalized_translation_value,
+	if(tml.webpage_id is null,hrl.proxy_request_url, concat(ws.website_url,w.webpage_url)) as request_url,
+        tm.translation_memory_uuid
+	from translation_miss_log tml
+        left join xf_tm_translation_memories tm on tml.translation_memory_id=tm.translation_memory_id
+	left join xf_tm_strings s on tml.string_id=s.string_id
+	left join xf_tm_translation_memory_strings tms on tms.string_id=tml.string_id and tms.translation_memory_id=tml.translation_memory_id
+	left join xf_tm_translations t on tms.current_translation_id=t.translation_id
+	left join http_request_log hrl on tml.http_request_log_id=hrl.http_request_log_id
+	left join webpages w on tml.webpage_id=w.webpage_id
+	left join websites ws on tml.website_id=ws.website_id
+	) as `translation_miss_log`'][] = 'SELECT COUNT(*) as num FROM (select tml.*,
+	s.num_words,
+	t.normalized_translation_value,
+	if(tml.webpage_id is null,hrl.proxy_request_url, concat(ws.website_url,w.webpage_url)) as request_url,
+        tm.translation_memory_uuid
+	from translation_miss_log tml
+        left join xf_tm_translation_memories tm on tml.translation_memory_id=tm.translation_memory_id
+	left join xf_tm_strings s on tml.string_id=s.string_id
+	left join xf_tm_translation_memory_strings tms on tms.string_id=tml.string_id and tms.translation_memory_id=tml.translation_memory_id
+	left join xf_tm_translations t on tms.current_translation_id=t.translation_id
+	left join http_request_log hrl on tml.http_request_log_id=hrl.http_request_log_id
+	left join webpages w on tml.webpage_id=w.webpage_id
+	left join websites ws on tml.website_id=ws.website_id
+	) as `translation_miss_log`';
+							$cache['en']['SELECT length(`translation_miss_log`.`normalized_string`) as `__normalized_string_length`,`translation_miss_log`.`normalized_string`,length(`translation_miss_log`.`string`) as `__string_length`,`translation_miss_log`.`string`,length(`translation_miss_log`.`normalized_translation_value`) as `__normalized_translation_value_length`,`translation_miss_log`.`normalized_translation_value`,length(`translation_miss_log`.`num_words`) as `__num_words_length`,`translation_miss_log`.`num_words`,length(`translation_miss_log`.`translation_memory_id`) as `__translation_memory_id_length`,`translation_miss_log`.`translation_memory_id`,length(`translation_miss_log`.`translation_memory_uuid`) as `__translation_memory_uuid_length`,`translation_miss_log`.`translation_memory_uuid`,length(`translation_miss_log`.`string_id`) as `__string_id_length`,`translation_miss_log`.`string_id`,length(`translation_miss_log`.`source_language`) as `__source_language_length`,`translation_miss_log`.`source_language`,length(`translation_miss_log`.`destination_language`) as `__destination_language_length`,`translation_miss_log`.`destination_language`,length(`translation_miss_log`.`webpage_id`) as `__webpage_id_length`,`translation_miss_log`.`webpage_id`,length(`translation_miss_log`.`string_hash`) as `__string_hash_length`,`translation_miss_log`.`string_hash`,length(`translation_miss_log`.`request_url`) as `__request_url_length`,`translation_miss_log`.`request_url`,length(`translation_miss_log`.`website_id`) as `__website_id_length`,`translation_miss_log`.`website_id`,length(`translation_miss_log`.`translation_miss_log_id`) as `__translation_miss_log_id_length`,`translation_miss_log`.`translation_miss_log_id`,length(`translation_miss_log`.`webpage_refresh_log_id`) as `__webpage_refresh_log_id_length`,`translation_miss_log`.`webpage_refresh_log_id`,length(`translation_miss_log`.`http_request_log_id`) as `__http_request_log_id_length`,`translation_miss_log`.`http_request_log_id`,length(`translation_miss_log`.`encoded_string`) as `__encoded_string_length`,`translation_miss_log`.`encoded_string`,length(`translation_miss_log`.`date_inserted`) as `__date_inserted_length`,ifnull(convert_tz(`translation_miss_log`.`date_inserted`, \'_1_\', \'_2_\'), `translation_miss_log`.`date_inserted`) as `date_inserted` FROM (select tml.*,
+	s.num_words,
+	t.normalized_translation_value,
+	if(tml.webpage_id is null,hrl.proxy_request_url, concat(ws.website_url,w.webpage_url)) as request_url,
+        tm.translation_memory_uuid
+	from translation_miss_log tml
+        left join xf_tm_translation_memories tm on tml.translation_memory_id=tm.translation_memory_id
+	left join xf_tm_strings s on tml.string_id=s.string_id
+	left join xf_tm_translation_memory_strings tms on tms.string_id=tml.string_id and tms.translation_memory_id=tml.translation_memory_id
+	left join xf_tm_translations t on tms.current_translation_id=t.translation_id
+	left join http_request_log hrl on tml.http_request_log_id=hrl.http_request_log_id
+	left join webpages w on tml.webpage_id=w.webpage_id
+	left join websites ws on tml.website_id=ws.website_id
+	) as `translation_miss_log` LIMIT 1,2'][] = 'SELECT length(`translation_miss_log`.`normalized_string`) as `__normalized_string_length`,`translation_miss_log`.`normalized_string`,length(`translation_miss_log`.`string`) as `__string_length`,`translation_miss_log`.`string`,length(`translation_miss_log`.`normalized_translation_value`) as `__normalized_translation_value_length`,`translation_miss_log`.`normalized_translation_value`,length(`translation_miss_log`.`num_words`) as `__num_words_length`,`translation_miss_log`.`num_words`,length(`translation_miss_log`.`translation_memory_id`) as `__translation_memory_id_length`,`translation_miss_log`.`translation_memory_id`,length(`translation_miss_log`.`translation_memory_uuid`) as `__translation_memory_uuid_length`,`translation_miss_log`.`translation_memory_uuid`,length(`translation_miss_log`.`string_id`) as `__string_id_length`,`translation_miss_log`.`string_id`,length(`translation_miss_log`.`source_language`) as `__source_language_length`,`translation_miss_log`.`source_language`,length(`translation_miss_log`.`destination_language`) as `__destination_language_length`,`translation_miss_log`.`destination_language`,length(`translation_miss_log`.`webpage_id`) as `__webpage_id_length`,`translation_miss_log`.`webpage_id`,length(`translation_miss_log`.`string_hash`) as `__string_hash_length`,`translation_miss_log`.`string_hash`,length(`translation_miss_log`.`request_url`) as `__request_url_length`,`translation_miss_log`.`request_url`,length(`translation_miss_log`.`website_id`) as `__website_id_length`,`translation_miss_log`.`website_id`,length(`translation_miss_log`.`translation_miss_log_id`) as `__translation_miss_log_id_length`,`translation_miss_log`.`translation_miss_log_id`,length(`translation_miss_log`.`webpage_refresh_log_id`) as `__webpage_refresh_log_id_length`,`translation_miss_log`.`webpage_refresh_log_id`,length(`translation_miss_log`.`http_request_log_id`) as `__http_request_log_id_length`,`translation_miss_log`.`http_request_log_id`,length(`translation_miss_log`.`encoded_string`) as `__encoded_string_length`,`translation_miss_log`.`encoded_string`,length(`translation_miss_log`.`date_inserted`) as `__date_inserted_length`,ifnull(convert_tz(`translation_miss_log`.`date_inserted`, \'_1_\', \'_2_\'), `translation_miss_log`.`date_inserted`) as `date_inserted` FROM (select tml.*,
+	s.num_words,
+	t.normalized_translation_value,
+	if(tml.webpage_id is null,hrl.proxy_request_url, concat(ws.website_url,w.webpage_url)) as request_url,
+        tm.translation_memory_uuid
+	from translation_miss_log tml
+        left join xf_tm_translation_memories tm on tml.translation_memory_id=tm.translation_memory_id
+	left join xf_tm_strings s on tml.string_id=s.string_id
+	left join xf_tm_translation_memory_strings tms on tms.string_id=tml.string_id and tms.translation_memory_id=tml.translation_memory_id
+	left join xf_tm_translations t on tms.current_translation_id=t.translation_id
+	left join http_request_log hrl on tml.http_request_log_id=hrl.http_request_log_id
+	left join webpages w on tml.webpage_id=w.webpage_id
+	left join websites ws on tml.website_id=ws.website_id
+	) as `translation_miss_log` LIMIT 1,2';
+							$cache['en']['select website_id, website_name from websites order by website_name'][] = 'select website_id, website_name from websites order by website_name';
+							
+			?>

@@ -110,13 +110,53 @@
           <td>swete:key</td>
 
           <td>This should be a SHA1 hash of the concatenation of the
-          swete:salt parameter and your web site's secret web service
-          key.</td>
+          swete:salt parameter and your web site's secret web service key. The
+          format of this key should match the output of the<ulink
+          url="http://php.net/manual/en/function.sha1.php"> PHP's sha1()
+          function</ulink>. I.e. It should be a 40-character hexadecimal
+          string. Case is insensitive. An example SHA1 hash is:
+          <literal>7faa2f0b39563dc66f1fd580b21c57dfac061ec9</literal></td>
         </tr>
       </tbody>
     </table>
 
     <para/>
+
+    <section>
+      <title>Output and Error Handling</title>
+
+      <para>There are three possible outputs for the REST API:</para>
+
+      <orderedlist>
+        <listitem>
+          <para>The translated content. If SWeTE's translation memory contains
+          translations for the input string, then the output will simply be a
+          translated version of the input string. It will not be contained in
+          a data structure of any kind. It will just be a plain string.</para>
+        </listitem>
+
+        <listitem>
+          <para>The original content. If the translation memory doesn't
+          contain any matching translations for the input content, then it is
+          possible that the API will simply return the same content that was
+          passed to it. It will not be contained in a data structure of any
+          kind. It will just be a plain string.</para>
+        </listitem>
+
+        <listitem>
+          <para>An error message. If there are any errors (e.g. incorrect key,
+          expired or invalid salt, etc..), then it will output the error
+          message as a single string, preceded by the string [ERROR]. I.e. All
+          errors will be returned in the format:</para>
+
+          <para>[ERROR] Error Message</para>
+
+          <para>e.g.</para>
+
+          <para>[ERROR] Incorrect Key</para>
+        </listitem>
+      </orderedlist>
+    </section>
 
     <section>
       <title>Sample PHP Client</title>
@@ -254,7 +294,18 @@ $result2 = translatePlainText(
 
 
 echo "\r\n\r\nSecond Result:\n";
-echo $result2;</programlisting>
+echo $result2;
+
+// Try a request with an incorrect key.
+$errorResult = translatePlainText(
+    'Hello World', 
+    'http://test.swetedemo.weblite.ca/demosite4/index.html', 
+    'foobarxyz' 
+);
+
+
+echo "\r\n\r\nThird Result:\n";
+echo $errorResult;</programlisting>
 
         <para>The output of this snippet would be as follows:</para>
 
@@ -274,7 +325,10 @@ echo $result2;</programlisting>
 
 
 Second Result:
-Bonjour Monde</screen>
+Bonjour Monde
+
+Third Result:
+[Error] Incorrect Key</screen>
 
         <note>
           <para>Some of the HTML formatting has been changed to fit the page
