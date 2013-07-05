@@ -462,7 +462,7 @@
     </section>
   </section>
 
-  <section id="capturing-strings">
+  <section id="capturing-strings-sec">
     <title>Capturing Strings</title>
 
     <para>There are three ways to add new "strings" and translations into
@@ -931,7 +931,7 @@
 
       <para>Due to these transformations, it is safest to only work with
       strings that have already been captured by SWeTE using the string
-      capture step (See <xref linkend="capturing-strings"/> for more
+      capture step (See <xref linkend="capturing-strings-sec"/> for more
       information on capturing strings), and exported using the export CSV
       step. If you have a raw CSV file with strings that you want to import
       from a database or external corpus you should build a web page with this
