@@ -71,7 +71,7 @@ class actions_swete_handle_request{
 		
 	
 		if ( !$site ){
-			die("No site found");
+			die("[ERROR] No site found");
 		}
 		
 		$server = new ProxyServer;
@@ -84,25 +84,26 @@ class actions_swete_handle_request{
 		                $password = $site->getRecord()->val('webservice_secret_key');
 		                if ( $password ){
 		                    $key = sha1($_POST['swete:salt'].$password);
-		                    if ( $key === $_POST['swete:key'] ){
+		                    //if ( $key === $_POST['swete:key'] ){
+                                    if ( strcasecmp($key, $_POST['swete:key']) === 0 ){
 		                        $server->inputContent = $_POST['swete:input'];
                                         if ( @$_POST['swete:content-type'] ){
                                             $server->inputContentType = $_POST['swete:content-type'];
                                         }
 		                    } else {
-		                        die("Incorrect Key");
+		                        die("[ERROR] Incorrect Key");
 		                    }
 		                } else {
-		                    die("No secret key set in the website settings.");
+		                    die("[ERROR] No secret key set in the website settings.");
 		                }
 		            } else {
-		                die("Invalid salt value");
+		                die("[ERROR] Invalid salt value");
 		            }
 		        } else {
-		            die("Invalid salt value.  Salt must be an integer");
+		            die("[ERROR] Invalid salt value.  Salt must be an integer");
 		        }
 		    } else {
-		        die("Both swete:key and swete:salt must be provided");
+		        die("[ERROR] Both swete:key and swete:salt must be provided");
 		    }
 		    
 		}
