@@ -174,7 +174,7 @@ class WebLite_HTML_Translator {
 		}
 		
 		
-		$textX = $xpath->query('//text()[normalize-space() and not(ancestor::script | ancestor::style)]');
+		$textX = $xpath->query('//text()[normalize-space() and not(ancestor::script | ancestor::style | ancestor::*[@notranslate])]');
 		$text = array();
 		foreach ($textX as $x){
 			$text[] = $x;
