@@ -553,7 +553,11 @@ class LiveCache {
 			$delegate->preprocessHeaders($this->client->headers);
 			$headers = $proxyWriter->proxifyHeaders($this->client->headers, true);
 			$locHeaders = preg_grep('/^Location:/i', $headers);
-			if ( !$locHeaders and ($isHtml or $isCSS) ){
+			$translationMode = $delegate->getTranslationMode($this->client);
+			if ( !$locHeaders 
+			    and ($isHtml or $isCSS or ($translationMode === ProxyClient::TRANSLATION_MODE_TRANSLATE) )
+			    and ( $translationMode !== ProxyClient::TRANSLATION_MODE_NOTRANSLATE)  )
+			{
 				if ( $isHtml ){
 
 					

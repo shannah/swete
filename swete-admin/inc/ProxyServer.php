@@ -325,7 +325,8 @@ class ProxyServer {
 		$headers = $proxyWriter->proxifyHeaders($client->headers, true);
 		$locHeaders = preg_grep('/^Location:/i', $headers);
 		// Let's see if this should be a passthru
-		if ( !$isHtml and !$isCSS ){
+		$translationMode = $delegate->getTranslationMode($client);
+		if ( !$isHtml and !$isCSS and ($translationMode !== ProxyClient::TRANSLATION_MODE_TRANSLATE) ){
 			//$skip_decoration_phase = true;
 			$cacheControlSet = false;
 			foreach ($headers as $h){
@@ -352,7 +353,7 @@ class ProxyServer {
 			return;
 		}
 		$stats = array();
-		if ( $isHtml and !$locHeaders ){
+		if ( ($isHtml and  ($translationMode !== ProxyClient::TRANSLATION_MODE_NOTRANSLATE) ) and !$locHeaders ){
 			
 			$this->mark('Preprocessing page content');
 			$client->content = $delegate->preprocess($client->content);
