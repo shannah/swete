@@ -819,4 +819,91 @@ class ProxyWriter {
      	 return $out;
 	}
 	
+	private function _jsonToHtml(array &$stream, array &$json, array $textkeys, array $htmlkeys, $forceTranslateType=null){
+	    foreach ( $json as $k=>$v ){
+            if ( $forceTranslateType === 'text' or in_array($k, $textkeys) ){
+                if ( is_array($v) ){
+                    $this->_jsonToHtml($stream, $json[$k], $textkeys, $htmlkeys, 'text');
+                } else {
+                    $i = count($stream);
+                    $stream[] = '<div id="'.$i.'">'.htmlspecialchars($v).'</div>';
+                    $json[$k] = 'sweteplaceholder://'.$i;
+                }
+            } else if ( $forceTranslateType === 'html' or  in_array($k, $htmlkeys) ){
+                if ( is_array($v) ){
+                    $this->_jsonToHtml($stream, $json[$k], $textkeys, $htmlkeys, 'html');
+                } else {
+                    $i = count($stream);
+                    $stream[] = '<div id="'.$i.'">'.$v.'</div>';
+                    $json[$k] = 'sweteplaceholder://'.$i;
+                }
+            } else if ( is_array($v) ){
+                $this->_jsonToHtml($stream, $json[$k], $textkeys, $htmlkeys);
+            }
+        }
+	}
+	
+	private function _getJsonKeys(&$json){
+	    $textkeys = array();
+        $htmlkeys = array('cell');
+        if ( isset($json['swete:text_keys']) ){
+            $textkeys = $json['swete:text_keys'];
+        }
+        if ( isset($json['swete:html_keys']) ){
+            $htmlkeys = $json['swete:html_keys'];
+        }
+        return array(
+            'html' => $htmlkeys,
+            'text' => $textkeys
+        );
+	}
+	
+	public function jsonToHtml(&$json){
+	    
+        $stream = array();
+        $keys = $this->_getJsonKeys($json);
+        $this->_jsonToHtml($stream, $json, $keys['text'], $keys['html']);
+        
+        return '<!doctype html><html><head></head><body>'.implode("\n", $stream).'</body></html>';
+	    
+	}
+	
+	public function htmlToJson(array &$json, $html){
+	    $doc = SweteTools::loadHtml($html);
+	    $keys = $this->_getJsonKeys($json);
+	    $this->_htmlToJson($doc, $json, $keys['text'], $keys['html']);
+	    return json_encode($json);
+	}
+	
+	private function getElementById(DOMDocument $doc, $id)
+    {
+        $xpath = new DOMXPath($doc);
+        return $xpath->query("//*[@id='$id']")->item(0);
+    }
+	
+	private function _htmlToJson(DOMDocument $doc, array &$json, array $textkeys, array $htmlkeys, $translateType = null){
+	    foreach ( $json as $k=>$v ){
+	        if ( is_array($v) ){
+	            if ( in_array($k, $textkeys) ) $translateType = 'text';
+	            else if ( in_array($k, $htmlkeys) ) $translateType = 'html';
+	            $this->_htmlToJson($doc, $json[$k], $textkeys, $htmlkeys, $translateType);
+	        } else {
+                if ( !isset($translateType) and !in_array($k, $textkeys) and !in_array($k, $htmlkeys) ) continue;
+                if ( preg_match('#^sweteplaceholder://(\d+)$#', $v, $matches) ){
+                    $el = $this->getElementById($doc, $matches[1]);
+                    if ( $el ){
+                        $v = $doc->saveXml($el);
+                        $start = strpos($v, '>')+1;
+                        $end = strrpos($v, '<');
+                        $v = substr($v, $start, $end-$start);
+                        $json[$k] = $v;
+                        if ( in_array($k, $textkeys) or $translateType === 'text' ){
+                            $json[$k] = html_entity_decode($json[$k]);
+                        }
+                    } else {
+                    }
+                }
+            }
+	    }
+	}
 }

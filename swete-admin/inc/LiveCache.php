@@ -531,6 +531,8 @@ class LiveCache {
 		return $this->db;
 	}
 	
+	
+	
 	public function handleRequest(){
 	    $this->flush();
 		$now = time();
@@ -547,7 +549,24 @@ class LiveCache {
 		
 			$isHtml = preg_match('/html|xml/', $this->client->contentType);
 			$isCSS = preg_match('/css/', $this->client->contentType);
+			$isJson = (preg_match('/json/', $this->client->contentType) or $this->client->content{0}=='{');
+			
 			$proxyWriter = $this->getProxyWriter();
+			$json = null;
+			if ( $isJson ){
+			    $json = json_decode($this->client->content, true);
+			    if ( isset($json) ){
+                    $html = $proxyWriter->jsonToHtml($json);
+                    $isHtml = isset($html);
+                    if ( $isHtml ){
+                        $this->client->content = $html;
+                    } else {
+                        $isJson = false;
+                    }
+                } else {
+                    $isJson = false;                
+                }
+			}
 			ProxyClientPreprocessor::$db = $this->dbConnect();
 			$delegate = new ProxyClientPreprocessor($this->siteId);
 			$delegate->preprocessHeaders($this->client->headers);
@@ -559,9 +578,8 @@ class LiveCache {
 			    and ( $translationMode !== ProxyClient::TRANSLATION_MODE_NOTRANSLATE)  )
 			{
 				if ( $isHtml ){
-
-					
-					$this->mark('Preprocessing page content');
+                    
+                    $this->mark('Preprocessing page content');
 					$this->client->content = $delegate->preprocess($this->client->content);
 					$this->mark('Finished preprocessing');
 					require_once 'modules/tm/lib/XFTranslationMemoryReader.php';
@@ -576,6 +594,10 @@ class LiveCache {
 					$this->mark('PROXIFY HTML START');
 					$this->client->content = $proxyWriter->proxifyHtml($this->client->content);
 					$this->mark('PROXIFY HTML END');
+					
+					if ( $isJson ){
+					    $this->client->content = $proxyWriter->htmlToJson($json, $this->client->content);
+					}
 				} else if (  $isCSS ){
 					$this->mark('PROXIFY CSS START');
 					$this->client->content = $proxyWriter->proxifyCss($this->client->content);	

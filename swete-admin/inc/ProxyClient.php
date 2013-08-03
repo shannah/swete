@@ -592,6 +592,7 @@ class ProxyClient {
 		}
 		
 		$this->content = $contents;
+
 		return $contents;
 	
 	}

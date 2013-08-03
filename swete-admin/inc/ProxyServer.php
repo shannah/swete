@@ -319,7 +319,26 @@ class ProxyServer {
 		//print_r($client->headers);
 		
 		$isHtml = preg_match('/html|xml/', $client->contentType);
+		$isJson = (preg_match('/json/', $client->contentType) or ($client->content and $client->content{0}=='{'));
 		$isCSS = preg_match('/css/', $client->contentType);
+		
+		$json = null;
+        if ( $isJson ){
+            $json = json_decode($client->content, true);
+            if ( isset($json) ){
+                $html = $proxyWriter->jsonToHtml($json);
+                $isHtml = isset($html);
+                if ( $isHtml ){
+                    $client->content = $html;
+                } else {
+                    $isJson = false;
+                }
+            } else {
+                $isJson = false;                
+            }
+        }
+		
+		
 		$delegate = new ProxyClientPreprocessor($this->site->getRecord()->val('website_id'));
 		$delegate->preprocessHeaders($client->headers);
 		$headers = $proxyWriter->proxifyHeaders($client->headers, true);
@@ -413,6 +432,10 @@ class ProxyServer {
 			$client->content = $proxyWriter->proxifyHtml($client->content);
 			$this->mark('PROXIFY HTML END');
 			//$client->content = preg_replace('#</head>#', '<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script><script src="http://localhost/sfutheme/js/newclf.js"></script><link rel="stylesheet" type="text/css" href="http://localhost/sfutheme/css/newclf.css"/></head>', $client->content);
+			
+			if ( $isJson ){
+                $client->content = $proxyWriter->htmlToJson($json, $client->content);
+            }
 			
 		} else if ( $isCSS ){
 			if ( isset($this->liveCache) ){
