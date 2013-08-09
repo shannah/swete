@@ -222,9 +222,247 @@
     fact you can delete the entire translation miss log table (i.e. every
     record in the "Strings" tab), and your proxy site will still function
     perfectly. </para>
+
+    <section>
+      <title>Searching and Sorting the "Strings" Tab</title>
+
+      <para>The "Strings" tab provides you with a lot of power when it comes
+      to searching and sorting the strings. This is very important for large
+      web applications as you could be dealing with hundreds of thousands or
+      even millions of strings. Some common things you may want to do
+      include:</para>
+
+      <orderedlist>
+        <listitem>
+          <para>Find strings that haven't been translated.</para>
+        </listitem>
+
+        <listitem>
+          <para>Find strings that have been inserted in a particular date
+          range (e.g. strings inserted since last Wednesday).</para>
+        </listitem>
+
+        <listitem>
+          <para>Find strings that were imported from a particular URL.</para>
+        </listitem>
+
+        <listitem>
+          <para>Find strings the contain certain keywords.</para>
+        </listitem>
+
+        <listitem>
+          <para>Find strings that have a particular number of words.</para>
+        </listitem>
+      </orderedlist>
+
+      <para>Once you have found a set of strings, you can decide to export
+      them, translate them manually, or translate them using the Google
+      translation API.</para>
+
+      <section>
+        <title>Keyword Searches</title>
+
+        <para>The easiest type of search you can perform in the Strings tab is
+        a keyword search. This type of search is performed by entering a
+        keyword or phrase into the "Search" box at the top of the page, and
+        clicking "Search". </para>
+
+        <para><inlinemediaobject>
+            <imageobject>
+              <imagedata contentwidth="50%"
+                         fileref="images/ch04-keyword-search.png"/>
+            </imageobject>
+          </inlinemediaobject></para>
+
+        <para>This will match all rows for which every key word in the search
+        phrase exists in at least one column of the row. E.g. Consider a row
+        in the "Strings" tab with the following field values:</para>
+
+        <informaltable>
+          <tgroup cols="2">
+            <tbody>
+              <row>
+                <entry>String</entry>
+
+                <entry>Hello</entry>
+              </row>
+
+              <row>
+                <entry>Translation</entry>
+
+                <entry>Bonjour</entry>
+              </row>
+
+              <row>
+                <entry>Request URL</entry>
+
+                <entry>http://example.com/homepage</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </informaltable>
+
+        <para>A keyword search for "Hello" would match this row, as would a
+        search for "Bonjour", or a search for "home". In addition it would be
+        matched by "Hello Bonjour", "Hello home" and "jour home".</para>
+
+        <para/>
+      </section>
+
+      <section>
+        <title>Single-Column Searches</title>
+
+        <para>In some cases, you may want to limit your search to particular
+        columns of the "Strings" tab. SWeTE supports column searches either by
+        clicking the "Advanced Search" link next to the top "Search Strings"
+        button, or by revealing the search fields in the table header, which
+        is usually quicker and easier than using the advanced search
+        form.</para>
+
+        <para>You can reveal the search fields in the table header by clicking
+        the background of any cell in the table heading row. </para>
+
+        <para><inlinemediaobject>
+            <imageobject>
+              <imagedata contentwidth="50%"
+                         fileref="images/ch04-strings-header-row.png"/>
+            </imageobject>
+          </inlinemediaobject></para>
+
+        <note>
+          <para>Make sure to click the background of the header row and not on
+          the label text. If you click on the label, it will sort the table on
+          that column instead of revealing the search fields.</para>
+        </note>
+
+        <para>After clicking on the header row background, you should see a
+        row of search fields appear just below the heading:</para>
+
+        <para><inlinemediaobject>
+            <imageobject>
+              <imagedata contentwidth="50%"
+                         fileref="images/ch04-strings-search-fields.png"/>
+            </imageobject>
+          </inlinemediaobject></para>
+
+        <para>To filter the results based on keywords in a particular column,
+        just enter the phrase in the appropriate search field and hit "Enter".
+        E.g. If you type "Hello" into the search field in the "String column,
+        it will filter the results to only show those rows for which the
+        source string contains "Hello". I.e. it would match "Hello World",
+        "Dhello", etc.., but would not match "hello" or "ello".</para>
+      </section>
+
+      <section>
+        <title>Multi-word Searches</title>
+
+        <para>It is worth noting that search phrases comprised of multiple
+        words do not require that the content contains the exact ordering of
+        the words. E.g. If you searched the "String" column for the phrase
+        "Hello World", it would match any of "Hello World", "World Hello",
+        "This is Hello World time", or "The World of Hellos". I.e. it isn't
+        strict about order. It just demands that each of the words in the
+        search phrase occurs in the content.</para>
+      </section>
+
+      <section>
+        <title>Exact Matches Only</title>
+
+        <para>By default, single-column searches don't require exact matching.
+        Rows only need contain the individual words of the search phrase in
+        order to included in the found set. E.g. A search in the "Strings"
+        column for "dogs" would match "dogs", "brown dogs", or "the dogsled".
+        You can force exact matching by prepending an "=" to the search
+        phrase. E.g. Searching for "=dogs" would only match "dogs", and not
+        "brown dogs" nor "the dogsled".</para>
+      </section>
+
+      <section>
+        <title>Finding "Empty" Columns </title>
+
+        <para>A special case of exact matching that is very frequently needed
+        is a search for "empty". E.g. if you wanted to find all strings for
+        which there is no translation, you might perform a single-column
+        search in the "Current Translation" field for "=". This means that you
+        want to match all rows for which the current translation is
+        nothing.</para>
+      </section>
+
+      <section>
+        <title>Range Searches</title>
+
+        <para>SWeTE also supports range searches which are especially helpful
+        for columns contain numerical or date data. </para>
+
+        <para>To match rows whose value in a row is "less than" the search
+        term, you would prefix the search term with a "&lt;". E.g. To find all
+        strings that have less than 10 words, you could search in the "Num
+        Words" field for "&lt;10".</para>
+
+        <para>Similarly, to match rows whose value is "greater than" the
+        search term, you would prefix "&gt;". SWeTE also supports
+        "less-than-or-equal" and "greater-than-or-equal" searches using the
+        "&lt;=" and "&gt;=" prefixes respectively.</para>
+
+        <para>Finally, SWeTE supports full range searches (i.e. matches values
+        between a lower and upper bound) using the "&lt;lower
+        bound&gt;..&lt;upper bound&gt;" notation. E.g. To find all strings
+        that have more than 10 words and fewer than 100 words, you could
+        search the "Num Words" field with "10..100".</para>
+      </section>
+
+      <section>
+        <title>Pattern Matching Searches</title>
+
+        <para>If the default matching behaviour is not precise enough for you,
+        and exact matching is too specific, you may find SWeTE's pattern
+        matching search to be useful. If you prefix a search phrase with "~",
+        it will be treated as an exact search, except that it will support
+        wild cards as part of the search. E.g. You could search the "String"
+        field for "~A%" to find all rows for which the string Starts with A.
+        This would match "Ape", "Are we there yet", "Abcdefg...", etc.. A
+        search for "~A%B" would match all strings that begin with A and end
+        with B. This would match things like "About to end B", "AB", and "A O
+        B", but would not match "The A of B" or "Car ABC".</para>
+
+        <para>The above examples demonstrate the use of the '%' wildcard to
+        match 0 or more characters. It also supports the '?' wildcard to match
+        a single character only. E.g. a search for '~A?B' would match "ACB",
+        but not "ACCB".</para>
+      </section>
+
+      <section>
+        <title>Date Searches</title>
+
+        <para>Searching on Date fields can be tricky because they require the
+        date to be entered in a specific format:</para>
+
+        <para>YYYY-MM-DD HH:ii:ss</para>
+
+        <para>The time portion is optional, but if you not performing a range
+        search you may need to include time, or you might not find any
+        matches. You can use the "Date Inserted" field to find all strings
+        that have been inserted in a particular date range or since a
+        particular time. E.g. To find strings that were inserted on or after
+        July 7, 2012, you would search for "&gt;=2012-07-07". To find strings
+        added between July 7, 2012 and July 9, 2012, you would search for
+        "2012-07-07..2012-07-09".</para>
+      </section>
+
+      <section>
+        <title>Combining Multiple Single-Column Searches</title>
+
+        <para>If you combine searches in multiple columns, they are
+        interpreted as "AND" searches. I.e. If you enter "Hello" in the
+        "String" search field, and "Bonjour" in the "Current Translation"
+        search field, it will only match rows where "String" contains "Hello",
+        <emphasis>and</emphasis> "Current Translation" contains
+        "Bonjour".</para>
+      </section>
+    </section>
   </section>
 
-  <section>
+  <section id="capturing-strings-sec">
     <title>Capturing Strings</title>
 
     <para>There are three ways to add new "strings" and translations into
@@ -382,7 +620,7 @@
     </warning>
 
     <section>
-      <title>Exporting Strings as CSV</title>
+      <title id="exporting-strings-as-csv">Exporting Strings as CSV</title>
 
       <para>Exporting strings to CSV format is quite simple. In the "Strings"
       tab, you can just perform a search for the subset of strings that you
@@ -513,6 +751,272 @@
           </tr>
         </tbody>
       </table>
+
+      <para/>
+
+      <section>
+        <title>Sample CSV File</title>
+
+        <para>You can view a sample exported CSV file in the
+        docs/samples/translation_miss_log_results_2013_07_05_00_11_28.csv file
+        with the SWeTE distribution. You can also view it <ulink
+        url="https://raw.github.com/shannah/swete/master/docs/samples/translation_miss_log_results_2013_07_05_00_11_28.csv">here</ulink>
+        on github.</para>
+      </section>
+    </section>
+
+    <section>
+      <title>Exporting Strings as XLIFF</title>
+
+      <para>XLIFF is also a viable method of getting strings and translations
+      in and out of SWeTE. There are three variations of exporting to
+      XLIFF:</para>
+
+      <orderedlist>
+        <listitem>
+          <para>Export Found Strings to XLIFF. This option is used in the
+          "Strings" tab to export the entire current found set as an XLIFF
+          file.</para>
+        </listitem>
+
+        <listitem>
+          <para>Export Selected Strings to XLIFF. This option, also used in
+          the "Strings" tab, is used to export only those strings that have
+          been checked the list of strings.</para>
+        </listitem>
+
+        <listitem>
+          <para>Export Translation Memory as XLIFF. This option will export an
+          entire translation memory as an XLIFF file. This is handy if you
+          want to back up a translation memory, or to copy a translation
+          memory from one site to another.</para>
+        </listitem>
+      </orderedlist>
+
+      <section>
+        <title>Exporting Found Strings as XLIFF</title>
+
+        <para>The "Strings" tab provides a lot of flexibility in the way of
+        filtering and sorting strings and translation. You can search for
+        keywords, or strings that were inserted on a particular date or in a
+        date range. You can even search for strings for which there is no
+        translation, or where the number of words in the source in in a
+        particular range. Once you have found the strings that you want to
+        export, you can select "Export" &gt; "Export found strings as XLIFF".
+        This will cause your browser to download an XLIFF file including all
+        of the strings in the current found set along with their associated
+        translations.</para>
+
+        <note>
+          <para>Support for XLIFF files varies across CAT tools. Currently
+          <ulink url="http://www.omegat.org/">OmegaT</ulink> is the only tool
+          that has been tested and verified to fully support the XLIFF files
+          produced by SWeTE without corrupting them or causing data
+          loss.</para>
+        </note>
+      </section>
+
+      <section>
+        <title>Exporting Selected Strings as XLIFF</title>
+
+        <para>In cases where you just want to select a few specific strings to
+        export as XLIFF, you can use the "Export Selected Strings as XLIFF"
+        option. To use this option, simply check the box beside each string
+        that you want to include in the XLIFF file, then select "Export" &gt;
+        "Export Selected Strings as XLIFF".</para>
+      </section>
+
+      <section>
+        <title>Exporting A Translation Memory as XLIFF</title>
+
+        <para>A third way to produce an XLIFF file is to export a full
+        translation memory. You can do this by:</para>
+
+        <orderedlist>
+          <listitem>
+            <para>Click on the "Translation Memories" tab.</para>
+          </listitem>
+
+          <listitem>
+            <para>Click on the translation memory that you wish to
+            export.</para>
+          </listitem>
+
+          <listitem>
+            <para>Click on "Export" &gt; "Export XLIFF" on the top button
+            bar.</para>
+
+            <para><inlinemediaobject>
+                <imageobject>
+                  <imagedata fileref="images/ch04-export-xliff.png"/>
+                </imageobject>
+              </inlinemediaobject></para>
+          </listitem>
+        </orderedlist>
+
+        <para>The resulting XLIFF file will contain all of strings (which have
+        translations) in the translation memory. </para>
+
+        <note>
+          <para>You may notice that translation memories only contain strings
+          that have been translated. This contrasts the strings as seen in the
+          "Strings" tab, which includes all strings that have been imported
+          into the system, whether they have been translated or not.</para>
+        </note>
+      </section>
+    </section>
+  </section>
+
+  <section>
+    <title>Importing Strings and Translations</title>
+
+    <para>In order to provide a workflow between external CAT tools and SWeTE,
+    you must be able to re-import the files that had previously been exported
+    - but have had translations added to them. SWeTE supports importing of
+    both CSV and XLIFF files as long as they are in the same format as SWeTE
+    produces in its export operations.</para>
+
+    <para/>
+
+    <section>
+      <title>Importing Translations from a CSV File</title>
+
+      <para>CSV is one of the simplest, most reliable formats for transferring
+      translations. SWeTE accepts CSV files as long as they are in the same
+      format as as SWeTE uses for exporting CSV files. The strings need to be
+      fully-encoded, with HTML tags replaced with the appropriate SWeTE
+      placeholders. In order for the strings to be useful, they must be in a
+      format consistent with a preprocessed string from the proxy site. In
+      order to understand this, it may help to quickly review how SWeTE
+      processes web pages.</para>
+
+      <para>When a request is made for a web page in SWeTE, it first loads the
+      webpage from the source site. Then it passes the page contents through a
+      set of prefilters to prepare the page to be processed by the translation
+      parser. Finally, just before each string is passed to the translation
+      parser, it replaces all HTML tags with placeholder tags so that strings
+      with different HTML tags but in the same place will match. These
+      placeholders are:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><literal>&lt;g id="n"&gt;xxx&lt;/g&gt;</literal>, for HTML
+          tags that have both an opening and closing tag. E.g. [<literal>I am
+          &lt;a href="foobar.html"&gt;Steve&lt;/a&gt;</literal>] would be
+          converted to [<literal>I am &lt;g
+          id="1"&gt;Steve&lt;/g&gt;</literal>]. [<literal>We are &lt;a
+          href="foobar.html"&gt;Steve&lt;/a&gt; and &lt;a
+          href="foobar2.html"&gt;Jack&lt;/a&gt;</literal>] would be converted
+          to [<literal>We are &lt;g id="1"&gt;Steve&lt;/g&gt; and &lt;g
+          id="2"&gt;Jack&lt;/g&gt;</literal>].</para>
+        </listitem>
+
+        <listitem>
+          <para><literal>&lt;x id="n"/&gt;</literal>, for HTML tags that don't
+          have a closing tag. E.g. [<literal>I am Steve &lt;br/&gt; and this
+          &lt;br/&gt; is Jack</literal>] would be converted to [<literal>I am
+          Steve &lt;x id="1"/&gt; and this &lt;x id="2"/&gt; is
+          Jack</literal>].</para>
+        </listitem>
+
+        <listitem>
+          <para>&lt;v id="n"&gt;&lt;/v&gt;, to mark variables, i.e. HTML tags
+          that include the data-swete-translate attribute. See <xref
+          linkend="inline-variables"/> for more information about
+          data-swete-translate and inline variables. The default website
+          profile includes a number of text filters wrap replace numbers and
+          dates in these inline variable tags.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Due to these transformations, it is safest to only work with
+      strings that have already been captured by SWeTE using the string
+      capture step (See <xref linkend="capturing-strings-sec"/> for more
+      information on capturing strings), and exported using the export CSV
+      step. If you have a raw CSV file with strings that you want to import
+      from a database or external corpus you should build a web page with this
+      CSV file and capture the page using SWeTE. (In future versions there may
+      be an import path without having to do this, but for now, it is the
+      safest method of importing raw strings).</para>
+
+      <para>Steps to import a set of translations from a CSV file.</para>
+
+      <orderedlist>
+        <listitem>
+          <para>Click on the "Strings" tab on the top menu bar.</para>
+
+          <para><inlinemediaobject>
+              <imageobject>
+                <imagedata fileref="images/ch04-top-menubar.png"/>
+              </imageobject>
+            </inlinemediaobject></para>
+        </listitem>
+
+        <listitem>
+          <para>Click on the "Import Translations" button on the left menu
+          bar.</para>
+
+          <para><inlinemediaobject>
+              <imageobject>
+                <imagedata fileref="images/ch04-import-translations-button.png"/>
+              </imageobject>
+            </inlinemediaobject></para>
+        </listitem>
+
+        <listitem>
+          <para>This will show a form to upload your CSV file as
+          follows:</para>
+
+          <para><inlinemediaobject>
+              <imageobject>
+                <imagedata contentwidth="50%"
+                           fileref="images/ch04-import-form.png"/>
+              </imageobject>
+            </inlinemediaobject></para>
+        </listitem>
+
+        <listitem>
+          <para>Use the "File" field to select the CSV file that contains your
+          translations. </para>
+
+          <note>
+            <para> It should be in the same format as SWeTE exports. The top
+            row must contain the column names exactly as they are included in
+            the SWeTE CSV export option. See <xref
+            linkend="exporting-strings-as-csv"/> for details about the
+            required columns. You can view a sample exported CSV file in the
+            docs/samples/translation_miss_log_results_2013_07_05_00_11_28.csv
+            file with the SWeTE distribution. You can also view it <ulink
+            url="https://raw.github.com/shannah/swete/master/docs/samples/translation_miss_log_results_2013_07_05_00_11_28.csv">here</ulink>
+            on github.</para>
+          </note>
+        </listitem>
+
+        <listitem>
+          <para>Select "CSV" in the "File Format" field.</para>
+        </listitem>
+
+        <listitem>
+          <para>If you want to target a specific translation memory into which
+          to insert all translations, then select that translation memory in
+          the "Target Translation Memory" field. If you do not select a
+          translation memory, it will use the translation_memory_uuid column
+          of the CSV file to identify the translation memory to which the
+          string belongs, and try to use it. If the system doesn't have a
+          matching translation memory, then it will fail to import that
+          string.</para>
+        </listitem>
+
+        <listitem>
+          <para>Click Save when you are done.</para>
+        </listitem>
+      </orderedlist>
+    </section>
+
+    <section>
+      <title>Importing Translations from an XLIFF File</title>
+
+      <para/>
     </section>
   </section>
 </chapter>

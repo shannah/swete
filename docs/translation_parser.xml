@@ -570,7 +570,7 @@
       translation).</para>
     </example>
 
-    <section>
+    <section id="inline-variables">
       <title>Inline Variables (using data-swete-translate)</title>
 
       <para>Many web applications use server-side technologies and templates
@@ -1041,12 +1041,13 @@
           <para>You'll notice that this particular pattern would convert
           strings like:</para>
 
-          <para>September 9, 2008</para>
+          <para><literal>September 9, 2008</literal></para>
 
           <para>to</para>
 
-          <para>&lt;span data-swete-translate="0" data-date-format="MMMM
-          d,y"&gt;September 9, 2008&lt;/span&gt;</para>
+          <para><literal>&lt;span data-swete-translate="0"
+          data-date-format="MMMM d,y"&gt;September 9,
+          2008&lt;/span&gt;</literal></para>
 
           <para>Hence, with this filter activated in the site (which it is by
           default) all dates of this form will automatically be converted to

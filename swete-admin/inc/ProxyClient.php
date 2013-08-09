@@ -79,6 +79,10 @@
  */
 class ProxyClient {
 
+    const TRANSLATION_MODE_DEFAULT = 1;
+    const TRANSLATION_MODE_TRANSLATE = 2;
+    const TRANSLATION_MODE_NOTRANSLATE = 3;
+
 	/**
 	 * @type string
 	 *
@@ -592,6 +596,7 @@ class ProxyClient {
 		}
 		
 		$this->content = $contents;
+
 		return $contents;
 	
 	}
@@ -720,7 +725,25 @@ class ProxyClientPreprocessor implements ProxyClientDelegate {
 		//return preg_replace('/\b(?<!&\#)([0-9]+[\/\.\-,]?)+/', '<span data-swete-translate="0">$0</span>', $string);
 	}
 	
-	
+	/**
+	 * @brief Returns the translation mode for the current request.  This can be used
+	 * to override whether or not the content should be translated.  By default
+	 * all HTML and CSS content is translated and all else is left alone.  This allows
+	 * you to either cause translation to happen (regardless of content type), translation
+	 * to NOT happen, or for the default behaviour to prevail.
+	 * @param ProxyClient $client the current client making the request.
+	 */
+	public function getTranslationMode(ProxyClient $client){
+	    $del = $this->delegate();
+	    if ( isset($del) and method_exists($del, 'getTranslationMode') ){
+	        $out = $del->getTranslationMode($client);
+	        if ( !$out ){
+	            return ProxyClient::TRANSLATION_MODE_DEFAULT;
+	        }
+	        return $out;
+	    }
+	    return ProxyClient::TRANSLATION_MODE_DEFAULT;
+	}
 	
 	public function preprocess($html){
 		$obj = $this->delegate();
