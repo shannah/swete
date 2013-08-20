@@ -481,10 +481,13 @@ class ProxyClient {
 			
 		//}
 		
+		/*
+		//DISABLED BECAUSE PAGES WITH MULTIPLE ENCODINGS CAUSE PROBEMS HERE
+		// BETTER FOR SERVER OR PAGE TO EXPLICITLY STATE ENCODING
 		if ( !$encoding ){
 			$encoding = mb_detect_encoding($content, 'utf-8,iso-8859-1');
 		}
-		
+		*/
 		if ( $encoding ){
 			//echo "Converting encoding to utf-8 from $encoding";exit;
 			return mb_convert_encoding($content, 'utf-8', $encoding);
