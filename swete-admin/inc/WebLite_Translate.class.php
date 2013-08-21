@@ -184,6 +184,9 @@ class WebLite_HTML_Translator {
 			                $stringsIndex[trim(_n($tok))] = $index;
 			                $innerHTML[] = '{{$'.$index.'$}}';
 			                $index++;
+			                if ( $tok{strlen($tok)-1} === ' ' ){
+			                    $innerHTML[] = ' ';
+			                }
 			            }
 			        }
 			        $tr->innerHTML = implode('', $innerHTML);
@@ -218,7 +221,7 @@ class WebLite_HTML_Translator {
 		}
 		
 		
-		$textX = $xpath->query('//text()[normalize-space() and not(ancestor::script | ancestor::style | ancestor::*[@notranslate])]');
+		$textX = $xpath->query('//text()[normalize-space() and not(ancestor::script | ancestor::style | ancestor::*[@notranslate] | ancestor::*[@translate])]');
 		$text = array();
 		foreach ($textX as $x){
 			$text[] = $x;
