@@ -146,18 +146,62 @@ class WebLite_HTML_Translator {
 		
 		$xpath = new DOMXPath($dom);
 		$this->translateDates($xpath);
-		$text = $xpath->query('//text()[normalize-space() and not(ancestor::script | ancestor::style)]');
+		//$text = $xpath->query('//text()[normalize-space() and not(ancestor::script | ancestor::style)]');
 		//$translatables = $dom->find('[translate]');
 		$translatables = $xpath->query('//*[@translate]');
 		foreach ($translatables as $tr){
+		
 			$index = count($strings);
 			
 			//$strings[] = trim(_n($tr->innertext));
-			$strings[] = trim(_n($tr->innerHTML));
-			//$stringsIndex[trim(_n($tr->innertext))] = $index;
-			$stringsIndex[trim(_n($tr->innerHTML))] = $index;
-			//$tr->innertext = '{{$'.$index.'$}}';
-			$tr->innerHTML = '{{$'.$index.'$}}';
+			//$strings[] = trim(_n($tr->innerHTML));
+			$trStr = trim(_n($tr->innerHTML));
+			if ( $tr->hasAttribute('data-swete-delimiters') ){
+			    
+			    $delim = trim($tr->getAttribute('data-swete-delimiters'));
+			    if ( $delim ){
+			        $delimSplitter = $delim{0};
+			        $delimiters = explode($delimSplitter, $delim);
+			        $delimiters2 = array();
+			        foreach ( $delimiters as $delimiterIdx => $delimiter ){
+			            if ( !trim($delimiter) ){
+			                continue;
+			            }
+			            $delimiters2[] = '('.preg_quote($delimiter, '/').')';
+			        }
+			        $delimiters = $delimiters2;
+			        $pattern = '/'.implode('|', $delimiters).'/';
+			        $toks = preg_split($pattern, $trStr, -1, PREG_SPLIT_DELIM_CAPTURE);
+			        $innerHTML = array();
+			        foreach ( $toks as $tokIdx => $tok ){
+			            if ( !trim($tok) ){
+			                $innerHTML[] = $tok;
+			            } else if ( $tokIdx % 2 === 1 ){
+			                // It is a delimiter
+			                $innerHTML[] = $tok;
+			            } else {
+			                $strings[] = trim(_n($tok));
+			                $stringsIndex[trim(_n($tok))] = $index;
+			                $innerHTML[] = '{{$'.$index.'$}}';
+			                $index++;
+			            }
+			        }
+			        $tr->innerHTML = implode('', $innerHTML);
+			        $trStr = '';
+			        
+			    }
+			    
+			} 
+			
+			if ( $trStr ){
+			    $strings[] = trim(_n($trStr));
+			    $stringsIndex[trim(_n($trStr))] = $index;
+			    $tr->innerHTML = '{{$'.$index.'$}}';
+			    $index++;
+			}
+			
+			$gchildren = $xpath->query('./text()', $tr);
+			foreach ($gchildren as $gchild) $gchild->isCovered = 1;
 		}
 		
 		
