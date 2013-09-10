@@ -30,10 +30,65 @@ class CSVStringImporter {
     public $errors = array();
     public $succeeded = 0;
     public $failed = 0;
+    public $separator = ',';
+    public $eol = "\n";
     
     public function CSVStringImporter($inputFilePath, XFTranslationMemory $translationMemory = null ){
         $this->inputFilePath = $inputFilePath;
         $this->targetTranslationMemory = $translationMemory;
+    }
+    
+    /**
+     * This method is necessary to fix the encoding that may  come from Excel.
+     * Excel exports now use UTF-16LE because it cannot seem to understand UTF-8.
+     * This step converts the input file to UTF-8 and sets the appropriate separator.
+     */
+    public function fixEncoding(){
+        $seps = array(',',"\t",';');
+        $sep = null;
+        $fh = fopen($this->inputFilePath, 'r');
+        $content = fread($fh, 2);
+        $encoding = null;
+        if ($content[0]==chr(0xff) && $content[1]==chr(0xfe)) {
+            $encoding = 'UTF-16LE';
+        } else if ($content[0]==chr(0xfe) && $content[1]==chr(0xff)) {
+            $encoding = 'UTF-16BE';
+        }
+        //echo "Encoding is $encoding";
+        if ( isset($encoding) ){
+            $tmp = tmpfile();
+            while ( !feof($fh) ){
+                $line = mb_convert_encoding(fread($fh, 4096), 'utf-8', $encoding);
+                fwrite($tmp, $line);
+            }
+            fclose($fh);
+            fseek($tmp, 0);
+            $fh = fopen($this->inputFilePath, 'w');
+            while ( !feof($tmp)){
+                fwrite($fh, fgets($tmp));
+            }
+            //fseek($tmp, 0);
+            //fpassthru($tmp);exit;
+            fclose($tmp);
+            fclose($fh);
+            $fh = fopen($this->inputFilePath, 'r');
+        }
+        
+        foreach ( $seps as $s ){
+            if ( isset($sep) ){
+                break;
+            }
+            fseek($fh, 0);
+            $row = fgetcsv($fh, 0, $s);
+            if ( count($row) > 1 ){
+                $sep = $s;
+            }
+            
+        }
+        
+        fclose($fh);
+        $this->separator = $sep;
+        
     }
     
     public function import(){
@@ -44,7 +99,7 @@ class CSVStringImporter {
                     $this->inputFilePath
             ));
         }
-        $headers = array_flip(fgetcsv($fh));
+        $headers = array_flip(fgetcsv($fh, 0, $this->separator));
         
         $required_fields = array(
             'normalized_string',
@@ -64,7 +119,7 @@ class CSVStringImporter {
             }
         }
         
-        while (($row = fgetcsv($fh)) !== false){
+        while (($row = fgetcsv($fh, 0, $this->separator)) !== false){
             $string = $row[$headers['normalized_string']];
             $translation = $row[$headers['normalized_translation_value']];
             $translationMemory = $this->targetTranslationMemory;

@@ -37,7 +37,7 @@
         if ( resultsView.model.get('target_translation_memory_uuid') ){
             window.location=DATAFACE_SITE_HREF+
                 '?-action=list'+
-                '&-table=translation_miss_log'+
+                '&-table=swete_strings'+
                 '&translation_memory_uuid=='+encodeURIComponent(resultsView.model.get('target_translation_memory_uuid'))+
                 '&-sort=date_inserted+desc'+
                 ((parseInt(resultsView.model.get('succeeded'))>0)?('&-limit='+encodeURIComponent(resultsView.model.get('succeeded'))):'')
@@ -45,7 +45,7 @@
         } else {
             window.location=DATAFACE_SITE_HREF+
                 '?-action=list'+
-                '&-table=translation_miss_log'+
+                '&-table=swete_strings'+
                 '&-sort=date_inserted+desc'+
                 (parseInt(resultsView.model.get('succeeded'))>0?('&-limit='+encodeURIComponent(resultsView.model.get('succeeded'))):'');
         }

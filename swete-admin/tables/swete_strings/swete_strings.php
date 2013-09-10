@@ -4,6 +4,7 @@
  *
  * @author shannah
  */
+require_once 'modules/tm/lib/TMTools.php';
 class tables_swete_strings {
     
     function getPermissions($record){
@@ -64,6 +65,29 @@ class tables_swete_strings {
 
     function normalized_translation_value__csvValue(Dataface_Record $record){
         return $record->val('normalized_translation_value');
+    }
+    
+    function deleteRecord($record){
+        if ( $record->val('translation_memory_id') ){
+            $res = df_q(sprintf("delete from translation_miss_log where string_id=%d and translation_memory_id=%d", 
+                    $record->val('string_id'), 
+                    $record->val('translation_memory_id')
+                  )
+            );
+            $res = df_q(sprintf("delete from xf_tm_translation_memory_strings where string_id=%d and translation_memory_id=%d",
+                    $record->val('string_id'),
+                    $record->val('translation_memory_id')
+            ));
+            
+        } else {
+            $res = df_q(sprintf("delete from translation_miss_log where string_id=%d and translation_memory_id IS NULL", 
+                    $record->val('string_id')
+                  )
+            );
+        }
+        
+        
+        return $res;
     }
 }
 

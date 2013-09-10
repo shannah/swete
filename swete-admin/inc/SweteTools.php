@@ -202,8 +202,9 @@ END
 			$sql = <<<END
 CREATE TABLE IF NOT EXISTS `swete_strings_$lang` (
 	`string_id` int(11) unsigned not null,
+        `translation_memory_id` int(11) unsigned not null,
 	`string` text COLLATE utf8_unicode_ci,
-	PRIMARY KEY (`translation_miss_log_id`)
+	PRIMARY KEY (`string_id`,`translation_memory_id`)
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 END
 ;

@@ -1361,23 +1361,33 @@ class conf_Installer {
         } catch ( Exception $ex){}      
     }
     
-    function update_4790(){
+    function update_4797(){
         $sql[] = "CREATE VIEW `swete_strings` AS
-            select tml.*,
+            select  s.string_id,
+                    s.normalized_value as normalized_string,
+                    s.normalized_value as string,
                     s.num_words,
                     t.normalized_translation_value,
                     if(tml.webpage_id is null,hrl.proxy_request_url, concat(ws.website_url,w.webpage_url)) as request_url,
-                    tm.translation_memory_uuid
+                    ifnull(tml.translation_memory_id,tm.translation_memory_id) as translation_memory_id,
+                    ifnull(tm2.translation_memory_uuid, tm.translation_memory_uuid) as translation_memory_uuid,
+                    ifnull(tm2.translation_memory_name,tm.translation_memory_name) as translation_memory_name,
+                    ifnull(tm2.source_language,tm.source_language) as source_language,
+                    ifnull(tm2.destination_language, tm.destination_language) as destination_language,
+                    ws.website_name,
+                    ws.website_id,
+                    tml.date_inserted
                     from 
                     xf_tm_strings s
-                    left join translation_miss_log tml on tml.string_id=s.string_id
-                    left join xf_tm_translation_memories tm on tml.translation_memory_id=tm.translation_memory_id
-
-                    left join xf_tm_translation_memory_strings tms on tms.string_id=tml.string_id and tms.translation_memory_id=tml.translation_memory_id
+                    left join xf_tm_translation_memory_strings tms on s.string_id=tms.string_id
                     left join xf_tm_translations t on tms.current_translation_id=t.translation_id
+                    left join xf_tm_translation_memories tm on tms.translation_memory_id=tm.translation_memory_id
+                    left join translation_miss_log tml on tml.string_id=s.string_id 
+                    left join xf_tm_translation_memories tm2 on tml.translation_memory_id=tm2.translation_memory_id
                     left join http_request_log hrl on tml.http_request_log_id=hrl.http_request_log_id
                     left join webpages w on tml.webpage_id=w.webpage_id
                     left join websites ws on tml.website_id=ws.website_id
+                    where ifnull(tml.translation_memory_id,tm.translation_memory_id) IS NOT NULL
             ";
         
         
@@ -1404,8 +1414,9 @@ class conf_Installer {
             $sql = <<<END
 CREATE TABLE IF NOT EXISTS `swete_strings_$lang` (
 `string_id` int(11) unsigned not null,
+`translation_memory_id` int(11) unsigned not null,
 `string` text COLLATE utf8_unicode_ci,
-PRIMARY KEY (`string_id`)
+PRIMARY KEY (`string_id`,`translation_memory_id`)
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 END
 ;

@@ -37,6 +37,7 @@ class tables_string_imports {
                 }
                 
                 $importer = new CSVStringImporter($filePath, $translationMemory);
+                $importer->fixEncoding();
                 $message = 'Import succeeded';
                 $status = 'COMPLETE';
                 try {

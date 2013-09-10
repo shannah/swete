@@ -37,15 +37,15 @@ class actions_dashboard {
 				select count(*) from webpages w where w.website_id=ws.website_id
 			) as numpages,
 			(
-				select count(*) from translation_miss_log tml where tml.website_id=ws.website_id
+				select count(*) from swete_strings tml where tml.website_id=ws.website_id
 			) as numphrases,
 			ifnull((
-				select sum(num_words) from xf_tm_strings xts 
-					inner join translation_miss_log tml on tml.string_id=xts.string_id
+				select sum(tml.num_words) from xf_tm_strings xts 
+					inner join swete_strings tml on tml.string_id=xts.string_id
 				where tml.website_id=ws.website_id
 			), 0) as numwords,
 			(
-				select count(*) from translation_miss_log tml
+				select count(*) from swete_strings tml
 					inner join websites ws2 on ws2.website_id=tml.website_id
 					inner join xf_tm_translation_memory_strings xttms on xttms.translation_memory_id=ws2.translation_memory_id and xttms.string_id=tml.string_id
 				where xttms.current_translation_id is not null
@@ -54,7 +54,7 @@ class actions_dashboard {
 			) as translated_phrases,
 			
 			ifnull((
-				select sum(num_words) from translation_miss_log tml
+				select sum(tml.num_words) from swete_strings tml
 					inner join websites ws2 on ws2.website_id=tml.website_id
 					inner join xf_tm_translation_memory_strings xttms on xttms.translation_memory_id=ws2.translation_memory_id and xttms.string_id=tml.string_id
 					inner join xf_tm_strings xts on xttms.string_id=xts.string_id
@@ -85,7 +85,7 @@ class actions_dashboard {
 		list($numPages) = mysql_fetch_row($res);
 		@mysql_free_result($res);
 		
-		$res = df_q("select count(*) num_phrases, sum(xts.num_words) as num_words from translation_miss_log tml 
+		$res = df_q("select count(*) num_phrases, sum(xts.num_words) as num_words from swete_strings tml 
 			left join xf_tm_strings xts on tml.string_id=xts.string_id");
 		list($numPhrases, $numWords) = mysql_fetch_row($res);
 		@mysql_free_result($res);
@@ -94,7 +94,7 @@ class actions_dashboard {
 		list($numSites) = mysql_fetch_row($res);
 		@mysql_free_result($res);
 		
-		$res = df_q("select count(*) as numphrases, ifnull(sum(xts.num_words),0) as num_words from translation_miss_log tml 
+		$res = df_q("select count(*) as numphrases, ifnull(sum(xts.num_words),0) as num_words from swete_strings tml 
 			inner join websites w on w.website_id=tml.website_id
 			inner join xf_tm_translation_memory_strings xttms on w.translation_memory_id=xttms.translation_memory_id and xttms.string_id=tml.string_id
 			inner join xf_tm_strings xts on xts.string_id=tml.string_id
