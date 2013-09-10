@@ -78,11 +78,12 @@ class conf_ApplicationDelegate {
 	}
 	
 	function beforeHandleRequest(){
-	
+                
 		$app = Dataface_Application::getInstance();
 		$app->addHeadContent('<link rel="stylesheet" type="text/css" href="'.htmlspecialchars(DATAFACE_SITE_URL.'/css/swete/global.css').'"/>');
 		
 		$query =& $app->getQuery();
+                
 		$res = df_q("select language_code, language_label from languages");
 		$langs = array();
 		while ($row = mysql_fetch_row($res) ){
@@ -96,6 +97,8 @@ class conf_ApplicationDelegate {
 		if ( @$app->_conf['using_default_action'] and $query['-table'] == 'dashboard' ){
 			$query['-action'] = 'dashboard';
 		}
+               
+                
 	}
 	
 	function block__after_left_column(){

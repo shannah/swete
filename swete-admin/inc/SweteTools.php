@@ -190,6 +190,31 @@ END
 		}
 		
 		
+                $tStrings = Dataface_Table::loadTable('swete_strings');
+		$wLanguages = array_keys($tStrings->getTranslations());
+		
+		$missing = array_diff($languages, $wLanguages);
+		
+		foreach ($missing as $lang){
+			if ( !preg_match('/^[a-zA-Z0-9]{2}/', $lang) ) throw new Exception("Invalid language code ".$lang);
+			
+			
+			$sql = <<<END
+CREATE TABLE IF NOT EXISTS `swete_strings_$lang` (
+	`string_id` int(11) unsigned not null,
+	`string` text COLLATE utf8_unicode_ci,
+	PRIMARY KEY (`translation_miss_log_id`)
+) DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+END
+;
+			SweteDb::q($sql);
+			
+			
+
+			
+		
+		}
+                
 		
 		$tJobTranslatable = Dataface_Table::loadTable('job_translatable');
 		$wLanguages = array_keys($tJobTranslatable->getTranslations());

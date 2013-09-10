@@ -1360,4 +1360,58 @@ class conf_Installer {
             df_clear_cache();
         } catch ( Exception $ex){}      
     }
+    
+    function update_4790(){
+        $sql[] = "CREATE VIEW `swete_strings` AS
+            select tml.*,
+                    s.num_words,
+                    t.normalized_translation_value,
+                    if(tml.webpage_id is null,hrl.proxy_request_url, concat(ws.website_url,w.webpage_url)) as request_url,
+                    tm.translation_memory_uuid
+                    from 
+                    xf_tm_strings s
+                    left join translation_miss_log tml on tml.string_id=s.string_id
+                    left join xf_tm_translation_memories tm on tml.translation_memory_id=tm.translation_memory_id
+
+                    left join xf_tm_translation_memory_strings tms on tms.string_id=tml.string_id and tms.translation_memory_id=tml.translation_memory_id
+                    left join xf_tm_translations t on tms.current_translation_id=t.translation_id
+                    left join http_request_log hrl on tml.http_request_log_id=hrl.http_request_log_id
+                    left join webpages w on tml.webpage_id=w.webpage_id
+                    left join websites ws on tml.website_id=ws.website_id
+            ";
+        
+        
+        df_q($sql);
+        
+        
+        $res = df_q('select distinct `target_language` from websites');
+        $languages = array();
+        while ($row = mysql_fetch_row($res) ) $languages[] = $row[0];
+        @mysql_free_result($res);
+
+        $res = df_q('select distinct `source_language` from websites');
+        while ($row = mysql_fetch_row($res) ) $languages[] = $row[0];
+        @mysql_free_result($res);
+
+        $languages = array_unique($languages);
+
+        $missing = $languages;
+
+        foreach ($missing as $lang){
+            if ( !preg_match('/^[a-zA-Z0-9]{2}/', $lang) ) throw new Exception("Invalid language code ".$lang);
+
+
+            $sql = <<<END
+CREATE TABLE IF NOT EXISTS `swete_strings_$lang` (
+`string_id` int(11) unsigned not null,
+`string` text COLLATE utf8_unicode_ci,
+PRIMARY KEY (`string_id`)
+) DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+END
+;
+            df_q($sql);
+
+
+        }
+    }
 }
