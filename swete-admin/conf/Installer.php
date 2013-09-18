@@ -1362,6 +1362,8 @@ class conf_Installer {
     }
     
     function update_4797(){
+    	import('Dataface/Table.php');
+    	Dataface_ModuleTool::getInstance()->loadModule('modules_tm');
         $sql[] = "CREATE VIEW `swete_strings` AS
             select  s.string_id,
                     s.normalized_value as normalized_string,
