@@ -511,16 +511,27 @@ class ProxyClient {
 		
 		$ch = curl_init( $url );
         if ( strtolower(@$this->SERVER['REQUEST_METHOD']) == 'post' ) {
-            //print_r($this->POST);exit;
-            $postStr = '';
-            if ( !$this->POST ){
-                $postStr = file_get_contents('php://input');
-            } else {
-                $postStr = http_build_query($this->POST);
-            }
-			curl_setopt( $ch, CURLOPT_POST, true );
-			curl_setopt( $ch, CURLOPT_POSTFIELDS, $postStr );
-			
+        	if ( strpos(strtolower(@$this->SERVER['CONTENT_TYPE']), 'multipart/form-data') !== false ){
+        		// THIS IS A KLUDGE quick fix right now to handle multipart/form-data.
+        		// We will just get it from the global $_POST array for now since
+        		// se decided not to populate the POST array in the client
+        		// It currently doesn't pass through files.
+        		// Here is a tip on how to properly pass through multipart/form-data
+        		//http://scraperblog.blogspot.ca/2013/07/php-curl-multipart-form-posting.html
+        		$postStr = http_build_query($_POST);
+        		curl_setopt( $ch, CURLOPT_POST, true );
+				curl_setopt( $ch, CURLOPT_POSTFIELDS, $postStr );
+        	} else {
+				$postStr = '';
+				if ( !$this->POST ){
+					$postStr = file_get_contents('php://input');
+				} else {
+					$postStr = http_build_query($this->POST);
+				}
+				curl_setopt( $ch, CURLOPT_POST, true );
+				curl_setopt( $ch, CURLOPT_POSTFIELDS, $postStr );
+				
+			}
 		}
 		
 		if ( @$this->send_cookies and @$this->REQUEST_HEADERS['Cookie']) {
@@ -536,7 +547,8 @@ class ProxyClient {
 		}
 		$reqHeaders = array();
 		$reqHeaderCandidates = array(
-			'X-SWeTE-Language'
+			'X-SWeTE-Language',
+			'X-Requested-With'
 		);
 		foreach ($reqHeaderCandidates as $h){
 			if ( isset($headers[$h]) ){
@@ -546,22 +558,19 @@ class ProxyClient {
 		if ( $reqHeaders ){
 			curl_setopt($ch, CURLOPT_HTTPHEADER, $reqHeaders);
 		}
-		
-		
 		$contents = $this->curl_exec( $ch );
+		
 		if ( $this->outputFile ){
 			curl_close($ch);
 			fclose($this->outputFileHandle);
 			return;
 		}
+		
 		$headerLen = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
 		$header = substr($contents, 0, $headerLen);
 		$contents = substr($contents, $headerLen);
-		
 		$status = curl_getinfo( $ch );
 		$this->status = $status;
-		//echo "Status: ";print_r($this->status);exit;
-		
 		curl_close( $ch );
 	  
 		if ( !$this->headers ){
@@ -572,15 +581,7 @@ class ProxyClient {
 			
 			// Propagate headers to response.
 			foreach ( $header_text as $header ) {
-			  //if ( preg_match( '/^(?:Content-Type|Content-Language|Set-Cookie|Location|Etag):/i', $header ) ) {
-				//echo $header;
-				
-				//if ( preg_match('/^Location:/i', $header) ){
-				//	  $header = str_replace($baseHost, $this->SERVER['HTTP_HOST'], $header);
-				//}
-				
-				$this->header( $header, false );
-			  //}
+			  $this->header( $header, false );
 			}
 		}
 		
