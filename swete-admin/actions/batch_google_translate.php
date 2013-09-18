@@ -104,7 +104,7 @@ END;
 		foreach ($strings as $string){
 			
 			$site = $this->getSite($string->val('website_id'));
-			$encString = $string->val('encoded_string');
+			$encString = TMTools::encode($string->val('string'), $garbage);
 			$compiledString = $this->compileString($encString);
 			echo "<script>progressBar.progressbar('option','value',".ceil(floatval($i)/floatval(count($strings))).");
 				progressLabel.text('Processing ['+".json_encode($encString).".substring(0,30)+'...]');
