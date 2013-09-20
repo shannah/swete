@@ -16,6 +16,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+//print_r($_SERVER);exit;
+if ( @$_SERVER['UNENCODED_URL'] and !@$_SERVER['REDIRECT_URL'] ){
+    if ( ($pos = strpos($_SERVER['UNENCODED_URL'],'?')) !== false ){
+        $_SERVER['REDIRECT_URL'] = substr($_SERVER['UNENCODED_URL'], 0, $pos);
+    } else {
+        $_SERVER['REDIRECT_URL'] = $_SERVER['UNENCODED_URL'];
+    }
+}
 if ( @$_SERVER['REDIRECT_ENCODE_SCRIPTS'] ){
     define('SWETE_ENCODE_SCRIPTS', 1);
 }

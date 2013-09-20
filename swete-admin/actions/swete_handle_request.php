@@ -30,7 +30,7 @@ class actions_swete_handle_request{
 		$app = Dataface_Application::getInstance();
 		$query = $app->getQuery();
 		//print_r($_SERVER);
-		$url = implode('/', array_map('rawurlencode', explode('/', $_SERVER['REDIRECT_URL'])));
+                $url = implode('/', array_map('rawurlencode', explode('/', $_SERVER['REDIRECT_URL'])));
 		if ( isset($_SERVER['REQUEST_URI']) ){
 			if ( strpos($_SERVER['REQUEST_URI'], '?') !== false ){
 				list($junk, $_SERVER['REDIRECT_QUERY_STRING']) = explode('?', $_SERVER['REQUEST_URI']);
