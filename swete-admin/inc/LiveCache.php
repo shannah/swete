@@ -613,13 +613,13 @@ class LiveCache {
                 }
                 header('Content-Length: '.strlen($this->client->content));
                 header('Connection: close');
-                header('X-SWeTE-Handler: LiveCache Processed-content/'.__LINE__);
+                header('X-SWeTE-Handler: LiveCache Processed-content/'.__LINE__.'/No-server-cache:'.$this->noServerCache);
                 echo $this->client->content;
                 flush();
                 $this->headers = $headers;
                 $this->content = $this->client->content;
                 $this->calculateExpires();
-                if ( $this->expires > time() ){
+                if ( $this->expires > time() and !$this->noServerCache ){
                     $this->saveContent();
                     $this->save();
                 }
