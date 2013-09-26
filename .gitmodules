@@ -13,3 +13,6 @@
 [submodule "swete-admin/modules/uitk"]
 	path = swete-admin/modules/uitk
 	url = https://github.com/shannah/xataface-module-uitk.git
+[submodule "swete-admin/modules/excel"]
+	path = swete-admin/modules/excel
+	url = https://github.com/shannah/xataface-module-excel.git
