@@ -33,7 +33,7 @@ class CSVStringImporter {
     public $separator = ',';
     public $eol = "\n";
     
-    public function CSVStringImporter($inputFilePath, XFTranslationMemory $translationMemory = null ){
+    public function __construct($inputFilePath, XFTranslationMemory $translationMemory = null ){
         $this->inputFilePath = $inputFilePath;
         $this->targetTranslationMemory = $translationMemory;
     }

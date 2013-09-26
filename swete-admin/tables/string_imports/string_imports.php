@@ -29,14 +29,19 @@ class tables_string_imports {
         
         switch ( $record->val('file_format') ){
             case 'CSV':
+            case 'XLS':
                 $translationMemory = null;
                 if ( $record->val('target_translation_memory_uuid') ){
                     $translationMemory = XFTranslationMemory::loadTranslationMemoryByUuid(
                         $record->val('target_translation_memory_uuid')
                     );
                 }
-                
-                $importer = new CSVStringImporter($filePath, $translationMemory);
+                if ( $record->val('file_format') === 'XLS' ){
+                    import('inc/ExcelStringImporter.php');
+                    $importer = new ExcelStringImporter($filePath, $translationMemory);
+                } else {
+                    $importer = new CSVStringImporter($filePath, $translationMemory);
+                }
                 $importer->fixEncoding();
                 $message = 'Import succeeded';
                 $status = 'COMPLETE';
