@@ -376,9 +376,11 @@ class LiveCache {
         //$proxyWriter = $this->site->getProxyWriter();
         
         $client->URL = $this->unproxifiedUrl;
-        $client->flushableContentTypeRegex = '#html|css#';
-        $client->afterFlushCallback = array($this, 'afterBinaryFlush');
-        $client->flushOutputFile = $this->getCacheContentPath();
+        if ( !$this->noServerCache ){
+            $client->flushableContentTypeRegex = '#html|css#';
+            $client->afterFlushCallback = array($this, 'afterBinaryFlush');
+            $client->flushOutputFile = $this->getCacheContentPath();
+        }
         
         if ( isset($this->logger) ){
             $this->logger->requestMethod = $client->SERVER['REQUEST_METHOD'];

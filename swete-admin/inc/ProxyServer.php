@@ -498,8 +498,11 @@ class ProxyServer {
 				$this->mark('About to check if resource can be cached.');
 				if ( $this->liveCache->expires > time() ){
 					$this->mark('Caching resource for live cache');
-					$this->liveCache->save();
-					$this->liveCache->saveContent();
+					
+                    $this->liveCache->save();
+                    if ( !$this->liveCache->noServerCache ){
+                        $this->liveCache->saveContent();
+                    }
 					$this->mark('Finished cashing resource for live cache.');
 				} else {
 					if ( $this->enableProfiling ){
@@ -507,6 +510,7 @@ class ProxyServer {
 					}
 					$this->mark('Saving just the cache info entry');
 					$this->liveCache->save();
+					
 					
 				}
 			}
