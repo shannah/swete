@@ -71,7 +71,7 @@ class LiveCache {
      * @type string
      */
     public $unproxifiedUrl = null;
-    
+
     /**
      * @brief The expiration time for the cached version of this request.  This is
      * stored as a unix timestamp (seconds since epoch), and is calculated by the 
@@ -99,6 +99,17 @@ class LiveCache {
     public $headers = null;
     
     /**
+     * @brief Stores just the cache control response header.  This is handy since
+     * we are frequently interested in this value -- saves us from looping through
+     * the headers each time we need to access this.  All cache-control headers 
+     * are concatenated in a single string for this value.
+     * @var type 
+     * @see cacheControl()
+     * @see resetCacheControl()
+     */
+    public $cacheControl = null;
+    
+    /**
      * @brief The content of this resource.  This is populated when the page is loaded
      * from the source.
      */
@@ -119,6 +130,14 @@ class LiveCache {
     public $skipLiveCache = false;
     public $sourceDateLocale = null;
     public $targetDateLocale = null;
+    
+    /**
+     * If conservative caching is enabled, only pages with Cache-Control = public in the
+     * response headers will be saved on the server.  This is the *safest* in multi-user 
+     * applications.
+     * @var type 
+     */
+    public $useConservativeCaching = true;
     
     
     /**
@@ -157,6 +176,27 @@ class LiveCache {
     public function getCachePath(){
         return self::getCachePathForProxifiedUrl($this->proxifiedUrl);
     }
+    
+    public function cacheControl(){
+        if ( !isset($this->cacheControl)){
+            if ( !is_array($this->headers) ){
+                return null;
+            }
+            $this->cacheControl = '';
+            foreach ( $this->headers as $h ){
+                if ( stripos($h, 'Cache-control:') === 0 ){
+                    $this->cacheControl .= $h;
+                }
+            }
+        }
+        return $this->cacheControl;
+    }
+    
+    public function resetCacheControl(){
+        $this->cacheControl = null;
+    }
+    
+    
     
     /**
      * @brief Loads a LiveCache object to encapsulate the specified resource.  The resource
@@ -366,20 +406,16 @@ class LiveCache {
         $client->REQUEST_HEADERS['X-Forwarded-For'] = $forwardedFor;
         $client->REQUEST_HEADERS['X-SWeTE-Language'] = $this->proxyLanguage;
         $client->REQUEST_HEADERS['Accept-Language'] = $this->proxyLanguage;
-        // These are all set by default anyways
-        //$client->SERVER = $_SERVER;
-        //$client->REQUEST = $_REQUEST;
-        //$client->GET = $_GET;  
-        //$client->POST = $_POST;
-        //$client->COOKIE = $_COOKIE;
-        //echo "Preprocess: [".$this->URL.']';
-        //$proxyWriter = $this->site->getProxyWriter();
+        $client->passThruHeaders[] = 'If-None-Match';
+        $client->passThruHeaders[] = 'If-Modified-Since';
         
         $client->URL = $this->unproxifiedUrl;
+        $savedCacheContent = false;
         if ( !$this->noServerCache ){
             $client->flushableContentTypeRegex = '#html|css#';
             $client->afterFlushCallback = array($this, 'afterBinaryFlush');
             $client->flushOutputFile = $this->getCacheContentPath();
+            $savedCacheContent = true;
         }
         
         if ( isset($this->logger) ){
@@ -390,7 +426,27 @@ class LiveCache {
         
         //echo "About to process ".$client->URL;
         $client->process();
+        if ( intval($client->status['http_code']) === 304 ){
+            foreach ( $client->headers as $h ){
+                header($h, false);
+            }
+            exit;
+        }
         $this->headers = $client->headers;
+        $this->resetCacheControl();
+        $cacheControl = $this->cacheControl();
+        if ( $this->useConservativeCaching ){
+            $public = false;
+            if ( isset($cacheControl) and stripos($cacheControl, 'public') !== false ){
+                $public = true;
+            }
+            if ( !$public ){
+                $this->noServerCache = true;
+                if ( $savedCacheContent ){
+                    @unlink($this->getCacheContentPath());
+                }
+            }
+        }
         $this->content = $client->content;
         $this->calculateExpires();
         
@@ -414,7 +470,6 @@ class LiveCache {
     public function calculateExpires(){
         $expires = null;
         $private = false;
-        $public = false;
         $cacheControlFound = false;
         $expiresFound = false;
         $pragmaFound = false;
@@ -472,6 +527,8 @@ class LiveCache {
         exit;
     }
     
+    
+    
     /**
      * @brief Flushes the content encapsulated by this resource, but obeying the caching rules.  It 
      * will check both the request headers and the cached response headers to determine if the content
@@ -497,7 +554,18 @@ class LiveCache {
             if ( stripos('/no-cache/i', $reqHeaders['cache-control']) !== false ){
                 $oldestCreated = time();
             }
-        }   
+        }
+        if ( $this->useConservativeCaching ){
+            $cacheControl = $this->cacheControl();
+            $public = false;
+            if ( isset($cacheControl) ){
+                $public = (stripos($cacheControl, 'public') !== false);
+            }
+            if ( !$public ){
+                $this->noServerCache = true;
+            }
+            
+        }
         $this->mark('Oldest created: '.date('Y-m-d H:i:s', $oldestCreated));
         if ( !$this->noServerCache and (!$oldestCreated or $oldestCreated < $this->created) and $this->expires > time() and file_exists($this->getCacheContentPath()) ){
             // We have a local cached version of this page so let's flush that out

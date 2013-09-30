@@ -274,6 +274,11 @@ class ProxyClient {
 	private $flushAndExit = false;
 	
 	public $afterFlushCallback = null;
+        
+        public $passThruHeaders = array(
+			'X-SWeTE-Language',
+			'X-Requested-With'
+		);
 	
 	/**
 	 * @brief Initializes the client object, setting default values for most properties.
@@ -546,10 +551,8 @@ class ProxyClient {
             curl_setopt( $ch, CURLOPT_REFERER, @$headers['Referer']);
 		}
 		$reqHeaders = array();
-		$reqHeaderCandidates = array(
-			'X-SWeTE-Language',
-			'X-Requested-With'
-		);
+		$reqHeaderCandidates = $this->passThruHeaders;
+                
 		foreach ($reqHeaderCandidates as $h){
 			if ( isset($headers[$h]) ){
 				$reqHeaders[] = $h.': '.$headers[$h];
