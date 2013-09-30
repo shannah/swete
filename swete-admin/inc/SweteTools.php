@@ -376,14 +376,16 @@ END
 		// a new doctype tag.
 		if ( stripos($intro, '<!DOCTYPE') !== false ){
 
-			$html = preg_replace('/^[^<]*<\!DOCTYPE[^>]+>/i', '', $html);
+			$html = preg_replace('/^[^<]*<\!DOCTYPE[^>]+>/i', '', $html, 1);
 		}
 		// If we are dealing with XHTML then we need to do some special treatment
 		// for scripts so that they don't F** us up with CDATA stuff.
 		if ( (defined('SWETE_ENCODE_SCRIPTS') and SWETE_ENCODE_SCRIPTS) or  stripos($intro, 'XHTML') !== false){
 			$html = preg_replace_callback('/(<script[^>]*>)([\s\S]*?)(<\/script>)/', array('SweteTools','_encode_scripts'), $html);
 		}
-		
+		if ( !preg_match('/<meta [^>]*Content-Type[^>]*UTF-8/i', $html) ){
+		    $html = preg_replace('/(<head[^>]*>)/i', '$1<meta http-equiv="Content-Type" content="text/html; charset=utf-8">', $html, 1);
+		}
 		$res = @$doc->loadHtml('<?xml encoding="UTF-8">'.$html);
 		if ( !$res ){
 			$outfile = tempnam();

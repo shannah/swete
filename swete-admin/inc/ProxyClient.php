@@ -493,11 +493,10 @@ class ProxyClient {
 			$encoding = mb_detect_encoding($content, 'utf-8,iso-8859-1');
 		}
 		*/
-		if ( $encoding ){
+		if ( $encoding and strtolower($encoding) !== 'utf-8' ){
 			//echo "Converting encoding to utf-8 from $encoding";exit;
 			return mb_convert_encoding($content, 'utf-8', $encoding);
 		} else {
-			
 			return $content;
 		}
 		//return array('content'=>$content, 'encoding'=>$encoding);
