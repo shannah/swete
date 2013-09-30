@@ -555,7 +555,7 @@ class ProxyWriter {
 	 */
 	public function _domCallback($element){
 		$atts = array(
-			'action', 'href','src','src_'.$this->_proxyLang, 'href_'.$this->_proxyLang
+			'action', 'href','src','src_'.$this->_proxyLang, 'href_'.$this->_proxyLang, 'data-href'
 		);
 		$convert = array(
 			'src_'.$this->_proxyLang => 'src',
@@ -564,8 +564,7 @@ class ProxyWriter {
 		);
 		foreach ($atts as $att){
 			if ( $element->hasAttribute($att) and !$element->hasAttribute('data-swete-translate') ){
-				$element->setAttribute($att, $this->proxifyUrl($element->getAttribute($att)));
-				
+			    $element->setAttribute($att, $this->proxifyUrl($element->getAttribute($att)));
 				if ( isset($convert[$att]) ){
 					$element->setAttribute($convert[$att], $element->getAttribute($att));
 				}
@@ -580,6 +579,16 @@ class ProxyWriter {
 				         ($tagName == 'embed' and $att == 'src')  
 				    ){
 				        $element->setAttribute($att, $this->unproxifyUrl($element->getAttribute($att)));
+				        $url = $element->getAttribute($att);
+                        $firstChar = '';
+                        if ( strlen($url) > 0 ) $firstChar = $url{0};
+                        $secondChar = '';
+                        if ( strlen($url) > 1 ) $secondChar = $url{1};
+                        if ( $firstChar === '/' and $secondChar !== '/' ){
+                            $url = $this->_srcUrl.$url;
+                            $element->setAttribute($att, $url);
+                        }
+                        
 				    }
 			
 				}
