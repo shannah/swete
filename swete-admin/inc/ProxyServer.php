@@ -38,6 +38,8 @@ require_once 'modules/tm/lib/XFTranslationMemory.php';
  */
 class ProxyServer {
 
+    public $useHtml5Parser = false;
+
     /**
      * @brief Input HTML content to be translated
      * If this is provided then it is used instead of trying to load the source page.
@@ -243,6 +245,7 @@ class ProxyServer {
 		
 		
 		$proxyWriter = $this->site->getProxyWriter();
+		$proxyWriter->useHtml5Parser = $this->useHtml5Parser;
 		$logger = $this->logger;
 		$logger->proxyRequestUrl = $url;
 		$isPost = (strtolower($this->SERVER['REQUEST_METHOD']) === 'post');

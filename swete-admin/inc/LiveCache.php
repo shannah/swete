@@ -37,7 +37,7 @@ class LiveCache {
      */
     public static $cacheDir = './livecache';
     
-    
+    public $useHtml5Parser = false;
     
     /**
      * @brief The singleton instance of the live cache so that it can 
@@ -717,6 +717,7 @@ class LiveCache {
         if ( !isset($this->_proxyWriter) ){
             require_once 'inc/ProxyWriter.php';
             $proxy = new ProxyWriter;
+            $proxy->useHtml5Parser = $this->useHtml5Parser;
             $proxy->sourceDateLocale = $this->sourceDateLocale;
             $proxy->targetDateLocale = $this->targetDateLocale;
             $proxy->setProxyUrl($this->proxyUrl);

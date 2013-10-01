@@ -23,6 +23,8 @@ class SweteTools {
 	const TRANSLATOR=2;
 	const ADMIN=3;
 	
+	public static $USE_HTML5_PARSER = false;
+	
 	/**
 	 * @brief Converts a URL to something that is more normalized for storage.
 	 *
@@ -368,10 +370,22 @@ END
 	}
 	
 	static function loadHtml($html){
-		
-		$doc = new DOMDocument;
 		$intro = substr($html,0, 255);
-
+		if ( self::$USE_HTML5_PARSER and stripos($intro, '<!DOCTYPE html>') !== false ){
+            // this is html5 so we'll use the html5 
+            require_once 'lib/HTML5.php';
+            $out =  HTML5::loadHTML($html);
+            // noscripts contents are treated like text which causes problems when 
+            // filters/replacements are run on them.  Let's just remove them
+            $noscripts = $out->getElementsByTagName('noscript');
+            foreach ( $noscripts as $noscript ){
+                $noscript->parentNode->removeChild($noscript);
+            }
+            return $out;
+        }
+        
+		$doc = new DOMDocument;
+		
 		// Remove the doctype tag if it is provided.  We are going to output
 		// a new doctype tag.
 		if ( stripos($intro, '<!DOCTYPE') !== false ){
@@ -383,10 +397,13 @@ END
 		if ( (defined('SWETE_ENCODE_SCRIPTS') and SWETE_ENCODE_SCRIPTS) or  stripos($intro, 'XHTML') !== false){
 			$html = preg_replace_callback('/(<script[^>]*>)([\s\S]*?)(<\/script>)/', array('SweteTools','_encode_scripts'), $html);
 		}
-		if ( !preg_match('/<meta [^>]*Content-Type[^>]*UTF-8/i', $html) ){
-		    $html = preg_replace('/(<head[^>]*>)/i', '$1<meta http-equiv="Content-Type" content="text/html; charset=utf-8">', $html, 1);
-		}
-		$res = @$doc->loadHtml('<?xml encoding="UTF-8">'.$html);
+		// This was experimental to add a UTF-8 meta tag to fix encoding issues with the DOM 
+		// parser. It helped on an HTML5 site, but there were other problems with the site
+		// so we added the optional $USE_HTML5_PARSER flag which fixed the issue properly.
+		//if ( !preg_match('/<meta [^>]*Content-Type[^>]*UTF-8/i', $html) ){
+		//    $html = preg_replace('/(<head[^>]*>)/i', '$1<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>', $html, 1);
+		//}
+		$res = @$doc->loadHtml('<?xml encoding="UTF-8" ?'.'>'.$html);
 		if ( !$res ){
 			$outfile = tempnam();
 			file_put_contents($outfile, $orig);
@@ -403,4 +420,7 @@ END
 	}
 	
 	
+}
+if ( defined('SWETE_USE_HTML5_PARSER') and SWETE_USE_HTML5_PARSER ){
+    SweteTools::$USE_HTML5_PARSER = true;
 }

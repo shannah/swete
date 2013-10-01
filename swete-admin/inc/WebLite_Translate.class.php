@@ -40,6 +40,7 @@ class WebLite_HTML_Translator {
     private $dateFormatters = array();
     public $sourceDateLocale = null;
     public $targetDateLocale = null;
+    public $useHtml5Parser = false;
 	
 	public static $atts = array(
 		'a' => array('title'),
@@ -129,15 +130,37 @@ class WebLite_HTML_Translator {
 	** @return dom, from the html content
 	*/
 	public function extractStrings($html){
+	    $dom = null;
+	    if ( $this->useHtml5Parser ){
+	        $intro = substr($html,0, 255);
+	        if ( stripos($intro, '<!DOCTYPE html>') !== false ){
+	            // this is html5 so we'll use the html5 
+                require_once 'lib/HTML5.php';
+                $options = new StdClass;
+                $options->decorateDocument = function(DOMDocument $dom){
+                    $dom->registerNodeClass('DOMElement', 'JSLikeHTMLElement');
+                };
+                $dom =  HTML5::loadHTML($html, $options);
+                // noscripts contents are treated like text which causes problems when 
+                // filters/replacements are run on them.  Let's just remove them
+                $noscripts = $dom->getElementsByTagName('noscript');
+                foreach ( $noscripts as $noscript ){
+                    $noscript->parentNode->removeChild($noscript);
+                }
+                
+	        }
+	    }
 		//$dom = str_get_html($html);
-		$dom = new DOMDocument();
-		$dom->registerNodeClass('DOMElement', 'JSLikeHTMLElement');
-		@$dom->loadHtml('<?xml encoding="UTF-8">'.$html);
-		// dirty fix
-		foreach ($dom->childNodes as $item)
-			if ($item->nodeType == XML_PI_NODE)
-				$dom->removeChild($item); // remove hack
-		$dom->encoding = 'UTF-8'; // insert proper
+		if ( !isset($dom) ){
+            $dom = new DOMDocument();
+            $dom->registerNodeClass('DOMElement', 'JSLikeHTMLElement');
+            @$dom->loadHtml('<?xml encoding="UTF-8">'.$html);
+            // dirty fix
+            foreach ($dom->childNodes as $item)
+                if ($item->nodeType == XML_PI_NODE)
+                    $dom->removeChild($item); // remove hack
+            $dom->encoding = 'UTF-8'; // insert proper
+        }
 		//print_r($dom);
 		$strings = array();
 		$this->strings =& $strings;

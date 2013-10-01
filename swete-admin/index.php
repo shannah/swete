@@ -27,6 +27,12 @@ if ( @$_SERVER['UNENCODED_URL'] and !@$_SERVER['REDIRECT_URL'] ){
 if ( @$_SERVER['REDIRECT_ENCODE_SCRIPTS'] ){
     define('SWETE_ENCODE_SCRIPTS', 1);
 }
+if ( @$_SERVER['REDIRECT_USE_HTML5_PARSER'] and intval($_SERVER['REDIRECT_USE_HTML5_PARSER']) === 1 ){
+    define('SWETE_USE_HTML5_PARSER', 1);
+}
+if ( intval(@$_SERVER['REDIRECT_USE_CONSERVATIVE_CACHING']) === 0 ){
+    define('SWETE_USE_CONSERVATIVE_CACHING', 0);
+}
 if (!function_exists('apache_request_headers')) { 
     eval(' 
         function apache_request_headers() { 
@@ -47,6 +53,12 @@ if ( @$_GET['-action'] == 'swete_handle_request' ){
 	define('XATAFACE_DISABLE_AUTH',1);
 	error_log('[SWeTE Profiler]['.getmypid().'] start time: '.microtime());
 	$liveCache = LiveCache::getCurrentPage();
+	if ( SWETE_USE_HTML5_PARSER ){
+	    $liveCache->useHtml5Parser = true;
+	}
+	if ( defined('SWETE_USE_CONSERVATIVE_CACHING') and SWETE_USE_CONSERVATIVE_CACHING === 0 ){
+	    $liveCache->useConservativeCaching = false;
+	}
 	if ( intval(@$_SERVER['REDIRECT_NOSERVERCACHE']) === 1){
 	    $liveCache->noServerCache = true;
 	}
