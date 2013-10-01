@@ -362,10 +362,11 @@ class LiveCache {
         if ( !file_exists($this->getCacheContentPath()) ) throw new Exception("No content cached for page.");
         $headers = preg_grep('/^(Content|Location|ETag|Last|Server|Vary|Expires|Allow|Cache|Pragma)/i', $this->headers);
         while ( @ob_end_clean());
+        header("HTTP/1.0 200");
         foreach ($headers as $header){
             header($header, false);
         }
-        header('X-SWeTE-Handler: LiveCache Cached-content/'.__LINE__);
+        header('X-SWeTE-Handler: LiveCache Cached-content/'.__LINE__.'/'.basename($this->getCacheContentPath()));
         $fp = fopen($this->getCacheContentPath(),'r');
         $bytesSent = 0;
         while(!feof($fp)) {
