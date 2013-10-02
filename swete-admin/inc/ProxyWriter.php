@@ -124,6 +124,12 @@ class ProxyWriter {
 	 */
 	public $lastStrings = null;
 	
+	public function __construct(){
+	    if ( defined('SWETE_UNPROXIFY_RESOURCE_PATHS') and !SWETE_UNPROXIFY_RESOURCE_PATHS ){
+	        $this->unproxifyResourcePaths = false;
+	    }
+	}
+	
 	/**
 	 * @brief Sets the source language of the proxy.
 	 * @param string $lang The 2-digit language code.
@@ -564,6 +570,7 @@ class ProxyWriter {
 			'href_'.$this->_proxyLang => 'href',
 			'action_'.$this->_proxyLang => 'action'
 		);
+		
 		foreach ($atts as $att){
 			if ( $element->hasAttribute($att) and !$element->hasAttribute('data-swete-translate') ){
 			    $element->setAttribute($att, $this->proxifyUrl($element->getAttribute($att)));
@@ -628,7 +635,7 @@ class ProxyWriter {
                 if ( stripos($intro, '<!DOCTYPE html>') !== false ){
                     // this is html5 so we'll use the html5 
                     require_once 'lib/HTML5.php';
-                    $doc =  HTML5::loadHTML($html, $options);
+                    $doc =  HTML5::loadHTML($html);
                     // noscripts contents are treated like text which causes problems when 
                     // filters/replacements are run on them.  Let's just remove them
                     $noscripts = $doc->getElementsByTagName('noscript');
