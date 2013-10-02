@@ -574,6 +574,9 @@ class LiveCache {
             $this->flushCache();
         }   else if ( $this->unproxifiedUrl ) {
             $this->mark('Flushing the source');
+            if ( file_exists($this->getCacheContentPath()) ){
+                @unlink($this->getCacheContentPath());
+            }
             $this->flushSource();
             
         }   
