@@ -36,6 +36,9 @@ if ( isset($_SERVER['REDIRECT_USE_CONSERVATIVE_CACHING']) and intval(@$_SERVER['
 if ( isset($_SERVER['REDIRECT_UNPROXIFY_RESOURCE_PATHS']) and intval(@$_SERVER['REDIRECT_UNPROXIFY_RESOURCE_PATHS']) === 0 ){
     define('SWETE_UNPROXIFY_RESOURCE_PATHS', 0);
 }
+if ( isset($_SERVER['REDIRECT_DEFAULT_CACHE_TTL']) ){
+    define('SWETE_DEFAULT_CACHE_TTL', intval($_SERVER['REDIRECT_DEFAULT_CACHE_TTL']));
+}
 if (!function_exists('apache_request_headers')) { 
     eval(' 
         function apache_request_headers() { 
@@ -64,6 +67,9 @@ if ( @$_GET['-action'] == 'swete_handle_request' ){
 	}
 	if ( intval(@$_SERVER['REDIRECT_NOSERVERCACHE']) === 1){
 	    $liveCache->noServerCache = true;
+	}
+	if ( defined('SWETE_DEFAULT_CACHE_TTL') ){
+	    $liveCache->defaultCacheTTL = SWETE_DEFAULT_CACHE_TTL;
 	}
 	if ( strtolower(@$_SERVER['REQUEST_METHOD']) == 'get'){
 		try {

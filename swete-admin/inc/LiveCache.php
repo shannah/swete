@@ -139,6 +139,8 @@ class LiveCache {
      */
     public $useConservativeCaching = true;
     
+    public $defaultCacheTTL = 3600;
+    
     
     /**
      * @brief Returns the path to the cached object for a resource as the given 
@@ -500,7 +502,7 @@ class LiveCache {
         }
         if ( !$private ){
         
-            if ( !$expires ) $expires = time() + 3600; // If no expiry was set and this isn't private - then let it persist for 1 hour
+            if ( !$expires ) $expires = time() + $this->defaultCacheTTL; // If no expiry was set and this isn't private - then let it persist for 1 hour
             $this->expires = $expires;
             
         } else {
