@@ -322,7 +322,7 @@ class ProxyServer {
 		//print_r($client->headers);
 		
 		$isHtml = preg_match('/html|xml/', $client->contentType);
-		$isJson = (preg_match('/json/', $client->contentType) or ($client->content and $client->content{0}=='{'));
+		$isJson = (preg_match('/json/', $client->contentType) or ($client->content and ($client->content{0}=='{' or $client->content{0}=='[') ));
 		$isCSS = preg_match('/css/', $client->contentType);
 		
 		$json = null;

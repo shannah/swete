@@ -629,7 +629,7 @@ class LiveCache {
         
             $isHtml = preg_match('/html|xml/', $this->client->contentType);
             $isCSS = preg_match('/css/', $this->client->contentType);
-            $isJson = (preg_match('/json/', $this->client->contentType) or $this->client->content{0}=='{');
+            $isJson = (preg_match('/json/', $this->client->contentType) or $this->client->content{0}=='{' or $this->client->content{0}=='[');
 
             $proxyWriter = $this->getProxyWriter();
             $json = null;
