@@ -24,7 +24,7 @@
 
 // We need to include the default translate class because it has some global functions
 // defined
-require_once dirname(__FILE_).'/WebLite_Translate.class.php'; 
+require_once dirname(__FILE__).'/WebLite_Translate.class.php'; 
 
 class WebLite_HTML_Translator_v2 {
     private $dateFormatters = array();
@@ -288,7 +288,7 @@ class WebLite_HTML_Translator_v2 {
 					//$node = $tx->parent->nodes[$i];
 					$node = $tx->parentNode->childNodes->item($i);
 					//if ( $node->tag != 'text' and !in_array($node->tag, self::$inlineTags) ){
-					if ( $node->nodeType != XML_TEXT_NODE and $node->nodeType != XML_ENTITY_NODE and
+					if ( $node->nodeType != XML_TEXT_NODE and /*$node->nodeType != XML_ENTITY_NODE and*/
 						!in_array(strtolower(@$node->tagName), self::$inlineTags) and
 						!($node instanceof DOMElement and $node->hasAttribute('data-swete-inline'))
 						 ){
@@ -314,7 +314,7 @@ class WebLite_HTML_Translator_v2 {
 						$node = $tx->parentNode->childNodes->item($i);
 						if ( !$node ) break;
 						//if ( $node->tag != 'text' and !in_array($node->tag, self::$inlineTags) ){
-						if ( $node->nodeType != XML_TEXT_NODE and $node->nodeType != XML_ENTITY_NODE and
+						if ( $node->nodeType != XML_TEXT_NODE and /*$node->nodeType != XML_ENTITY_NODE and*/
 							!in_array(strtolower(@$node->tagName), self::$inlineTags) and
 							!($node instanceof DOMElement and $node->hasAttribute('data-swete-inline'))
 							 ){
@@ -356,9 +356,22 @@ class WebLite_HTML_Translator_v2 {
 					$dom->saveXml($item)
 				);
 			}
-			//print_r($combinedText);
+			//var_dump($combinedText);
 			
 			$combinedText = implode('', $combinedText);
+			$leadingWhiteSpace = '';
+			$trailingWhiteSpace = '';
+			if ( preg_match('#^[\p{Z}\s]+#', $combinedText, $m1 ) ){
+			    $leadingWhiteSpace = $m1[0];
+			}
+			//echo 'Checking for trailing space: ['.$combinedText.']'."\n";
+			if ( preg_match('#[\p{Z}\s]+$#', $combinedText, $m1 ) ){
+			    //echo "Trailing white space found in '$combinedText'\n";
+			    $trailingWhiteSpace = $m1[0];
+			} else {
+			    //echo "No trailing whitespace found.".ord($combinedText{strlen($combinedText)-1});
+			    
+			}
 			$combinedText = _n($this->replaceStrings($combinedText));
 			if ( !trim(str_ireplace('&nbsp;','', $combinedText)) ){
 			
@@ -394,7 +407,9 @@ class WebLite_HTML_Translator_v2 {
 			}
 			if ( !@$group[0] ) continue;
 			if ( !@$group[0]->parentNode ) continue;
-			$group[0]->parentNode->replaceChild($dom->createTextNode('{{$'.$index.'$}}'), $group[0]);
+			$textNodeContent = $leadingWhiteSpace.'{{$'.$index.'$}}'.$trailingWhiteSpace;
+			//echo 'Content:['.$textNodeContent.']'."\n";
+			$group[0]->parentNode->replaceChild($dom->createTextNode($textNodeContent), $group[0]);
 			
 		
 			

@@ -58,6 +58,7 @@ class conf_ApplicationDelegate {
 		if ( $user ){
 			echo '<link rel="stylesheet" type="text/css" href="css/swete/UncompiledJobs.css" />';
 			echo '<meta id="xf-meta-username" name="xf-username" content="'.htmlspecialchars($user->val('username')).'"/>';
+			echo '<script>WEBLITE_TRANSLATOR_DISABLE_EXTRACTION=true;</script>';
 		}
 		
 	}
