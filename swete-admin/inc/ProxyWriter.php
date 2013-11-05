@@ -39,6 +39,8 @@ require_once 'lib/http_build_url.php';
  */
 class ProxyWriter {
 
+    public $translationParserVersion = null;
+
     public $useHtml5Parser = false;
 
 	/**
@@ -724,8 +726,16 @@ class ProxyWriter {
 		$mem = $this->translationMemory;
 		$minStatus = $this->minStatus;
 		$maxStatus = $this->maxStatus;
-		require_once 'inc/WebLite_Translate.class.php';
-		$translator = new Weblite_HTML_Translator();
+		
+		if ( isset($this->translationParserVersion) ){
+		    $v = intval($this->translationParserVersion);
+		    require_once 'inc/WebLite_Translate_v'.$v.'.class.php';
+		    $cls = 'WebLite_HTML_Translator_v'.$v;
+		    $translator = new $cls();
+		} else {
+		    require_once 'inc/WebLite_Translate.class.php';
+		    $translator = new Weblite_HTML_Translator();
+		}
 		$translator->useHtml5Parser = $this->useHtml5Parser;
 		$translator->sourceDateLocale = $this->sourceDateLocale;
 		$translator->targetDateLocale = $this->targetDateLocale;

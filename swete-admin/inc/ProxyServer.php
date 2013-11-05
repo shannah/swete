@@ -490,6 +490,9 @@ class ProxyServer {
 				$this->liveCache->siteUrl = $this->site->getSiteUrl();
 				$this->liveCache->sourceDateLocale = $this->site->getRecord()->val('source_date_locale');
 				$this->liveCache->targetDateLocale = $this->site->getRecord()->val('target_date_locale');
+				if ( $this->site->getRecord()->val('translation_parser_version')){
+				    $this->liveCache->translationParserVersion = intval($this->site->getRecord()->val('translation_parser_version'));
+				}
 				$this->liveCache->content  = $client->content;
 				$this->liveCache->headers = headers_list();
 				$this->liveCache->calculateExpires();

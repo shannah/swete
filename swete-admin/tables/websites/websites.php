@@ -67,6 +67,10 @@ class tables_websites {
 		
 	}
 	
+	function translation_parser_version__default(){
+	    return 2;
+	}
+	
 	
 	function beforeInsert($record){
 		if ( !$record->val('translation_memory_id') ){

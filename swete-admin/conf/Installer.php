@@ -1427,4 +1427,13 @@ END
 
         }
     }
+    
+    function update_4798(){
+        $sql[] = "alter table `websites` add `translation_parser_version` int(11) unsigned null";
+        try {
+            df_q($sql);
+            df_clear_views();
+            df_clear_cache();
+        } catch ( Exception $ex){}
+    }
 }
