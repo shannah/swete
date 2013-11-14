@@ -264,6 +264,9 @@ class SweteSite {
 		if ( !isset($this->_proxyWriter) ){
 			import('inc/ProxyWriter.php');
 			$proxy = new ProxyWriter;
+			if ( $this->_rec->val('translation_parser_version') ){
+			    $proxy->translationParserVersion = intval($this->_rec->val('translation_parser_version'));
+			}
 			$proxy->setProxyUrl($this->getProxyUrl());
 			$proxy->setSrcUrl($this->getSiteUrl());
 			$res = SweteDb::q("select `name`,`alias` from path_aliases where website_id='".addslashes($this->_rec->val('website_id'))."'");

@@ -512,7 +512,6 @@ class ProxyClient {
 		$url = $this->URL;
 		
 		if ( !$url ) throw new Exception("No URL specified to retrieve");
-		
 		$ch = curl_init( $url );
         if ( strtolower(@$this->SERVER['REQUEST_METHOD']) == 'post' ) {
         	if ( strpos(strtolower(@$this->SERVER['CONTENT_TYPE']), 'multipart/form-data') !== false ){
@@ -560,6 +559,8 @@ class ProxyClient {
 		if ( $reqHeaders ){
 			curl_setopt($ch, CURLOPT_HTTPHEADER, $reqHeaders);
 		}
+		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 		$contents = $this->curl_exec( $ch );
 		
 		if ( $this->outputFile ){
@@ -572,6 +573,7 @@ class ProxyClient {
 		$header = substr($contents, 0, $headerLen);
 		$contents = substr($contents, $headerLen);
 		$status = curl_getinfo( $ch );
+		//echo "Status : $status";print_r($status);exit;
 		$this->status = $status;
 		curl_close( $ch );
 	  

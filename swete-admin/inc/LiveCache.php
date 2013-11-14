@@ -130,6 +130,7 @@ class LiveCache {
     public $skipLiveCache = false;
     public $sourceDateLocale = null;
     public $targetDateLocale = null;
+    public $translationParserVersion = null;
     
     /**
      * If conservative caching is enabled, only pages with Cache-Control = public in the
@@ -351,7 +352,8 @@ class LiveCache {
             'proxyUrl',
             'siteUrl',
             'sourceDateLocale',
-            'targetDateLocale'
+            'targetDateLocale',
+            'translationParserVersion'
         );
     }
     
@@ -627,7 +629,7 @@ class LiveCache {
         
             $isHtml = preg_match('/html|xml/', $this->client->contentType);
             $isCSS = preg_match('/css/', $this->client->contentType);
-            $isJson = (preg_match('/json/', $this->client->contentType) or $this->client->content{0}=='{');
+            $isJson = (preg_match('/json/', $this->client->contentType) or $this->client->content{0}=='{' or $this->client->content{0}=='[');
 
             $proxyWriter = $this->getProxyWriter();
             $json = null;
@@ -723,6 +725,9 @@ class LiveCache {
         if ( !isset($this->_proxyWriter) ){
             require_once 'inc/ProxyWriter.php';
             $proxy = new ProxyWriter;
+            if ( isset($this->translationParserVersion) ){
+                $proxy->translationParserVersion = intval($this->translationParserVersion);
+            }
             $proxy->useHtml5Parser = $this->useHtml5Parser;
             $proxy->sourceDateLocale = $this->sourceDateLocale;
             $proxy->targetDateLocale = $this->targetDateLocale;
