@@ -59,7 +59,7 @@ if ( @$_GET['-action'] == 'swete_handle_request' ){
 	define('XATAFACE_DISABLE_AUTH',1);
 	error_log('[SWeTE Profiler]['.getmypid().'] start time: '.microtime());
 	$liveCache = LiveCache::getCurrentPage();
-	if ( SWETE_USE_HTML5_PARSER ){
+	if ( defined('SWETE_USE_HTML5_PARSER') and SWETE_USE_HTML5_PARSER ){
 	    $liveCache->useHtml5Parser = true;
 	}
 	if ( defined('SWETE_USE_CONSERVATIVE_CACHING') and SWETE_USE_CONSERVATIVE_CACHING === 0 ){
