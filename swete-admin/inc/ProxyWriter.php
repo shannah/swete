@@ -39,6 +39,10 @@ require_once 'lib/http_build_url.php';
  */
 class ProxyWriter {
 
+    public $translationParserVersion = null;
+
+    public $useHtml5Parser = false;
+
 	/**
 	 * @brief The locale for parsing dates.  E.g. en_CA
 	 * @type string
@@ -121,6 +125,12 @@ class ProxyWriter {
 	 * by the translateHtml function.
 	 */
 	public $lastStrings = null;
+	
+	public function __construct(){
+	    if ( defined('SWETE_UNPROXIFY_RESOURCE_PATHS') and !SWETE_UNPROXIFY_RESOURCE_PATHS ){
+	        $this->unproxifyResourcePaths = false;
+	    }
+	}
 	
 	/**
 	 * @brief Sets the source language of the proxy.
@@ -555,17 +565,17 @@ class ProxyWriter {
 	 */
 	public function _domCallback($element){
 		$atts = array(
-			'action', 'href','src','src_'.$this->_proxyLang, 'href_'.$this->_proxyLang
+			'action', 'href','src','src_'.$this->_proxyLang, 'href_'.$this->_proxyLang, 'data-href'
 		);
 		$convert = array(
 			'src_'.$this->_proxyLang => 'src',
 			'href_'.$this->_proxyLang => 'href',
 			'action_'.$this->_proxyLang => 'action'
 		);
+		
 		foreach ($atts as $att){
 			if ( $element->hasAttribute($att) and !$element->hasAttribute('data-swete-translate') ){
-				$element->setAttribute($att, $this->proxifyUrl($element->getAttribute($att)));
-				
+			    $element->setAttribute($att, $this->proxifyUrl($element->getAttribute($att)));
 				if ( isset($convert[$att]) ){
 					$element->setAttribute($convert[$att], $element->getAttribute($att));
 				}
@@ -580,6 +590,16 @@ class ProxyWriter {
 				         ($tagName == 'embed' and $att == 'src')  
 				    ){
 				        $element->setAttribute($att, $this->unproxifyUrl($element->getAttribute($att)));
+				        $url = $element->getAttribute($att);
+                        $firstChar = '';
+                        if ( strlen($url) > 0 ) $firstChar = $url{0};
+                        $secondChar = '';
+                        if ( strlen($url) > 1 ) $secondChar = $url{1};
+                        if ( $firstChar === '/' and $secondChar !== '/' ){
+                            $url = $this->_srcUrl.$url;
+                            $element->setAttribute($att, $url);
+                        }
+                        
 				    }
 			
 				}
@@ -609,17 +629,37 @@ class ProxyWriter {
 	 */
 	public function proxifyHtml($html){
         $fullDoc = true;
+        $doc = null;
 		if ( is_string($html) ){
 			if ( stripos($html, '<body') === false and stripos($html, '<head') === false ) $fullDoc = false;
-			$doc = new DOMDocument;
-			
-			$res = @$doc->loadHtml('<?xml encoding="UTF-8">'.$html);
-			// dirty fix
-			foreach ($doc->childNodes as $item)
-				if ($item->nodeType == XML_PI_NODE)
-					$doc->removeChild($item); // remove hack
-			$doc->encoding = 'UTF-8'; // insert proper
-			if ( !$res ) throw new Exception("Failed to convert to HTML.  Expecting Object by got something else.");
+			if ( $this->useHtml5Parser ){
+                $intro = substr($html,0, 255);
+                if ( stripos($intro, '<!DOCTYPE html>') !== false ){
+                    // this is html5 so we'll use the html5 
+                    require_once 'lib/HTML5.php';
+                    $doc =  HTML5::loadHTML($html);
+                    // noscripts contents are treated like text which causes problems when 
+                    // filters/replacements are run on them.  Let's just remove them
+                    $noscripts = $doc->getElementsByTagName('noscript');
+                    foreach ( $noscripts as $noscript ){
+                        $noscript->parentNode->removeChild($noscript);
+                    }
+                    
+                }
+            }
+            if ( !isset($doc) ){
+                $doc = new DOMDocument;
+                
+                $res = @$doc->loadHtml('<?xml encoding="UTF-8">'.$html);
+                // dirty fix
+                foreach ($doc->childNodes as $item)
+                    if ($item->nodeType == XML_PI_NODE)
+                        $doc->removeChild($item); // remove hack
+                $doc->encoding = 'UTF-8'; // insert proper
+                if ( !$res ) throw new Exception("Failed to convert to HTML.  Expecting Object by got something else.");
+            }
+		} else if ( $html instanceof DOMDocument ){
+		    $doc = $html;
 		}
 		
 		
@@ -686,8 +726,17 @@ class ProxyWriter {
 		$mem = $this->translationMemory;
 		$minStatus = $this->minStatus;
 		$maxStatus = $this->maxStatus;
-		require_once 'inc/WebLite_Translate.class.php';
-		$translator = new Weblite_HTML_Translator();
+		
+		if ( isset($this->translationParserVersion) ){
+		    $v = intval($this->translationParserVersion);
+		    require_once 'inc/WebLite_Translate_v'.$v.'.class.php';
+		    $cls = 'WebLite_HTML_Translator_v'.$v;
+		    $translator = new $cls();
+		} else {
+		    require_once 'inc/WebLite_Translate.class.php';
+		    $translator = new Weblite_HTML_Translator();
+		}
+		$translator->useHtml5Parser = $this->useHtml5Parser;
 		$translator->sourceDateLocale = $this->sourceDateLocale;
 		$translator->targetDateLocale = $this->targetDateLocale;
 		$html2 = $translator->extractStrings($html);

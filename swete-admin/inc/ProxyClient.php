@@ -493,11 +493,10 @@ class ProxyClient {
 			$encoding = mb_detect_encoding($content, 'utf-8,iso-8859-1');
 		}
 		*/
-		if ( $encoding ){
+		if ( $encoding and strtolower($encoding) !== 'utf-8' ){
 			//echo "Converting encoding to utf-8 from $encoding";exit;
 			return mb_convert_encoding($content, 'utf-8', $encoding);
 		} else {
-			
 			return $content;
 		}
 		//return array('content'=>$content, 'encoding'=>$encoding);
@@ -513,7 +512,6 @@ class ProxyClient {
 		$url = $this->URL;
 		
 		if ( !$url ) throw new Exception("No URL specified to retrieve");
-		
 		$ch = curl_init( $url );
         if ( strtolower(@$this->SERVER['REQUEST_METHOD']) == 'post' ) {
         	if ( strpos(strtolower(@$this->SERVER['CONTENT_TYPE']), 'multipart/form-data') !== false ){
@@ -561,6 +559,8 @@ class ProxyClient {
 		if ( $reqHeaders ){
 			curl_setopt($ch, CURLOPT_HTTPHEADER, $reqHeaders);
 		}
+		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 		$contents = $this->curl_exec( $ch );
 		
 		if ( $this->outputFile ){
@@ -573,6 +573,7 @@ class ProxyClient {
 		$header = substr($contents, 0, $headerLen);
 		$contents = substr($contents, $headerLen);
 		$status = curl_getinfo( $ch );
+		//echo "Status : $status";print_r($status);exit;
 		$this->status = $status;
 		curl_close( $ch );
 	  

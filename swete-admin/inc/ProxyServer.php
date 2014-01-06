@@ -38,6 +38,8 @@ require_once 'modules/tm/lib/XFTranslationMemory.php';
  */
 class ProxyServer {
 
+    public $useHtml5Parser = false;
+
     /**
      * @brief Input HTML content to be translated
      * If this is provided then it is used instead of trying to load the source page.
@@ -243,6 +245,7 @@ class ProxyServer {
 		
 		
 		$proxyWriter = $this->site->getProxyWriter();
+		$proxyWriter->useHtml5Parser = $this->useHtml5Parser;
 		$logger = $this->logger;
 		$logger->proxyRequestUrl = $url;
 		$isPost = (strtolower($this->SERVER['REQUEST_METHOD']) === 'post');
@@ -319,7 +322,7 @@ class ProxyServer {
 		//print_r($client->headers);
 		
 		$isHtml = preg_match('/html|xml/', $client->contentType);
-		$isJson = (preg_match('/json/', $client->contentType) or ($client->content and $client->content{0}=='{'));
+		$isJson = (preg_match('/json/', $client->contentType) or ($client->content and ($client->content{0}=='{' or $client->content{0}=='[') ));
 		$isCSS = preg_match('/css/', $client->contentType);
 		
 		$json = null;
@@ -487,6 +490,9 @@ class ProxyServer {
 				$this->liveCache->siteUrl = $this->site->getSiteUrl();
 				$this->liveCache->sourceDateLocale = $this->site->getRecord()->val('source_date_locale');
 				$this->liveCache->targetDateLocale = $this->site->getRecord()->val('target_date_locale');
+				if ( $this->site->getRecord()->val('translation_parser_version')){
+				    $this->liveCache->translationParserVersion = intval($this->site->getRecord()->val('translation_parser_version'));
+				}
 				$this->liveCache->content  = $client->content;
 				$this->liveCache->headers = headers_list();
 				$this->liveCache->calculateExpires();

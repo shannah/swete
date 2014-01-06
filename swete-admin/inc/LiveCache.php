@@ -37,7 +37,7 @@ class LiveCache {
      */
     public static $cacheDir = './livecache';
     
-    
+    public $useHtml5Parser = false;
     
     /**
      * @brief The singleton instance of the live cache so that it can 
@@ -130,6 +130,7 @@ class LiveCache {
     public $skipLiveCache = false;
     public $sourceDateLocale = null;
     public $targetDateLocale = null;
+    public $translationParserVersion = null;
     
     /**
      * If conservative caching is enabled, only pages with Cache-Control = public in the
@@ -138,6 +139,8 @@ class LiveCache {
      * @var type 
      */
     public $useConservativeCaching = true;
+    
+    public $defaultCacheTTL = 3600;
     
     
     /**
@@ -349,7 +352,8 @@ class LiveCache {
             'proxyUrl',
             'siteUrl',
             'sourceDateLocale',
-            'targetDateLocale'
+            'targetDateLocale',
+            'translationParserVersion'
         );
     }
     
@@ -362,10 +366,11 @@ class LiveCache {
         if ( !file_exists($this->getCacheContentPath()) ) throw new Exception("No content cached for page.");
         $headers = preg_grep('/^(Content|Location|ETag|Last|Server|Vary|Expires|Allow|Cache|Pragma)/i', $this->headers);
         while ( @ob_end_clean());
+        header("HTTP/1.0 200");
         foreach ($headers as $header){
             header($header, false);
         }
-        header('X-SWeTE-Handler: LiveCache Cached-content/'.__LINE__);
+        header('X-SWeTE-Handler: LiveCache Cached-content/'.__LINE__.'/'.basename($this->getCacheContentPath()));
         $fp = fopen($this->getCacheContentPath(),'r');
         $bytesSent = 0;
         while(!feof($fp)) {
@@ -499,7 +504,7 @@ class LiveCache {
         }
         if ( !$private ){
         
-            if ( !$expires ) $expires = time() + 3600; // If no expiry was set and this isn't private - then let it persist for 1 hour
+            if ( !$expires ) $expires = time() + $this->defaultCacheTTL; // If no expiry was set and this isn't private - then let it persist for 1 hour
             $this->expires = $expires;
             
         } else {
@@ -573,6 +578,9 @@ class LiveCache {
             $this->flushCache();
         }   else if ( $this->unproxifiedUrl ) {
             $this->mark('Flushing the source');
+            if ( file_exists($this->getCacheContentPath()) ){
+                @unlink($this->getCacheContentPath());
+            }
             $this->flushSource();
             
         }   
@@ -621,7 +629,7 @@ class LiveCache {
         
             $isHtml = preg_match('/html|xml/', $this->client->contentType);
             $isCSS = preg_match('/css/', $this->client->contentType);
-            $isJson = (preg_match('/json/', $this->client->contentType) or $this->client->content{0}=='{');
+            $isJson = (preg_match('/json/', $this->client->contentType) or $this->client->content{0}=='{' or $this->client->content{0}=='[');
 
             $proxyWriter = $this->getProxyWriter();
             $json = null;
@@ -717,6 +725,10 @@ class LiveCache {
         if ( !isset($this->_proxyWriter) ){
             require_once 'inc/ProxyWriter.php';
             $proxy = new ProxyWriter;
+            if ( isset($this->translationParserVersion) ){
+                $proxy->translationParserVersion = intval($this->translationParserVersion);
+            }
+            $proxy->useHtml5Parser = $this->useHtml5Parser;
             $proxy->sourceDateLocale = $this->sourceDateLocale;
             $proxy->targetDateLocale = $this->targetDateLocale;
             $proxy->setProxyUrl($this->proxyUrl);

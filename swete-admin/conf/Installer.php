@@ -1427,4 +1427,49 @@ END
 
         }
     }
+    
+    function update_4798(){
+        $sql[] = "alter table `websites` add `translation_parser_version` int(11) unsigned null";
+        try {
+            df_q($sql);
+            df_clear_views();
+            df_clear_cache();
+        } catch ( Exception $ex){}
+    }
+    
+    
+    function update_4799(){
+        $sql[] = "CREATE OR REPLACE VIEW `swete_strings` AS
+            select  s.string_id,
+                    s.normalized_value as normalized_string,
+                    s.normalized_value as string,
+                    s.num_words,
+                    t.normalized_translation_value,
+                    if(tml.webpage_id is null,hrl.proxy_request_url, concat(ws.website_url,w.webpage_url)) as request_url,
+                    ifnull(tml.translation_memory_id,tm.translation_memory_id) as translation_memory_id,
+                    tm.translation_memory_uuid,
+                    tm.translation_memory_name,
+                    tm.source_language,
+                    tm.destination_language,
+                    ws.website_name,
+                    ws.website_id,
+                    tml.date_inserted
+                    from 
+                    xf_tm_strings s
+                    inner join xf_tm_translation_memories tm on 1
+                    left join xf_tm_translation_memory_strings tms on s.string_id=tms.string_id and tms.translation_memory_id=tm.translation_memory_id
+                    left join xf_tm_translations t on tms.current_translation_id=t.translation_id
+                    left join translation_miss_log tml on tml.string_id=s.string_id and tml.translation_memory_id=tm.translation_memory_id
+                    left join http_request_log hrl on tml.http_request_log_id=hrl.http_request_log_id
+                    left join webpages w on tml.webpage_id=w.webpage_id
+                    left join websites ws on tml.website_id=ws.website_id
+                    where ifnull(tml.translation_memory_id,tm.translation_memory_id) IS NOT NULL
+            ";
+            
+        try {
+            df_q($sql);
+            df_clear_views();
+            df_clear_cache();
+        } catch ( Exception $ex){}
+    }
 }

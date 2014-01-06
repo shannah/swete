@@ -19,28 +19,19 @@
 //require_once dirname(__FILE__).'/simple_html_dom.php';
 //require_once 'lib/simple_html_dom.php';
 //if ( !function_exists('_n') ) require_once dirname(__FILE__).'/webpage.functions.inc.php';
-require_once dirname(__FILE__).'/../lib/JSLikeHTMLElement.php';
+// JSLikeHTMLElement will be included already in the default WebLite_Translate class import
+//require_once dirname(__FILE__).'/../lib/JSLikeHTMLElement.php';
 
+// We need to include the default translate class because it has some global functions
+// defined
+require_once dirname(__FILE__).'/WebLite_Translate.class.php'; 
 
-function normalizeSourceString($str){
-	mb_regex_encoding('UTF-8');
-	return trim(mb_ereg_replace('\s+', ' ', $str));
-}
-
-function _n($str){ return normalizeSourceString($str);}
-
-function getApprovedStringKey($str){
-	mb_regex_encoding('UTF-8');
-	return html_entity_decode(trim(mb_ereg_replace('\s+', '', $str)), ENT_QUOTES, 'UTF-8');
-}
-function _k($str){ return getApprovedStringKey($str);}
-
-
-class WebLite_HTML_Translator {
+class WebLite_HTML_Translator_v2 {
     private $dateFormatters = array();
     public $sourceDateLocale = null;
     public $targetDateLocale = null;
     public $useHtml5Parser = false;
+    
 	
 	public static $atts = array(
 		'a' => array('title'),
@@ -244,7 +235,7 @@ class WebLite_HTML_Translator {
 		}
 		
 		
-		$textX = $xpath->query('//text()[normalize-space() and not(ancestor::script | ancestor::style | ancestor::*[@notranslate] | ancestor::*[@translate])]');
+		$textX = $xpath->query('//text()[not(ancestor::script | ancestor::style | ancestor::*[@notranslate] | ancestor::*[@translate])]');
 		$text = array();
 		foreach ($textX as $x){
 			$text[] = $x;
@@ -297,7 +288,7 @@ class WebLite_HTML_Translator {
 					//$node = $tx->parent->nodes[$i];
 					$node = $tx->parentNode->childNodes->item($i);
 					//if ( $node->tag != 'text' and !in_array($node->tag, self::$inlineTags) ){
-					if ( $node->nodeType != XML_TEXT_NODE and 
+					if ( $node->nodeType != XML_TEXT_NODE and /*$node->nodeType != XML_ENTITY_NODE and*/
 						!in_array(strtolower(@$node->tagName), self::$inlineTags) and
 						!($node instanceof DOMElement and $node->hasAttribute('data-swete-inline'))
 						 ){
@@ -323,7 +314,7 @@ class WebLite_HTML_Translator {
 						$node = $tx->parentNode->childNodes->item($i);
 						if ( !$node ) break;
 						//if ( $node->tag != 'text' and !in_array($node->tag, self::$inlineTags) ){
-						if ( $node->nodeType != XML_TEXT_NODE and 
+						if ( $node->nodeType != XML_TEXT_NODE and /*$node->nodeType != XML_ENTITY_NODE and*/
 							!in_array(strtolower(@$node->tagName), self::$inlineTags) and
 							!($node instanceof DOMElement and $node->hasAttribute('data-swete-inline'))
 							 ){
@@ -353,7 +344,6 @@ class WebLite_HTML_Translator {
 				$group[] = $tx;
 			}
 			
-			
 			$combinedText = array();
 			foreach ($group as $item){
 				//$combinedText[] = trim($item->outertext);
@@ -366,7 +356,22 @@ class WebLite_HTML_Translator {
 					$dom->saveXml($item)
 				);
 			}
-			$combinedText = implode(' ', $combinedText);
+			//var_dump($combinedText);
+			
+			$combinedText = implode('', $combinedText);
+			$leadingWhiteSpace = '';
+			$trailingWhiteSpace = '';
+			if ( preg_match('#^[\p{Z}\s]+#', $combinedText, $m1 ) ){
+			    $leadingWhiteSpace = $m1[0];
+			}
+			//echo 'Checking for trailing space: ['.$combinedText.']'."\n";
+			if ( preg_match('#[\p{Z}\s]+$#', $combinedText, $m1 ) ){
+			    //echo "Trailing white space found in '$combinedText'\n";
+			    $trailingWhiteSpace = $m1[0];
+			} else {
+			    //echo "No trailing whitespace found.".ord($combinedText{strlen($combinedText)-1});
+			    
+			}
 			$combinedText = _n($this->replaceStrings($combinedText));
 			if ( !trim(str_ireplace('&nbsp;','', $combinedText)) ){
 			
@@ -402,7 +407,9 @@ class WebLite_HTML_Translator {
 			}
 			if ( !@$group[0] ) continue;
 			if ( !@$group[0]->parentNode ) continue;
-			$group[0]->parentNode->replaceChild($dom->createTextNode('{{$'.$index.'$}}'), $group[0]);
+			$textNodeContent = $leadingWhiteSpace.'{{$'.$index.'$}}'.$trailingWhiteSpace;
+			//echo 'Content:['.$textNodeContent.']'."\n";
+			$group[0]->parentNode->replaceChild($dom->createTextNode($textNodeContent), $group[0]);
 			
 		
 			
@@ -536,47 +543,5 @@ class WebLite_HTML_Translator {
 		return true;
 	}
 	
-	public static function test(){
 	
-		
-		//$dom = file_get_html('http://www.mozartschool.com/register.htm');
-		//$text = $dom->find('text');
-		//foreach ($text as $tx){
-		//	if ( !trim($tx->innertext) ) continue;
-		//	echo $tx->tag."\n".$tx->parent->tag."\n";
-		//	echo $tx->innertext."\n\n";
-		//}
-		//exit;
-		$translator = new WebLite_HTML_Translator();
-		$translator->translate(file_get_contents('http://dev.translate.weblite.ca/index.html'));
-		print_r($translator->strings);
-		//print_r($translator->translate(file_get_contents('http://en.wikipedia.org/wiki/Richard_Marx')));
-		
-		//$translator->translateNode($dom->find('html',0));
-		//echo $dom->save();
-		//print_r($translator->strings);
-	}
-	
-	
-}
-
-
-interface WebLite_Translation_Memory {
-	public function getString($id, $approvalLevel=0);
-	
-	public function save();
-}
-
-class Default_Translation_Memory implements WebLite_Translation_Memory {
-	public function getString($id, $approvalLevel=0){
-		return $id;
-	}
-	
-	public function save(){}
-}
-
-
-
-if ( @$argv and $argv[1] == 'test' ){
-	WebLite_HTML_Translator::test();
 }
