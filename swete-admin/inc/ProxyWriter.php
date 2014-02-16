@@ -39,6 +39,8 @@ require_once 'lib/http_build_url.php';
  */
 class ProxyWriter {
 
+    private $_scriptStack = array();
+
     public $translationParserVersion = null;
 
     public $useHtml5Parser = false;
@@ -882,6 +884,16 @@ class ProxyWriter {
                 if ( is_array($v) ){
                     $this->_jsonToHtml($stream, $json[$k], $textkeys, $htmlkeys, 'html');
                 } else {
+                    // Preserve scripts
+                    $scriptStack =& $this->_scriptStack;
+                    $v = preg_replace_callback('/<script[^>]*>[\s\S]*?<\/script>/', function($matches) use (&$scriptStack){
+                            $id = count($scriptStack);
+                            $scriptStack[] = $matches[0];
+                            return '<script id="'.$id.'"></script>';
+                        },
+                        $v
+                    );
+                
                     $i = count($stream);
                     $stream[] = '<div id="'.$i.'">'.$v.'</div>';
                     $json[$k] = 'sweteplaceholder://'.$i;
@@ -908,19 +920,22 @@ class ProxyWriter {
 	}
 	
 	public function jsonToHtml(&$json){
-	    
+	    $this->_scriptStack = array();
         $stream = array();
         $keys = $this->_getJsonKeys($json);
         $this->_jsonToHtml($stream, $json, $keys['text'], $keys['html']);
         
-        return '<!doctype html><html><head></head><body>'.implode("\n", $stream).'</body></html>';
+        $out =  '<!doctype html><html><head></head><body>'.implode("\n", $stream).'</body></html>';
+        return $out;
 	    
 	}
 	
 	public function htmlToJson(array &$json, $html){
+	    
 	    $doc = SweteTools::loadHtml($html);
 	    $keys = $this->_getJsonKeys($json);
 	    $this->_htmlToJson($doc, $json, $keys['text'], $keys['html']);
+	    $this->_scriptStack = array();
 	    return json_encode($json);
 	}
 	
@@ -947,7 +962,14 @@ class ProxyWriter {
                         $v = substr($v, $start, $end-$start);
                         $json[$k] = $v;
                         if ( in_array($k, $textkeys) or $translateType === 'text' ){
-                            $json[$k] = html_entity_decode($json[$k]);
+                            $json[$k] = htmlspecialchars_decode($json[$k]);
+                        } else {
+                            $scriptStack =& $this->_scriptStack;
+                            $json[$k] = preg_replace_callback('/<script id="(\d+)"><\/script>/', function($matches) use (&$scriptStack){
+                                    return $scriptStack[intval($matches[1])];
+                                },
+                                $json[$k]
+                            );
                         }
                     } else {
                     }
