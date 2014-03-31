@@ -39,6 +39,8 @@ require_once 'lib/http_build_url.php';
  */
 class ProxyWriter {
 
+	public static $default_json_keys = array('text'=>array(), 'html'=>array('cell'));
+
     private $_scriptStack = array();
 
     public $translationParserVersion = null;
@@ -870,43 +872,46 @@ class ProxyWriter {
      	 return $out;
 	}
 	
+	private static $json_div_id_prefix = 'jsondiv_';
+	private static $json_script_id_prefix = 'jsonscript_';
 	private function _jsonToHtml(array &$stream, array &$json, array $textkeys, array $htmlkeys, $forceTranslateType=null){
+		$scriptPrefix = self::$json_script_id_prefix;
 	    foreach ( $json as $k=>$v ){
-            if ( $forceTranslateType === 'text' or in_array($k, $textkeys) ){
-                if ( is_array($v) ){
+	    	if ( $forceTranslateType === 'text' or (is_string($k) and in_array($k, $textkeys)) ){
+            	if ( is_array($v) ){
                     $this->_jsonToHtml($stream, $json[$k], $textkeys, $htmlkeys, 'text');
                 } else {
                     $i = count($stream);
-                    $stream[] = '<div id="'.$i.'">'.htmlspecialchars($v).'</div>';
+                    $stream[] = '<div id="'.self::$json_div_id_prefix.$i.'">'.htmlspecialchars($v).'</div>';
                     $json[$k] = 'sweteplaceholder://'.$i;
                 }
-            } else if ( $forceTranslateType === 'html' or  in_array($k, $htmlkeys) ){
-                if ( is_array($v) ){
+            } else if ( $forceTranslateType === 'html' or  (is_string($k) and in_array($k, $htmlkeys)) ){
+            	if ( is_array($v) ){
                     $this->_jsonToHtml($stream, $json[$k], $textkeys, $htmlkeys, 'html');
                 } else {
                     // Preserve scripts
                     $scriptStack =& $this->_scriptStack;
-                    $v = preg_replace_callback('/<script[^>]*>[\s\S]*?<\/script>/', function($matches) use (&$scriptStack){
+                    $v = preg_replace_callback('/<script[^>]*>[\s\S]*?<\/script>/', function($matches) use (&$scriptStack, $scriptPrefix){
                             $id = count($scriptStack);
                             $scriptStack[] = $matches[0];
-                            return '<script id="'.$id.'"></script>';
+                            return '<script id="'.$scriptPrefix.$id.'"></script>';
                         },
                         $v
                     );
                 
                     $i = count($stream);
-                    $stream[] = '<div id="'.$i.'">'.$v.'</div>';
+                    $stream[] = '<div id="'.self::$json_div_id_prefix.$i.'">'.$v.'</div>';
                     $json[$k] = 'sweteplaceholder://'.$i;
                 }
             } else if ( is_array($v) ){
-                $this->_jsonToHtml($stream, $json[$k], $textkeys, $htmlkeys);
+            	$this->_jsonToHtml($stream, $json[$k], $textkeys, $htmlkeys);
             }
         }
 	}
 	
 	private function _getJsonKeys(&$json){
-	    $textkeys = array();
-        $htmlkeys = array('cell');
+	    $textkeys = self::$default_json_keys['text'];//array();
+        $htmlkeys = self::$default_json_keys['html'];//array('cell');
         if ( isset($json['swete:text_keys']) ){
             $textkeys = $json['swete:text_keys'];
         }
@@ -954,7 +959,7 @@ class ProxyWriter {
 	        } else {
                 if ( !isset($translateType) and !in_array($k, $textkeys) and !in_array($k, $htmlkeys) ) continue;
                 if ( preg_match('#^sweteplaceholder://(\d+)$#', $v, $matches) ){
-                    $el = $this->getElementById($doc, $matches[1]);
+                    $el = $this->getElementById($doc, self::$json_div_id_prefix.$matches[1]);
                     if ( $el ){
                         $v = $doc->saveXml($el);
                         $start = strpos($v, '>')+1;
@@ -965,7 +970,7 @@ class ProxyWriter {
                             $json[$k] = htmlspecialchars_decode($json[$k]);
                         } else {
                             $scriptStack =& $this->_scriptStack;
-                            $json[$k] = preg_replace_callback('/<script id="(\d+)"><\/script>/', function($matches) use (&$scriptStack){
+                            $json[$k] = preg_replace_callback('/<script id="'.preg_quote(self::$json_script_id_prefix, '/').'(\d+)"><\/script>/', function($matches) use (&$scriptStack){
                                     return $scriptStack[intval($matches[1])];
                                 },
                                 $json[$k]
