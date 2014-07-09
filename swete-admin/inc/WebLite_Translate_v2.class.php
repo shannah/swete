@@ -162,6 +162,34 @@ class WebLite_HTML_Translator_v2 {
 		$this->translateDates($xpath);
 		//$text = $xpath->query('//text()[normalize-space() and not(ancestor::script | ancestor::style)]');
 		//$translatables = $dom->find('[translate]');
+		$translateAttrs = $xpath->query('//*[@data-swete-translate-attrs or @alt or @title]');
+		$otherAtts = array('title','alt');
+		foreach ( $translateAttrs as $el ){
+			if ( $el->hasAttribute('data-swete-translate-attrs') ){
+				$attNames = explode(' ', $el->getAttribute('data-swete-translate-attrs'));
+			} else {
+				$attNames = array();
+			}
+			
+			foreach ( $otherAtts as $attName ){
+				if ( $el->hasAttribute($attName) ){
+					$attNames[] = $attName;
+				}
+			}
+			foreach ( $attNames as $attName ){
+				$attVal = $el->getAttribute($attName);
+				if ( $attVal and trim($attVal) ){
+					$index = count($strings);
+					$strings[] = trim(_n($attVal));
+			        $stringsIndex[trim(_n($attVal))] = $index;
+			        $el->setAttribute($attName, '{{$'.$index.'$}}');
+			        $index++;
+				}
+				
+			}
+			
+		}
+		
 		$translatables = $xpath->query('//*[@translate]');
 		foreach ($translatables as $tr){
 		
