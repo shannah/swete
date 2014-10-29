@@ -1,4 +1,7 @@
 # i18n by Translation Proxy
+
+Originally published in the [February 2014 issue of PHP Architect](http://www.phparch.com/magazine/2014-2/february/)
+
 ###### By Steve Hannah
 
 > Using a translation proxy can significantly reduce development and maintenance costs for multilingual applications compared to conventional internationalization approaches.  We will discuss some of the advantages of the translation proxy approach, then demonstrate a typical internationalization process using SWeTE, an open source translation proxy written in PHP.
