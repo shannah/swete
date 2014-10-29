@@ -16,6 +16,9 @@ GPLv2
 * MySQL 5+
 * Apache 1.3+ with mod_rewrite installed
 
+## Download
+
+[Latest release](releases/latest)
 
 ##Credits
 
