@@ -10,6 +10,13 @@ SWeTE (Simple Website Translation Engine) is an open source translation proxy wr
 
 GPLv2
 
+## Requirements
+
+* PHP 5.3+
+* MySQL 5+
+* Apache 1.3+ with mod_rewrite installed
+
+
 ##Credits
 
 SWeTE Server is developed by [Web Lite Translation Corp.](http://translate.weblite.ca). 
