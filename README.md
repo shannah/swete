@@ -18,7 +18,7 @@ GPLv2
 
 ## Download
 
-[Latest release](releases/latest)
+[Latest release](https://github.com/shannah/swete/releases/latest)
 
 ##Credits
 
