@@ -30,6 +30,7 @@ class actions_dashboard {
 			ws.website_id, 
 			ws.website_name,
 			ws.website_url,
+			ws.translation_memory_id,
 			concat('http://',ws.host,ws.base_path) as proxy_url,
 			ws.source_language,
 			ws.target_language,
