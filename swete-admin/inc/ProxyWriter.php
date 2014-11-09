@@ -45,6 +45,8 @@ class ProxyWriter {
 
     public $translationParserVersion = null;
 
+    public $generifyResourceProtocols = false;
+
     public $useHtml5Parser = false;
 
 	/**
@@ -601,7 +603,9 @@ class ProxyWriter {
                         if ( strlen($url) > 1 ) $secondChar = $url{1};
                         if ( $firstChar === '/' and $secondChar !== '/' ){
                             $url = $this->_srcUrl.$url;
-                            $url = preg_replace('#^https?://#', '//', $url);
+                            if ( $this->generifyResourceProtocols ){
+                                $url = preg_replace('#^https?://#', '//', $url);
+                            }
                             $element->setAttribute($att, $url);
                         }
                         
