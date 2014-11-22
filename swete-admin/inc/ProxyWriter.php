@@ -479,7 +479,6 @@ class ProxyWriter {
 	 * @see unproxifyUrl()
 	 */
 	public static function changeBase($oldBase, $newBase, $url, $pathDict = array()){
-		
 		if ( !is_array($oldBase) ) $oldBase = self::parse_url($oldBase);
 		if ( !is_array($newBase) ) $newBase = self::parse_url($newBase);
 		if ( $oldBase['path'] and $oldBase['path']{strlen($oldBase['path'])-1} != '/' ) $oldBase['path'] .= '/';
@@ -490,7 +489,6 @@ class ProxyWriter {
 		if ( !$url ) return $url;
 		if ( $url{0} == '/' and (@$url{1} != '/' or @$url{2} == '/') ){
 			// absolute URL
-			
 			if ( @$oldBase['path'] and strpos($url ,$oldBase['path']) !== 0  ){
 				// The URL falls outside of the old base so we don't perform the transformation
 				return $url;
@@ -602,7 +600,9 @@ class ProxyWriter {
                         $secondChar = '';
                         if ( strlen($url) > 1 ) $secondChar = $url{1};
                         if ( $firstChar === '/' and $secondChar !== '/' ){
-                            $url = $this->_srcUrl.$url;
+                            $tmpParts = $this->_srcParts;
+                            $tmpParts['path'] = $url;
+                            $url = http_build_url($tmpParts);//$this->_srcUrl.$url;
                             if ( $this->generifyResourceProtocols ){
                                 $url = preg_replace('#^https?://#', '//', $url);
                             }
