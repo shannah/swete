@@ -42,7 +42,14 @@
 	});
 	
 	$('a.site-stats').click(function(){
-		$(this).parent().children('.popup-panel').fadeIn();
+		var q = {
+		    '-action' : 'dashboard_site_stats',
+		    'website_id' : $(this).attr('data-website-id'),
+		    '-table' : 'websites'
+		};
+		$(this).parent().children('.popup-panel').fadeIn().children('.content-pane').load(DATAFACE_SITE_HREF, q, function(){
+		    
+		});
 		return false;
 	});
 	
