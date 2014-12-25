@@ -780,6 +780,8 @@ class ProxyClientPreprocessor implements ProxyClientDelegate {
 		if ( $txt->length > 0 ){
 			foreach ( $txt as $txtEl){
 				if ( in_array(strtolower($txtEl->parentNode->tagName), array('style','title','script')) ) continue; 
+				if ( $txtEl->parentNode->getAttribute('data-swete-text-filter') === 'disabled' ) continue;
+				
 				if ( !trim($txtEl->nodeValue) ) continue;
 				
 				$count = 0;
