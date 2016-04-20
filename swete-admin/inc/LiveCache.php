@@ -626,7 +626,13 @@ class LiveCache {
             self::getTranslationMemoryModificationTime($this->translationMemoryId) < $this->created
         )
         {
-        
+        	if ( file_exists('sites/'.basename($this->siteId).'/Delegate.php') ){
+        		require_once 'sites/'.basename($this->siteId).'/Delegate.php';
+        		$clazz = 'sites_'.intval($this->siteId).'_Delegate';
+        		if ( class_exists($clazz) and method_exists($clazz, 'init') ){
+        			call_user_func(array($clazz, 'init'));
+        		}
+        	}
             $isHtml = preg_match('/html|xml/', $this->client->contentType);
             $isCSS = preg_match('/css/', $this->client->contentType);
             $isJson = (preg_match('/json/', $this->client->contentType) or $this->client->content{0}=='{' or $this->client->content{0}=='[');

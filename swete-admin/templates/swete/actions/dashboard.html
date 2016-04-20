@@ -62,6 +62,13 @@
 									<li>
 										<a href="{$ENV.DATAFACE_SITE_HREF}?-action=list&amp;-table=swete_strings&amp;website_id={$row->website_id|escape}">Translate Strings</a>
 									</li>
+									<li>
+										<a href="{$ENV.DATAFACE_SITE_HREF}?-action=swete_export_found_strings_as_xliff&amp;-table=swete_strings&amp;website_id={$row->website_id|escape}">Export Strings</a>
+									</li>
+									<li>
+
+										<a href="{$ENV.DATAFACE_SITE_HREF}?-action=tm_import_from_xliff&amp;-table=xf_tm_translation_memories&amp;translation_memory_id={$row->translation_memory_id|escape}&amp;-relationship=translations">Import Strings</a>
+									</li>
 								</ul>
 							</li>
 						</ul>
@@ -69,12 +76,12 @@
 						
 					</td>
 					<td>
-						<a href="#" class="site-stats" title="View the stats for this site"><span>Info</span></a>
+						<a href="#" class="site-stats" title="View the stats for this site" data-website-id="{$row->website_id|escape}"><span>Info</span></a>
 						<div class="popup-panel site-stats-panel">
 							<div class="panel-bar">
 								<a class="close-panel" href="#"><span>Close</span></a>
 							</div>
-							<div class="content-pane">
+							<div class="content-pane">{*
 								<table>
 									{if $ENV.APPLICATION.enable_static}
 										<tr>
@@ -136,7 +143,7 @@
 									</tr>
 										
 								</table>
-							</div>
+							*}</div>
 						
 						</div>
 					</td>

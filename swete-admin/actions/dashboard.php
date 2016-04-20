@@ -23,6 +23,7 @@ class actions_dashboard {
 		
 		// Get sites summary
 		import('Dataface/ResultReader.php');
+		/*
 		$reader = new Dataface_ResultReader("select
 			ws.source_language,
 			ws.target_language,
@@ -30,6 +31,7 @@ class actions_dashboard {
 			ws.website_id, 
 			ws.website_name,
 			ws.website_url,
+			ws.translation_memory_id,
 			concat('http://',ws.host,ws.base_path) as proxy_url,
 			ws.source_language,
 			ws.target_language,
@@ -62,6 +64,23 @@ class actions_dashboard {
 					and tml.website_id=ws.website_id
 					
 			), 0) as translated_words
+			
+				
+			from websites ws
+			", df_db());
+		*/
+		$reader = new Dataface_ResultReader("select
+			ws.source_language,
+			ws.target_language,
+			ws.log_translation_misses,
+			ws.website_id, 
+			ws.website_name,
+			ws.website_url,
+			ws.translation_memory_id,
+			concat('http://',ws.host,ws.base_path) as proxy_url,
+			ws.source_language,
+			ws.target_language
+			
 			
 				
 			from websites ws

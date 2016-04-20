@@ -441,7 +441,7 @@ class ProxyClient {
 				curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
 			}
 			$content = curl_exec($ch);
-			error_log("Finished curl_exec");
+			//error_log("Finished curl_exec");
 			
 			if ( $this->outputFile ){
 				
@@ -561,6 +561,12 @@ class ProxyClient {
 		}
 		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		/*
+		    This fixes an issue with big commerce connecting to the 
+		    checkout page.  We just got a blank page with no errors.
+		    http://stackoverflow.com/a/18217538
+		*/
+		curl_setopt($ch, CURLOPT_SSL_CIPHER_LIST, 'rsa_rc4_128_sha');
 		$contents = $this->curl_exec( $ch );
 		
 		if ( $this->outputFile ){
@@ -774,6 +780,8 @@ class ProxyClientPreprocessor implements ProxyClientDelegate {
 		if ( $txt->length > 0 ){
 			foreach ( $txt as $txtEl){
 				if ( in_array(strtolower($txtEl->parentNode->tagName), array('style','title','script')) ) continue; 
+				if ( $txtEl->parentNode->getAttribute('data-swete-text-filter') === 'disabled' ) continue;
+				
 				if ( !trim($txtEl->nodeValue) ) continue;
 				
 				$count = 0;

@@ -243,7 +243,14 @@ class ProxyServer {
 		$url = $this->URL;
 		
 		
-		
+		$siteId = $this->site->getRecord()->val('website_id');
+		if ( file_exists('sites/'.basename($siteId).'/Delegate.php') ){
+			require_once 'sites/'.basename($siteId).'/Delegate.php';
+			$clazz = 'sites_'.intval($siteId).'_Delegate';
+			if ( class_exists($clazz) and method_exists($clazz, 'init') ){
+				call_user_func(array($clazz, 'init'));
+			}
+		}
 		$proxyWriter = $this->site->getProxyWriter();
 		$proxyWriter->useHtml5Parser = $this->useHtml5Parser;
 		$logger = $this->logger;

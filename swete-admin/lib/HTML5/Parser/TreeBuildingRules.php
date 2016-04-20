@@ -75,7 +75,7 @@ class TreeBuildingRules {
     case 'option':
       return $this->closeIfCurrentMatches($new, $current, array('option', 'optgroup'));
     case 'tr':
-      $this->closeIfCurrentMatches($new, $current, array('tr'));
+      return $this->closeIfCurrentMatches($new, $current, array('tr'));
     case 'td':
     case 'th':
       return $this->closeIfCurrentMatches($new, $current, array('th', 'td'));
@@ -84,7 +84,6 @@ class TreeBuildingRules {
     case 'tfoot':
     case 'table': // Spec isn't explicit about this, but it's necessary.
       return $this->closeIfCurrentMatches($new, $current, array('thead', 'tfoot', 'tbody'));
-
     }
 
     return $current;
