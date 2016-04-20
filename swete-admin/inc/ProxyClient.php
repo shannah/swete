@@ -566,7 +566,10 @@ class ProxyClient {
 		    checkout page.  We just got a blank page with no errors.
 		    http://stackoverflow.com/a/18217538
 		*/
-		curl_setopt($ch, CURLOPT_SSL_CIPHER_LIST, 'rsa_rc4_128_sha');
+		if (defined('SWETE_CLIENT_SSL_CIPHER_LIST')) {
+		    //curl_setopt($ch, CURLOPT_SSL_CIPHER_LIST, 'rsa_rc4_128_sha');
+		    curl_setopt($ch, CURLOPT_SSL_CIPHER_LIST, SWETE_CLIENT_SSL_CIPHER_LIST);
+		}
 		$contents = $this->curl_exec( $ch );
 		
 		if ( $this->outputFile ){
