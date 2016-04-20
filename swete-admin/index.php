@@ -30,6 +30,9 @@ if ( @$_SERVER['REDIRECT_ENCODE_SCRIPTS'] ){
 if ( isset($_SERVER['REDIRECT_USE_HTML5_PARSER']) and intval($_SERVER['REDIRECT_USE_HTML5_PARSER']) === 1 ){
     define('SWETE_USE_HTML5_PARSER', 1);
 }
+if ( isset($_SERVER['REDIRECT_USE_HTML5_SERIALIZER']) and intval($_SERVER['REDIRECT_USE_HTML5_SERIALIZER']) === 1 ){
+    define('SWETE_USE_HTML5_SERIALIZER', 1);
+}
 if ( isset($_SERVER['REDIRECT_SSL_CIPHER_LIST']) ){
     define('SWETE_CLIENT_SSL_CIPHER_LIST', $_SERVER['REDIRECT_SSL_CIPHER_LIST']);
 }
@@ -64,6 +67,9 @@ if ( @$_GET['-action'] == 'swete_handle_request' ){
 	$liveCache = LiveCache::getCurrentPage();
 	if ( defined('SWETE_USE_HTML5_PARSER') and SWETE_USE_HTML5_PARSER ){
 	    $liveCache->useHtml5Parser = true;
+	}
+	if ( defined('SWETE_USE_HTML5_SERIALIZER') and SWETE_USE_HTML5_SERIALIZER ){
+	    $liveCache->useHtml5Serializer = true;
 	}
 	if ( defined('SWETE_USE_CONSERVATIVE_CACHING') and SWETE_USE_CONSERVATIVE_CACHING === 0 ){
 	    $liveCache->useConservativeCaching = false;

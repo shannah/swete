@@ -39,6 +39,7 @@ require_once 'modules/tm/lib/XFTranslationMemory.php';
 class ProxyServer {
 
     public $useHtml5Parser = false;
+    public $useHtml5Serializer = false;
 
     /**
      * @brief Input HTML content to be translated
@@ -253,6 +254,7 @@ class ProxyServer {
 		}
 		$proxyWriter = $this->site->getProxyWriter();
 		$proxyWriter->useHtml5Parser = $this->useHtml5Parser;
+		$proxyWriter->useHtml5Serializer = $this->useHtml5Serializer;
 		$logger = $this->logger;
 		$logger->proxyRequestUrl = $url;
 		$isPost = (strtolower($this->SERVER['REQUEST_METHOD']) === 'post');

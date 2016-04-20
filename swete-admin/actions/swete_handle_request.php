@@ -78,6 +78,9 @@ class actions_swete_handle_request{
 		if ( defined('SWETE_USE_HTML5_PARSER') and SWETE_USE_HTML5_PARSER ){
 		    $server->useHtml5Parser = true;
 		}
+		if ( defined('SWETE_USE_HTML5_SERIALIZER') and SWETE_USE_HTML5_SERIALIZER ){
+		    $server->useHtml5Serializer = true;
+		}
 		if ( @$_POST['swete:input'] ){
 		    if ( @$_POST['swete:key'] and @$_POST['swete:salt'] ){
 		        if ( is_numeric($_POST['swete:salt']) ){

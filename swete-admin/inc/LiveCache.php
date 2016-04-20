@@ -30,7 +30,7 @@
  */
 class LiveCache {
 
-    public $DEBUG = false;
+    public $DEBUG = true;
     
     /**
      * @brief The directory where cache files are stored.
@@ -38,6 +38,8 @@ class LiveCache {
     public static $cacheDir = './livecache';
     
     public $useHtml5Parser = false;
+    
+    public $useHtml5Serializer = false;
     
     /**
      * @brief The singleton instance of the live cache so that it can 
@@ -430,8 +432,11 @@ class LiveCache {
         }
         
         //echo "About to process ".$client->URL;
+        $this->mark("Making background request for {$client->URL}");
         $client->process();
+        $this->mark("Finished background request for {$client->URL}");
         if ( intval($client->status['http_code']) === 304 ){
+            $this->mark("Response was 304");
             foreach ( $client->headers as $h ){
                 header($h, false);
             }
@@ -587,7 +592,7 @@ class LiveCache {
     }
     
     public function mark($str){
-        if ( $this->DEBUG )error_log('[LiveCache]['.$this->unproxifiedUrl.']['.getmypid().'] '.$str);
+        if ( $this->DEBUG )error_log('[LiveCache]['.$this->unproxifiedUrl.']['.getmypid().']['.microtime().']'.$str);
     }
     
     /**
@@ -636,7 +641,7 @@ class LiveCache {
             $isHtml = preg_match('/html|xml/', $this->client->contentType);
             $isCSS = preg_match('/css/', $this->client->contentType);
             $isJson = (preg_match('/json/', $this->client->contentType) or $this->client->content{0}=='{' or $this->client->content{0}=='[');
-
+        
             $proxyWriter = $this->getProxyWriter();
             $json = null;
             if ( $isJson ){
@@ -653,6 +658,7 @@ class LiveCache {
                     $isJson = false;                
                 }
             }
+            
             ProxyClientPreprocessor::$db = $this->dbConnect();
             $delegate = new ProxyClientPreprocessor($this->siteId);
             $delegate->preprocessHeaders($this->client->headers);
@@ -692,7 +698,6 @@ class LiveCache {
                 }
 
                 foreach ($headers as $h){
-
                     header($h, false);
                 }
                 header('Content-Length: '.strlen($this->client->content));
@@ -700,6 +705,7 @@ class LiveCache {
                 header('X-SWeTE-Handler: LiveCache Processed-content/'.__LINE__.'/No-server-cache:'.$this->noServerCache);
                 echo $this->client->content;
                 flush();
+                $this->mark('FLUSHED BUFFER');
                 $this->headers = $headers;
                 $this->content = $this->client->content;
                 $this->calculateExpires();
@@ -735,6 +741,7 @@ class LiveCache {
                 $proxy->translationParserVersion = intval($this->translationParserVersion);
             }
             $proxy->useHtml5Parser = $this->useHtml5Parser;
+            $proxy->useHtml5Serializer = $this->useHtml5Serializer;
             $proxy->sourceDateLocale = $this->sourceDateLocale;
             $proxy->targetDateLocale = $this->targetDateLocale;
             $proxy->setProxyUrl($this->proxyUrl);

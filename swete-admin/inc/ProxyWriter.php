@@ -48,6 +48,8 @@ class ProxyWriter {
     public $generifyResourceProtocols = false;
 
     public $useHtml5Parser = false;
+    
+    public $useHtml5Serializer = false;
 
 	/**
 	 * @brief The locale for parsing dates.  E.g. en_CA
@@ -716,7 +718,12 @@ class ProxyWriter {
 			$end = strrpos($out, '<');
 			$out = substr($out, $start, $end-$start);
 		} else {
-			$out = $doc->saveHtml();
+		    if ($this->useHtml5Serializer) {
+		        require_once 'lib/HTML5.php'; 
+		        $out = HTML5::saveHTML($doc);
+		    } else {
+		    	$out = $doc->saveHtml();
+		    }
 		}
 		unset($doc);
 		return $out;
