@@ -721,6 +721,8 @@ class ProxyWriter {
 		    if ($this->useHtml5Serializer) {
 		        require_once 'lib/HTML5.php'; 
 		        $out = HTML5::saveHTML($doc);
+		        $out = preg_replace('/(<script[^>]*>)'.preg_quote('<![CDATA[', '/').'/', '$1', $out);
+		        $out = preg_replace('/'.preg_quote(']]></script>', '/').'/', '</script>', $out);
 		    } else {
 		    	$out = $doc->saveHtml();
 		    }
