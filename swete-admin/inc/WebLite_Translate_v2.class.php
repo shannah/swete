@@ -389,11 +389,11 @@ class WebLite_HTML_Translator_v2 {
 			$combinedText = implode('', $combinedText);
 			$leadingWhiteSpace = '';
 			$trailingWhiteSpace = '';
-			if ( preg_match('#^[\p{Z}\s]+#', $combinedText, $m1 ) ){
+			if ( preg_match('#^[\p{Z}\s]+#u', $combinedText, $m1 ) ){
 			    $leadingWhiteSpace = $m1[0];
 			}
 			//echo 'Checking for trailing space: ['.$combinedText.']'."\n";
-			if ( preg_match('#[\p{Z}\s]+$#', $combinedText, $m1 ) ){
+			if ( preg_match('#[\p{Z}\s]+$#u', $combinedText, $m1 ) ){
 			    //echo "Trailing white space found in '$combinedText'\n";
 			    $trailingWhiteSpace = $m1[0];
 			} else {
