@@ -810,8 +810,8 @@ class ProxyWriter {
 					//print_r($paramsArr[$k]);
 					$log[$k] = TMTools::decode($v, $paramsArr[$k]);
 				} catch (Exception $ex){
-					echo $ex->getMessage();
-					exit;
+					//echo $ex->getMessage();
+					//exit;
 				}
 			}
 			$stats['log'] = $log;
