@@ -1,0 +1,166 @@
+select.xf-langpair-selector {
+	display:none;
+}
+
+a.xf-change-langpair-link {
+	font-size: 10px;
+	color: #1a54e1 !important;
+	
+}
+
+a.xf-change-langpair-link:hover {
+	text-decoration:underline;
+}
+
+table.xf-translation-table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+table.xf-translation-table td.xf-field-translation-src,
+table.xf-translation-table td.xf-field-translation-dest,
+table.xf-translation-table td.xf-field-translation-label
+{
+	border: 2px solid #bbccff;
+}
+
+table.xf-translation-table tr.active td.xf-field-translation-label {
+	border: none;
+}
+
+table.xf-translation-table  td.xf-field-translation-label a.xf-edit-field-translation {
+	font-size: 10px;
+	color: #1a54e1;
+	text-decoration:none;
+	font-weight: normal;
+}
+
+table.xf-translation-table  td.xf-field-translation-label a.xf-edit-field-translation:hover {
+	text-decoration:underline;
+}
+
+table.xf-translation-table tr.active td.xf-field-translation-label a.xf-edit-field-translation {
+	display:none;
+}
+
+table.xf-translation-table tr td.xf-field-translation-label {
+	width: 150px;
+	font-weight: bold;
+	text-align: left;
+	font-size: 14px;
+	vertical-align: top;
+	background-color: #bbccff;
+	padding-bottom: 0;
+}
+
+table.xf-translation-table tr.active td.xf-field-translation-label  {
+	
+	background-color: transparent;
+	
+}
+
+table.xf-translation-table tr.active td.xf-field-translation-src,
+table.xf-translation-table tr.active td.xf-field-translation-dest{
+	display:none;
+}
+
+table.xf-translation-table tr td.xf-field-translation-label div.xf-label-tab {
+	background-color: transparent;
+	margin-top: 10px;
+	padding: 3px 5px 2px 5px;
+	margin-bottom: 0px;
+}
+
+
+table.xf-translation-table tr.active td.xf-field-translation-label div.xf-label-tab {
+	background-color: #bbccff;
+	
+}
+
+
+
+
+
+table.xf-translation-table tr {
+	margin: 10px;
+}
+
+table.xf-translation-table tr.xf-active-translation-field td {
+	border: 3px solid #bbccff;
+	padding: 1em;
+}
+
+
+
+table.xf-translation-table tr.xf-active-translation-field td .xf-button-bar {
+	margin: -1em -1em 0 -1em;
+}
+
+
+textarea.xf-tm-match {
+	border: 2px solid green;
+	background-image: url(images/tick.png);
+	background-repeat: no-repeat;
+	background-position: right;
+}
+
+textarea.xf-tm-nomatch {
+	border: 2px solid orange;
+}
+
+table.xf-translation-table tr.xf-active-translation-field td .xf-button-bar a.xf-tm-save-field-btn {
+	visibility:hidden;
+}
+
+table.xf-translation-table tr.xf-active-translation-field.xf-field-changed td .xf-button-bar a.xf-tm-save-field-btn  {
+	visibility: visible;
+}
+
+
+tr.xf-active-translation-field .xf-field-status-labels {
+	float: right;
+}
+
+tr.xf-active-translation-field .xf-field-status-labels span.changed,
+tr.xf-active-translation-field .xf-field-status-labels span.empty,
+tr.xf-active-translation-field .xf-field-status-labels span.translated {
+	display: none;
+}
+
+tr.xf-active-translation-field.xf-field-changed .xf-field-status-labels span.changed {
+	display:inline;
+	color: red;
+}
+
+tr.xf-active-translation-field.xf-field-empty .xf-field-status-labels span.empty {
+	display:inline;
+	color: orange;
+}
+
+tr.xf-active-translation-field.xf-field-empty .xf-field-status-labels span.changed {
+	display:none;
+}
+
+tr.xf-active-translation-field.xf-field-translated .xf-field-status-labels span.translated {
+	display: inline;
+}
+
+.xf-translation-form-wrapper.xf-translation-form-hide-record-headings h3.xf-translation-record-heading {
+	display: none;
+}
+
+.xf-translation-form-wrapper.xf-translation-form-hide-button-bar .xf-button-bar {
+	display: none;
+}
+
+.xf-translation-form-wrapper.xf-translation-form-hide-record-headings table.xf-translation-table thead {
+	display:none;
+}
+
+.xf-translation-form-wrapper.xf-translation-form-hide-record-headings table.xf-translation-table tr.xf-field-translation.active {
+	display:none;
+}
+
+.xf-translation-form-wrapper.xf-translation-form-hide-status-labels table.xf-translation-table .xf-field-status-labels {
+	display: none;
+}

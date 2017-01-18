@@ -1,0 +1,83 @@
+		<div class="xf-translation-form-wrapper 
+			{if $translationSettings.hide_record_headings}xf-translation-form-hide-record-headings{/if}
+			{if $translationSettings.hide_button_bar}xf-translation-form-hide-button-bar{/if}
+			{if $translationSettings.hide_status_labels}xf-translation-form-hide-status-labels{/if}
+			"
+			data-source-language="{$sourceCode|escape}"
+			data-destination-language="{$destCode|escape}"
+			data-translation-memory-id="{$translationMemoryId|escape}"
+		>
+			<h2>Translate Records from 
+				<span title="{$sourceLabel|escape}">
+					{$sourceLabel|escape|truncate:12}
+				</span>
+				to 
+				<span title="{$destLabel|escape}">
+					{$destLabel|escape|truncate:12}
+				</span>
+				{if $otherDests}
+					<a class="xf-change-langpair-link" href="#">
+						Change
+					</a>
+					<select class="xf-langpair-selector">
+						<option value="">Select Destination Language...</option>
+						{foreach from=$otherDests item=odestLabel key=odestCode}
+							<option value="{$odestCode|escape}">
+								{$odestLabel|escape}
+							</option>
+						{/foreach}
+					</select>
+				{/if}
+			</h2>
+			
+			{foreach from=$records item=rec}
+			
+				<div class="xf-record-translation"
+					data-xf-record-id="{$rec.id|escape}"
+				>
+					<h3 class="xf-translation-record-heading" title="{$rec.title|escape}">{$rec.title|escape|truncate:32}</h3>
+					{if $rec.data}
+						<table class="xf-translation-table">
+							<thead>
+								<tr>
+									<th><!-- Field Name Header --></th>
+									<th>{$sourceLabel|escape}</th>
+									<th>{$destLabel|escape}</th>
+								</tr>
+							</thead>
+							<tbody>
+								{foreach from=$rec.data item=fld}
+									<tr data-xf-fieldname="{$fld.fielddef.name|escape}" class="xf-field-translation {if !$fld.$destCode}xf-field-translation-null{/if}">
+										<td class="xf-field-translation-label">
+											<div class="xf-label-tab">
+												{$fld.fielddef.widget.label|escape}
+												<a href="#" class="xf-edit-field-translation">
+													Edit
+												</a>
+											</div>
+
+										</td>
+										<td class="xf-field-translation-src">{$fld.$sourceCode|escape}</td>
+										<td class="xf-field-translation-dest">{$fld.$destCode|escape}</td>
+									</tr>
+								{/foreach}
+								
+							</tbody>
+						
+						</table>
+					{elseif $rec.error}
+						<div class="xf-translation-error">
+							{$rec.error|escape}
+						</div>
+					
+					{else}
+						<div class="xf-translation-error">
+							Failed to get translation information for this record.
+						</div>
+					
+					{/if}
+					
+				</div>
+				
+			{/foreach}
+		</div>

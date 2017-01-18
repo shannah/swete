@@ -1,0 +1,24 @@
+{use_macro file="Dataface_Record_Template.html"}
+    {fill_slot name="record_content"}
+	<h5>
+        {if $msg} 
+		<div class="portalMessage">{$msg}</div><br> 
+	   {/if}
+	
+<form action="{$url}" method="post" enctype="multipart/form-data">
+
+<label for="file">Filename:</label><input type="file" name="file" id="file"/> <br>
+<div class="formHelp">Select an xliff file to import translations from.</div> <br>
+
+				{$userForm}  <br>
+
+<label for="status">Set Status:<br></label>
+<input type="radio" name="status" value="SUBMITTED" checked>SUBMITTED<br>
+<input type="radio" name="status" value="APPROVED">APPROVED<br> <br>
+
+				<input type="submit" name="submit" value="Submit"/>
+</form>
+
+	</h5>
+    {/fill_slot}
+{/use_macro}

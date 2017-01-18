@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+ <file original="first.html" source-language="en" target-language="fr" datatype="html">
+  <header/>
+  <body>
+   <trans-unit id="1">
+    <source>Hello</source>
+    <target>Bonjour</target>
+   </trans-unit>
+   <trans-unit id="2">
+    <source>Thank you</source>
+    <target>Merci</target>
+   </trans-unit>
+  </body>
+ </file>
+ <file original="second.html" source-language="en" target-language="fr" datatype="html">
+  <header/>
+  <body>
+   <trans-unit id="1">
+    <source>English</source>
+    <target>Francais</target>
+   </trans-unit>
+   <trans-unit id="2">
+    <source>Hello Hello Hello</source>
+    <target>Bonjour Bonjour Bonjour</target>
+   </trans-unit>
+   <trans-unit id="3">
+    <source>!@#$%^&amp;*()[]&lt;&gt;</source>
+    <target>!@#$%^&amp;*()[]&lt;&gt;</target>
+   </trans-unit>
+  </body>
+ </file>
+ <file original="third.html" source-language="as" target-language="fr" datatype="html">
+  <header/>
+  <body>
+   <trans-unit id="1">
+    <source>En1</source>
+    <target>Fr1</target>
+   </trans-unit>
+   <trans-unit id="2">
+    <source>En2</source>
+    <target>Fr2</target>
+   </trans-unit>
+   <trans-unit id="3">
+    <source>En3</source>
+    <target>Fr3</target>
+   </trans-unit>
+   <trans-unit id="4">
+    <source>En4</source>
+    <target>Fr4</target>
+   </trans-unit>
+  </body>
+ </file>
+</xliff>
