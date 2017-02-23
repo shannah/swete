@@ -30,7 +30,7 @@
  */
 class LiveCache {
 
-    public $DEBUG = true;
+    public $DEBUG = false;
     
     /**
      * @brief The directory where cache files are stored.

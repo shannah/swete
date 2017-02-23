@@ -419,6 +419,19 @@ END
 		return $doc;
 	}
 	
+	static function startsWith($haystack, $needle) {
+         $length = strlen($needle);
+         return (substr($haystack, 0, $length) === $needle);
+    }
+    
+    static function endsWith($haystack, $needle) {
+        $length = strlen($needle);
+        if ($length == 0) {
+            return true;
+        }
+    
+        return (substr($haystack, -$length) === $needle);
+    }
 	
 }
 if ( defined('SWETE_USE_HTML5_PARSER') and SWETE_USE_HTML5_PARSER ){

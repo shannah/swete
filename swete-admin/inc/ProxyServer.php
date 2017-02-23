@@ -540,7 +540,10 @@ class ProxyServer {
 		$this->mark('Loading the translation miss log');
 		$tlogEntry = new Dataface_Record('translation_miss_log', array());
 		
-		if ( $this->logTranslationMisses and @$stats['log']){
+		//error_log("Request url is ".$this->URL);
+		if ( $this->logTranslationMisses and @$stats['log'] and $delegate->isOnWhiteList($this->URL)){
+		
+		    
 			$this->mark('ITERATING TRANSLATION MISSES START ('.count($stats['log']).')');
 			foreach ($stats['log'] as $str){
 				

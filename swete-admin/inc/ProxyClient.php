@@ -717,6 +717,37 @@ class ProxyClientPreprocessor implements ProxyClientDelegate {
 		}
 	}
 	
+	public function isOnWhiteList($url) {
+	    $urlParts = parse_url($url);
+	    $urlPath = $urlParts['path'];
+	    $s = DIRECTORY_SEPARATOR;
+		$base = defined('DATAFACE_SITE_PATH') ? DATAFACE_SITE_PATH:'.';
+		$path = $base.$s.'sites'.$s.basename($this->siteId).$s.'whitelist.txt';
+		if (file_exists($path)) {
+		    $lines = file($path);
+		    foreach ($lines as $line) {
+                $lineParts = preg_split('/\s+/', $line);
+                if (count($lineParts) > 0) {
+                    $line = $lineParts[0];
+                } else {
+                    continue;
+                }
+                if (substr($line, 0, 5) === 'http:' or substr($line, 0, 6) === 'https:') {
+                    $lineParts = parse_url($line);
+                    $line = $lineParts['path'];
+                }
+                //error_log("checking line $line against $urlPath");
+                if (trim($line) === trim($urlPath)) {
+                    return true;
+                }
+		    }
+		    exit;
+		    return false;
+		} else {
+		    return true;
+		}
+	}
+	
 	protected function _processText($string, $index, &$count){
 		$filters =& $this->getPrefilters();
 		if ( $index>count($filters)-1 ) return $string;
