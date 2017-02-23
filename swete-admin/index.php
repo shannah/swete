@@ -1,4 +1,6 @@
 <?php
+date_default_timezone_set('America/Los Angeles');
+ini_set('memory_limit', '2048M');
 /**
  * SWeTE Server: Simple Website Translation Engine
  * Copyright (C) 2012  Web Lite Translation Corp.
@@ -63,7 +65,7 @@ if ( @$_GET['-action'] == 'swete_handle_request' ){
 	
 	define('XATAFACE_NO_SESSION',1);
 	define('XATAFACE_DISABLE_AUTH',1);
-	error_log('[SWeTE Profiler]['.getmypid().'] start time: '.microtime());
+	//error_log('[SWeTE Profiler]['.getmypid().'] start time: '.microtime());
 	$liveCache = LiveCache::getCurrentPage();
 	if ( defined('SWETE_USE_HTML5_PARSER') and SWETE_USE_HTML5_PARSER ){
 	    $liveCache->useHtml5Parser = true;
@@ -97,7 +99,7 @@ if ( @$_GET['-action'] == 'swete_handle_request' ){
 	$_GET = array('-action' => 'swete_handle_request');
 	$_REQUEST = $_GET;
 }
-ini_set('memory_limit', '256M');
+//ini_set('memory_limit', '256M');
 require_once 'include/functions.inc.php';
 require_once 'xataface/public-api.php';
 $conf = array();

@@ -859,15 +859,54 @@ class ProxyWriter {
       				
       			} else if ( preg_match('/^(Set-Cookie:)(.*)$/i', $header, $matches) ){
       				$cookieStr = $matches[2];
-      				$domainReplacement = 'domain=.'.$this->_proxyParts['host'];
-      				$domainPattern = '/domain=[^;]+/i';
-      				if ( count(explode('.', $this->_proxyParts['host'])) < 2 ){
-      					$domainReplacement = '';
-      					$domainPattern = '/domain=[^;]+;?/i';
+      				
+      				$domainMatch = '';
+      				if (preg_match('/domain=([^;]+)/i', $cookieStr, $matches2)) {
+      				    $domainMatch = $matches2[1];
       				}
-      				$cookieStr = preg_replace($domainPattern, $domainReplacement, $cookieStr, -1, $domainCount);
+      				$domainReplacement = 'domain=.'.$this->_proxyParts['host'];
+      				if ($domainMatch === $this->_srcParts['host']) {
+                        // keep default domain replacement
+      				} else if ($domainMatch) {
+      				    if ($domainMatch{0} === '*') {
+      				        $domainMatch = substr($domainMatch, 1);
+      				    }
+      				    if ($domainMatch) {
+      				        if ($domainMatch{0} !== '.') {
+                                $domainMatch = '.' . $domainMatch;
+                            }
+                            
+                            if (SweteTools::endsWith($this->_proxyParts['host'], $domainMatch)) {
+                                // The cookie is already valid for the proxy domain
+                                // leave it alone  
+                            } else if (SweteTools::endsWith($this->_srcParts['host'], $domainMatch)) {
+                                // The cookie is for a super-domain of the src host.
+                                // Need to translate the cookie to the equivalent superdomain of the
+                                // proxy
+                                $srcHostSplit = explode('.', $this->_srcParts['host']);
+                                $proxyHostSplit = explode('.', $this->_proxyParts['host']);
+                                $domainMatchSplit = explode('.', substr($domainMatch, 1));
+                                $levelsUp = count($srcHostSplit) - count($domainMatchSplit);
+                                while ($levelsUp > 0 and count($proxyHostSplit) > 2) {
+                                    array_unshift($proxyHostSplit);
+                                    $levelsUp--;
+                                }
+                                $domainReplacement = 'domain=.'.implode('.', $proxyHostSplit);
+                                
+                            }
+      				    }
+      				}
+      				$domainCount = 0;
+      				if ($domainMatch) {
+                        $domainPattern = '/domain=[^;]+/i';
+                        if ( count(explode('.', $this->_proxyParts['host'])) < 2 ){
+                            $domainReplacement = '';
+                            $domainPattern = '/domain=[^;]+;?/i';
+                        }
+                        $cookieStr = preg_replace($domainPattern, $domainReplacement, $cookieStr, -1, $domainCount);
+                    }
       				$cookieStr = preg_replace('/Path=[^;]+/i', 'path='.$this->_proxyParts['path'], $cookieStr);
-      				if ( $domainCount > 0 ){
+      				if ($domainCount > 0){
       					$out[] = 'Set-Cookie:'.$cookieStr;
       				} else {
       					$header = 'Set-Cookie:'.$cookieStr;
