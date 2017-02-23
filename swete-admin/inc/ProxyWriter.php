@@ -865,8 +865,10 @@ class ProxyWriter {
       				    $domainMatch = $matches2[1];
       				}
       				$domainReplacement = 'domain=.'.$this->_proxyParts['host'];
+      				$replaceDomain = false;
       				if ($domainMatch === $this->_srcParts['host']) {
                         // keep default domain replacement
+                        $replaceDomain = true;
       				} else if ($domainMatch) {
       				    if ($domainMatch{0} === '*') {
       				        $domainMatch = substr($domainMatch, 1);
@@ -878,26 +880,15 @@ class ProxyWriter {
                             
                             if (SweteTools::endsWith($this->_proxyParts['host'], $domainMatch)) {
                                 // The cookie is already valid for the proxy domain
-                                // leave it alone  
-                            } else if (SweteTools::endsWith($this->_srcParts['host'], $domainMatch)) {
-                                // The cookie is for a super-domain of the src host.
-                                // Need to translate the cookie to the equivalent superdomain of the
-                                // proxy
-                                $srcHostSplit = explode('.', $this->_srcParts['host']);
-                                $proxyHostSplit = explode('.', $this->_proxyParts['host']);
-                                $domainMatchSplit = explode('.', substr($domainMatch, 1));
-                                $levelsUp = count($srcHostSplit) - count($domainMatchSplit);
-                                while ($levelsUp > 0 and count($proxyHostSplit) > 2) {
-                                    array_unshift($proxyHostSplit);
-                                    $levelsUp--;
-                                }
-                                $domainReplacement = 'domain=.'.implode('.', $proxyHostSplit);
-                                
+                                // leave it alone 
+                                 
+                            } else {
+                                $replaceDomain = true;
                             }
       				    }
       				}
       				$domainCount = 0;
-      				if ($domainMatch) {
+      				if ($replaceDomain) {
                         $domainPattern = '/domain=[^;]+/i';
                         if ( count(explode('.', $this->_proxyParts['host'])) < 2 ){
                             $domainReplacement = '';
