@@ -98,6 +98,10 @@ class conf_ApplicationDelegate {
 		if ( @$app->_conf['using_default_action'] and $query['-table'] == 'dashboard' ){
 			$query['-action'] = 'dashboard';
 		}
+		
+		if ($query['-table'] == 'website_copy_form' and $query['-action'] != 'new') {
+		    $query['-action'] = 'new';
+		}
                
                 
 	}
