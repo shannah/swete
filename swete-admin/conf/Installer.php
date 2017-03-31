@@ -1613,5 +1613,23 @@ END
             df_clear_cache();
         } catch ( Exception $ex){}
     }
+    
+    function update_4910() {
+        $sql[] = "CREATE TABLE IF NOT EXISTS `website_copy_form` (
+              `website_copy_form_id` int(11) NOT NULL AUTO_INCREMENT,
+              `website_id` int(11) NOT NULL,
+              `use_same_translation_memory` tinyint(1) DEFAULT '1',
+              `website_name` varchar(128) DEFAULT NULL,
+              `website_url` varchar(255) DEFAULT NULL,
+              `copy_tm_strings` tinyint(1) DEFAULT '1',
+              PRIMARY KEY (`website_copy_form_id`),
+              KEY `website_id` (`website_id`)
+            ) ";
+        try {
+            df_q($sql);
+            df_clear_views();
+            df_clear_cache();
+        } catch ( Exception $ex){}
+    }
 
 }
