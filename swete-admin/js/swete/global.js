@@ -23,4 +23,41 @@
 	//var bgProcess = new BackgroundProcess();
 	//bgProcess.installMenu();
 	//bgProcess.setUpdateFrequency(5000);
+	
+	window.sweteClearCache = function() {
+	    if (confirm('Are you sure you want to clear the cache?  \nThis may affect performance while the cache is rebuilt.', 'Proceed', 'Cancel')) {
+	        var modal = $('<div class="modal">Please wait.  Do not leave this page until complete.</div>').get(0);
+	        $('body').append(modal);
+	        $('body').addClass('loading');
+	        $.post(DATAFACE_SITE_HREF, {'-action' : 'swete_clear_cache'})
+	            .done(function(res) {
+                    
+                    try {
+                        if (res.code == 200) {
+                            alert("The cache has been successfully cleared");
+                            window.location.reload();
+                        } else {
+                            throw new Error("Failed to clear cache");
+                        }
+                    } catch (e){
+                        var msg = "An error occurred while clearing the cache: ";
+                        if (res && res.message) {
+                            msg += res.message;
+                        } else {
+                            msg += "See server log";
+                        }
+                        alert(msg);
+                    }
+                })
+                .fail(function() {
+                    alert("HTTP failure.  Please see server logs.");
+                })
+                .always(function() {
+                    $(modal).remove();
+                    $('body').removeClass('loading');
+                });
+	        
+	    }
+	};
+	
 })();
