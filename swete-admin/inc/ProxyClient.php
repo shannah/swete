@@ -688,10 +688,10 @@ class ProxyClientPreprocessor implements ProxyClientDelegate {
 				order by stf.filter_order, tf.default_order";
 				
 			$res = self::q($sql);
-			while ($row = mysql_fetch_assoc($res) ){
+			while ($row = xf_db_fetch_assoc($res) ){
 				$this->prefilters[] = $row;
 			}
-			@mysql_free_result($res);			
+			@xf_db_free_result($res);			
 		}
 		//print_r($this->prefilters);exit;
 		return $this->prefilters;
@@ -705,8 +705,8 @@ class ProxyClientPreprocessor implements ProxyClientDelegate {
 	public static function q($sql){
 		$db = self::$db;
 		if ( !is_resource($db) and function_exists('df_db') ) $db = df_db();
-		$res = mysql_query($sql, $db);
-		if ( !$res ) throw new Exception(mysql_error($db));
+		$res = xf_db_query($sql, $db);
+		if ( !$res ) throw new Exception(xf_db_error($db));
 		return $res;
 	}
 	

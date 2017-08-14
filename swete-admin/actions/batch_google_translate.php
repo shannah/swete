@@ -95,10 +95,10 @@ END;
 		
 		$googleCodes = array();
 		$res = df_q("select language_code, google_language_code from languages");
-		while ($row = mysql_fetch_row($res) ){
+		while ($row = xf_db_fetch_row($res) ){
 			$googleCodes[$row[0]] = $row[1] ? $row[1]:$row[0];
 		}
-		@mysql_free_result($res);
+		@xf_db_free_result($res);
 		
 		$i=1;
 		foreach ($strings as $string){

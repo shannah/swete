@@ -56,7 +56,7 @@ class actions_tm_export_as_xliff
 					 inner join xf_tm_translation_memory_strings tms on (t.string_id = tms.string_id and t.translation_id=tms.current_translation_id)
 					 inner join xf_tm_strings s on s.string_id = t.string_id
 				WHERE tms.translation_memory_id = $id";	
-		$results = new Dataface_ResultReader($sql, df_db());	//mysql_query($sql, df_db());//, t.language as target_language, s.language as source_language
+		$results = new Dataface_ResultReader($sql, df_db());	//xf_db_query($sql, df_db());//, t.language as target_language, s.language as source_language
 		
 		//open the output file for writing
 		$outFile = fopen($outputFilename, 'w+');

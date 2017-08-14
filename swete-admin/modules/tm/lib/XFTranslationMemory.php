@@ -343,13 +343,13 @@ class XFTranslationMemory implements XFTranslationDictionary {
 		
 		$tmid = $this->_rec->val('translation_memory_id');
 		// Now add this translation to the translation memory
-		$res = mysql_query("insert ignore into xf_tm_translation_memory_translations 
+		$res = xf_db_query("insert ignore into xf_tm_translation_memory_translations 
 			(translation_memory_id,translation_id)
 			values
 			('".addslashes($tmid)."',
 			 '".addslashes($trec->val('translation_id'))."'
 			 )", df_db());
-		if ( !$res ) throw new Exception(mysql_error(df_db()));
+		if ( !$res ) throw new Exception(xf_db_error(df_db()));
 		
 		/*
 		$res = df_q("insert ignore into xf_tm_translation_memory_strings (
@@ -667,7 +667,7 @@ class XFTranslationMemory implements XFTranslationDictionary {
                         translation_memory_id='".addslashes($tmid)."' and 
                         string_id='".addslashes($strid)."' and 
                         (status_id='".addslashes($status)."' or current_translation_id='".addslashes($trid)."')");
-                error_log("Affected rows: ". mysql_affected_rows(df_db()));
+                error_log("Affected rows: ". xf_db_affected_rows(df_db()));
             } catch ( Exception $ex){
             	error_log("Deleting entries because ".$ex->getMessage());
                 $res = df_q("delete from xf_tm_translation_memory_strings where 
@@ -676,7 +676,7 @@ class XFTranslationMemory implements XFTranslationDictionary {
                 $doInsert = true;
                     
             }
-			if ( $doInsert or  mysql_affected_rows(df_db()) == 0 ){
+			if ( $doInsert or  xf_db_affected_rows(df_db()) == 0 ){
 				try {
 					$res = df_q("insert into xf_tm_translation_memory_strings (
 						translation_memory_id,
@@ -785,10 +785,10 @@ class XFTranslationMemory implements XFTranslationDictionary {
 				and tts.flagged=1
 			
 				";
-		$res  = mysql_query($sql, df_db());
-		if ( !$res ) throw new Exception(mysql_error(df_db()));
+		$res  = xf_db_query($sql, df_db());
+		if ( !$res ) throw new Exception(xf_db_error(df_db()));
 		
-		while ($row = mysql_fetch_assoc($res) ){
+		while ($row = xf_db_fetch_assoc($res) ){
 			$ks = $hashIndex[$row['hash']];
 			foreach ($ks as $k){
 				if ( !isset($k) ){
@@ -811,7 +811,7 @@ class XFTranslationMemory implements XFTranslationDictionary {
 			}
 		}
 		
-		@mysql_free_result($res);
+		@xf_db_free_result($res);
 		return $out;
 		
 		
@@ -880,10 +880,10 @@ class XFTranslationMemory implements XFTranslationDictionary {
 			order by tts.status_id desc
 				";
 
-		$res  = mysql_query($sql, df_db());
-		if ( !$res ) throw new Exception(mysql_error(df_db()));
+		$res  = xf_db_query($sql, df_db());
+		if ( !$res ) throw new Exception(xf_db_error(df_db()));
 		
-		while ($row = mysql_fetch_assoc($res) ){
+		while ($row = xf_db_fetch_assoc($res) ){
 			$ks = $hashIndex[$row['hash']];
 			foreach ($ks as $k){
 				if ( !isset($k) ){
@@ -909,7 +909,7 @@ class XFTranslationMemory implements XFTranslationDictionary {
 			}
 		}
 		
-		@mysql_free_result($res);
+		@xf_db_free_result($res);
 		
 		if ($info)
 			return $outInfo;

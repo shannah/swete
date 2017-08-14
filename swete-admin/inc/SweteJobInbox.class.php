@@ -125,8 +125,8 @@ class SweteJobInbox {
 			
 		
 		$res = SweteDb::q($sql);
-		list($num) = mysql_fetch_row($res);
-		@mysql_free_result($res);
+		list($num) = xf_db_fetch_row($res);
+		@xf_db_free_result($res);
 		return $num;
 	
 	}
@@ -167,11 +167,11 @@ class SweteJobInbox {
 		
 		$res = SweteDb::q($sql);
 		$out = array();
-		while ($row = mysql_fetch_object($res) ){
+		while ($row = xf_db_fetch_object($res) ){
 			$out[] = $row;
 		}
 		
-		@mysql_free_result($res);
+		@xf_db_free_result($res);
 		return $out;
 		
 	}
@@ -197,11 +197,11 @@ class SweteJobInbox {
 			where jn.job_note_id='".addslashes($jobNoteId)."' limit 1
 			";
 		$res = SweteDb::q($sql);
-		if ( mysql_num_rows($res) == 0 ){
+		if ( xf_db_num_rows($res) == 0 ){
 			return null;
 		} else {
-			$out = mysql_fetch_object($res);
-			@mysql_free_result($res);
+			$out = xf_db_fetch_object($res);
+			@xf_db_free_result($res);
 			return $out;
 		}
 	
@@ -221,7 +221,7 @@ class SweteJobInbox {
 	public function setReadStatic($jobNoteId, $username){
 		$res = SweteDb::q("select 'read' from job_notes_read where job_note_id='".addslashes($jobNoteId)."' and username='".addslashes($username)."' limit 1");
 		$sql = "update job_notes_read set `read`=1, date_read='".addslashes(date('Y-m-d H:i:s'))."' where job_note_id='".addslashes($jobNoteId)."' and `username`='".addslashes($username)."'";
-		if ( mysql_num_rows($res) == 0 ){
+		if ( xf_db_num_rows($res) == 0 ){
 			$sql = "insert into job_notes_read (`job_note_id`,`username`,`read`,`date_read`)
 				values (
 					'".addslashes($jobNoteId)."',

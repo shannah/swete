@@ -919,7 +919,7 @@ class conf_Installer {
 		*/
 		foreach ($sql as $q){
 			//echo $q;
-			mysql_query($q, df_db());
+			xf_db_query($q, df_db());
 		}
 		//df_q($sql);
 		
@@ -941,7 +941,7 @@ class conf_Installer {
 			  AFTER `destination_language`;";
 
     	foreach ($sql as $q){
-      		mysql_query($q, df_db());
+      		xf_db_query($q, df_db());
       	}
     }
     
@@ -951,7 +951,7 @@ class conf_Installer {
     		(1,'USER','USER'),(2,'TRANSLATOR','TRANSLATOR'),(3,'ADMIN','ADMIN');";
     		
     	foreach ($sql as $q){
-      		mysql_query($q, df_db());
+      		xf_db_query($q, df_db());
       	}
     	
     }
@@ -1156,8 +1156,8 @@ class conf_Installer {
     	$sql[] = "ALTER TABLE  `translation_miss_log` ADD INDEX (  `http_request_log_id` )";
     	
     	$res = df_q("select max(filter_id) from text_filters");
-    	list($filterId) = mysql_fetch_row($res);
-    	@mysql_free_result($res);
+    	list($filterId) = xf_db_fetch_row($res);
+    	@xf_db_free_result($res);
     	$filterId++;
     	$sql[] = "INSERT INTO `text_filters` VALUES($filterId, 'English Date With Full Month Names', '/\\b(January|February|March|April|May|June|July|August|September|October|November|December) \\\\d{1,2}, \\\\d{4}\\\\b/', '<span data-swete-translate=\"0\" data-date-format=\"%B %e, %Y\">\$0</span>', NULL, 0, 1, 0, 'en');";
     	$filterId++;
@@ -1398,12 +1398,12 @@ class conf_Installer {
         
         $res = df_q('select distinct `target_language` from websites');
         $languages = array();
-        while ($row = mysql_fetch_row($res) ) $languages[] = $row[0];
-        @mysql_free_result($res);
+        while ($row = xf_db_fetch_row($res) ) $languages[] = $row[0];
+        @xf_db_free_result($res);
 
         $res = df_q('select distinct `source_language` from websites');
-        while ($row = mysql_fetch_row($res) ) $languages[] = $row[0];
-        @mysql_free_result($res);
+        while ($row = xf_db_fetch_row($res) ) $languages[] = $row[0];
+        @xf_db_free_result($res);
 
         $languages = array_unique($languages);
 

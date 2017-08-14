@@ -146,8 +146,8 @@ class test_swetewebpage extends PHPUnit_TestCase {
 		
 		// We should have some misses:
 		$res = SweteDb::q("select count(*) from translation_miss_log where website_id='".addslashes($siteRec->getRecord()->val('website_id'))."'");
-		list($num) = mysql_fetch_row($res);
-		@mysql_free_result($res);
+		list($num) = xf_db_fetch_row($res);
+		@xf_db_free_result($res);
 		
 		$this->assertEquals(13, $num, 'There should be 13 misses in our translation log.');
 		
@@ -158,7 +158,7 @@ class test_swetewebpage extends PHPUnit_TestCase {
 			
 		}
 		$res = SweteDb::q("select count(*) from job_inputs_translation_misses where job_id='".$job->getRecord()->val('job_id')."'");
-		list($num) = mysql_fetch_row($res);
+		list($num) = xf_db_fetch_row($res);
 		$this->assertEquals(13, $num, 'There should be exactly 13 misses added to the translation inputs.');
 		
 		foreach ($misses as $miss){
@@ -168,7 +168,7 @@ class test_swetewebpage extends PHPUnit_TestCase {
 		}
 		
 		$res = SweteDb::q("select count(*) from job_inputs_translation_misses where job_id='".$job->getRecord()->val('job_id')."'");
-		list($num) = mysql_fetch_row($res);
+		list($num) = xf_db_fetch_row($res);
 		$this->assertEquals(0, $num, 'There should be exactly 0 misses added to the translation inputs after we removed them all.');
 		
 		
@@ -178,7 +178,7 @@ class test_swetewebpage extends PHPUnit_TestCase {
 			
 		}
 		$res = SweteDb::q("select count(*) from job_inputs_translation_misses where job_id='".$job->getRecord()->val('job_id')."'");
-		list($num) = mysql_fetch_row($res);
+		list($num) = xf_db_fetch_row($res);
 		$this->assertEquals(13, $num, 'There should be exactly 13 misses added to the translation inputs.');
 		
 		
@@ -223,7 +223,7 @@ class test_swetewebpage extends PHPUnit_TestCase {
 		$this->assertEquals('test_user2', $job->getRecord()->val('assigned_to'));
 		
 		$res = df_q("select count(*) from job_assignments where job_id='".addslashes($job->getRecord()->val('job_id'))."'");
-		list($num) = mysql_fetch_row($res);
+		list($num) = xf_db_fetch_row($res);
 		$this->assertEquals(2, $num, 'Should be 2 assignments now');
 		
 		
@@ -239,10 +239,10 @@ class test_swetewebpage extends PHPUnit_TestCase {
 		$job->compile();
 		
 		$res = df_q("select count(*) from job_translatable where job_id='".addslashes($job->getRecord()->val('job_id'))."'");
-		list($num) = mysql_fetch_row($res);
+		list($num) = xf_db_fetch_row($res);
 		$this->assertEquals(1, $num, 'Should be one translatble created for job.');
 		$res = df_q("select count(*) from job_content where job_id='".addslashes($job->getRecord()->val('job_id'))."'");
-		list($num) = mysql_fetch_row($res);
+		list($num) = xf_db_fetch_row($res);
 		$this->assertEquals(10, $num, 'Should be 10 content items in job_content for this job.');
 		
 		
@@ -504,8 +504,8 @@ class test_swetewebpage extends PHPUnit_TestCase {
 			
 	
 	static function q($sql){
-		$res = mysql_query($sql, df_db());
-		if ( !$res ) throw new Exception(mysql_error(df_db()));
+		$res = xf_db_query($sql, df_db());
+		if ( !$res ) throw new Exception(xf_db_error(df_db()));
 		return $res;
 	}
 	

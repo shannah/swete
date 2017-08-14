@@ -158,8 +158,8 @@ class modules_tm_XFTranslationMemoryTest extends PHPUnit_TestCase {
 		$this->assertTrue($dtm instanceof XFTranslationMemory);
 		
 		$res = self::q("select count(*) from xf_tm_translation_memories");
-		list($count) = mysql_fetch_row($res);
-		@mysql_free_result($res);
+		list($count) = xf_db_fetch_row($res);
+		@xf_db_free_result($res);
 		$this->assertEquals(1, $count, "Should only be one translation memory: the default one we just inserted.");
 		
 		
@@ -167,8 +167,8 @@ class modules_tm_XFTranslationMemoryTest extends PHPUnit_TestCase {
 		$this->assertEquals("es", $dtm->getDestinationLanguage());
 		
 		$res = self::q("select count(*) from xf_tm_records");
-		list($count) = mysql_fetch_row($res);
-		@mysql_free_result($res);
+		list($count) = xf_db_fetch_row($res);
+		@xf_db_free_result($res);
 		$this->assertEquals(1, $count, "Should be one row in records table: the default one we just added.");
 		$row = df_get_record('xf_tm_records', array('translation_memory_id'=>'='.$dtm->getRecord()->val('translation_memory_id')));
 		$this->assertTrue($row instanceof Dataface_Record);
@@ -446,8 +446,8 @@ class modules_tm_XFTranslationMemoryTest extends PHPUnit_TestCase {
 	
 	
 	static function q($sql){
-		$res = mysql_query($sql, df_db());
-		if ( !$res ) throw new Exception(mysql_error(df_db()));
+		$res = xf_db_query($sql, df_db());
+		if ( !$res ) throw new Exception(xf_db_error(df_db()));
 		return $res;
 	}
 	

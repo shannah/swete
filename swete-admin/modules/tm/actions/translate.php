@@ -223,15 +223,15 @@ class actions_translate {
 		}
 		$where = implode(' AND ', $where);
 		$sql .= $where;
-		$res = mysql_query($sql, df_db());
+		$res = xf_db_query($sql, df_db());
 		if ( !$res ){
-			throw new Exception(mysql_error(df_db()));
+			throw new Exception(xf_db_error(df_db()));
 		}
-		if ( mysql_num_rows($res) > 1 ){
+		if ( xf_db_num_rows($res) > 1 ){
 			throw new Exception("Duplicate translation rows for record ".$record->getId().".");
 		}
-		$out = mysql_fetch_object($res);
-		@mysql_free_result($res);
+		$out = xf_db_fetch_object($res);
+		@xf_db_free_result($res);
 		return $out;
 		
 		

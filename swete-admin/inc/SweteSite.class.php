@@ -71,9 +71,9 @@ class SweteSite {
 				`host` = ''
 			)
 			limit 1");
-		if ( mysql_num_rows($res) > 0 ){
-			list($id) = mysql_fetch_row($res);
-			@mysql_free_result($res);
+		if ( xf_db_num_rows($res) > 0 ){
+			list($id) = xf_db_fetch_row($res);
+			@xf_db_free_result($res);
 			$rec = df_get_record('websites', array('website_id'=>'='.$id));
 			if ( !$rec ){
 				throw new Exception("Failed to load record when we already established that it exists.");
@@ -176,8 +176,8 @@ class SweteSite {
 		
 		// First we need to create the translation table for webpages if it isn't created already
 		$res = SweteDb::q("show create table `webpages_en`");
-		list($sql) = mysql_fetch_row($res);
-		@mysql_free_result($res);
+		list($sql) = xf_db_fetch_row($res);
+		@xf_db_free_result($res);
 		$sql = str_replace('`webpages_en`', '`webpages_'.$lang, $sql);
 		$sql = str_replace('CREATE TABLE', 'CREATE TABLE IF NOT EXISTS', $sql);
 		$res = SweteDb::q($sql);
@@ -270,7 +270,7 @@ class SweteSite {
 			$proxy->setProxyUrl($this->getProxyUrl());
 			$proxy->setSrcUrl($this->getSiteUrl());
 			$res = SweteDb::q("select `name`,`alias` from path_aliases where website_id='".addslashes($this->_rec->val('website_id'))."'");
-			while ( $row = mysql_fetch_assoc($res) ){
+			while ( $row = xf_db_fetch_assoc($res) ){
 				$proxy->addAlias($row['name'], $row['alias']);
 			}
 			$proxy->setSourceLanguage($this->getSourceLanguage());

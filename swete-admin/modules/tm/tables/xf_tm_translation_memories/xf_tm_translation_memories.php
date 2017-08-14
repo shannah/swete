@@ -16,8 +16,8 @@ class tables_xf_tm_translation_memories {
 	        "select translation_memory_uuid from xf_tm_translation_memories where translation_memory_id=%d",
 	        $tm->val('translation_memory_id')
 	    ));
-	    list($uuid) = mysql_fetch_row($res);
-	    @mysql_free_result($res);
+	    list($uuid) = xf_db_fetch_row($res);
+	    @xf_db_free_result($res);
 	    $tm->setValue('translation_memory_uuid', $uuid);
 	    
 	}

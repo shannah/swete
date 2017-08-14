@@ -45,14 +45,14 @@ class BackgroundProcess_UpdateChangedPages extends BackgroundProcess {
 					wp.effective_translation_memory_id='".addslashes($tmid)."' and
 					ws.string_id in (".$strids.")";		
 			$res = df_q($sql);
-			$numPages += mysql_num_rows($res);
+			$numPages += xf_db_num_rows($res);
 			$wplangs = array();
-			while ( $row = mysql_fetch_row($res) ){
+			while ( $row = xf_db_fetch_row($res) ){
 				list($webpageId, $sourceLanguage) = $row;
 				$wpids[] = $webpageId;
 				$wplangs[] = $sourceLanguage;
 			}
-			@mysql_free_result($res);
+			@xf_db_free_result($res);
 		}
 		
 		df_q("update background_processes set 

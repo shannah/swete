@@ -51,8 +51,8 @@ class tables_swete_strings {
             $builder = new Dataface_QueryBuilder($query['-table'], $query);
             $sql = 'select sum(num_words) '.$builder->_from().$builder->_where();
             $res = df_q($sql);
-            $row = mysql_fetch_row($res);
-            @mysql_free_result($res);
+            $row = xf_db_fetch_row($res);
+            @xf_db_free_result($res);
             $app->addHeadContent('<style type="text/css">#total-words-found {float:right;width: 200px;}</style>');
             echo '<div id="total-words-found">Total Words: '.$row[0].'</div>';
             Dataface_JavascriptTool::getInstance()->import('swete/actions/batch_google_translate.js');

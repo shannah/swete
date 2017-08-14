@@ -72,8 +72,8 @@ class XFTranslationMemoryReader implements XFTranslationDictionary {
 		if ( !isset(self::$db) ){
 			throw new Exception("DB handle is null.");
 		}
-		$res = mysql_query($sql, self::$db);
-		if ( !$res ) throw new Exception(mysql_error(self::$db));
+		$res = xf_db_query($sql, self::$db);
+		if ( !$res ) throw new Exception(xf_db_error(self::$db));
 		return $res;
 	}
 	
@@ -85,7 +85,7 @@ class XFTranslationMemoryReader implements XFTranslationDictionary {
 	 */
 	public static function loadTranslationMemoryById($id){
 		$res = self::q("select * from xf_tm_translation_memories where translation_memory_id='".intval($id)."'");
-		$tmrec = mysql_fetch_object($res);
+		$tmrec = xf_db_fetch_object($res);
 		
 		if ( !$tmrec ) return null;
 		return new XFTranslationMemoryReader($tmrec);
@@ -107,8 +107,8 @@ class XFTranslationMemoryReader implements XFTranslationDictionary {
 				translation_memory_id='".addslashes($this->_rec->translation_memory_id)."'
 				and
 				translation_id='".addslashes($tr->translation_id)."'");
-		$row = mysql_fetch_row($res);
-		@mysql_free_result($res);
+		$row = xf_db_fetch_row($res);
+		@xf_db_free_result($res);
 		if ( $row ) return true;
 		else return false;
 		
@@ -131,8 +131,8 @@ class XFTranslationMemoryReader implements XFTranslationDictionary {
 				and
 				`language`='".addslashes($language)."'
 			");
-		$strRec = mysql_fetch_object($res);
-		@mysql_free_result($res);
+		$strRec = xf_db_fetch_object($res);
+		@xf_db_free_result($res);
 		if ( !$strRec ) return null;
 		
 		// We want to fill variables in this string to match what was asked of us.
@@ -151,8 +151,8 @@ class XFTranslationMemoryReader implements XFTranslationDictionary {
 	public static function loadStringById($string_id){
 		$res = self::q("select * from xf_tm_strings where
 				string_id='".addslashes($string_id)."'");
-		$strRec = mysql_fetch_object($res);
-		@mysql_free_result($res);
+		$strRec = xf_db_fetch_object($res);
+		@xf_db_free_result($res);
 		if ( !$strRec ) return null;
 		return $strRec;
 	}
@@ -193,7 +193,7 @@ class XFTranslationMemoryReader implements XFTranslationDictionary {
 			`language`='".addslashes($this->getDestinationLanguage())."'
 			limit 1
 			");
-		$trRec = mysql_fetch_object($res);
+		$trRec = xf_db_fetch_object($res);
 		
 		if ( !$trRec ) return null;
 		
@@ -260,7 +260,7 @@ class XFTranslationMemoryReader implements XFTranslationDictionary {
 
 		$res  = self::q($sql);
 		
-		$row =  mysql_fetch_assoc($res);
+		$row =  xf_db_fetch_assoc($res);
 		
 		return $row;
 	}
@@ -316,7 +316,7 @@ class XFTranslationMemoryReader implements XFTranslationDictionary {
 
 		$res  = self::q($sql);
 		
-		while ($row = mysql_fetch_assoc($res) ){
+		while ($row = xf_db_fetch_assoc($res) ){
 			$ks = $hashIndex[$row['hash']];
 			foreach ($ks as $k){
 				if ( !isset($k) ){
@@ -342,7 +342,7 @@ class XFTranslationMemoryReader implements XFTranslationDictionary {
 			}
 		}
 		
-		@mysql_free_result($res);
+		@xf_db_free_result($res);
 		
 		if ($info)
 			return $outInfo;

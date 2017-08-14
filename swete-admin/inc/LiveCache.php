@@ -389,8 +389,8 @@ class LiveCache {
     
     public function q($sql){
         $db = $this->dbConnect();
-        $res = mysql_query($sql, $db);
-        if ( !$res ) throw new Exception(mysql_error($db));
+        $res = xf_db_query($sql, $db);
+        if ( !$res ) throw new Exception(xf_db_error($db));
         return $res;
     }
         
@@ -605,11 +605,11 @@ class LiveCache {
     public function dbConnect(){
         if ( !is_resource($this->db) ){
             $info = parse_ini_file('conf.db.ini', true);
-            $this->db = mysql_connect($info['_database']['host'], $info['_database']['user'], $info['_database']['password']);
-            mysql_select_db($info['_database']['name'], $this->db);
-            mysql_query('set character_set_results = \'utf8\'', $this->db);
-            mysql_query("SET NAMES utf8", $this->db);
-            mysql_query('set character_set_client = \'utf8\'', $this->db);
+            $this->db = xf_db_connect($info['_database']['host'], $info['_database']['user'], $info['_database']['password']);
+            xf_db_select_db($info['_database']['name'], $this->db);
+            xf_db_query('set character_set_results = \'utf8\'', $this->db);
+            xf_db_query("SET NAMES utf8", $this->db);
+            xf_db_query('set character_set_client = \'utf8\'', $this->db);
         }
         return $this->db;
     }
@@ -747,10 +747,10 @@ class LiveCache {
             $proxy->setProxyUrl($this->proxyUrl);
             $proxy->setSrcUrl($this->siteUrl);
             $res = $this->q("select `name`,`alias` from path_aliases where website_id='".addslashes($this->siteId)."'");
-            while ( $row = mysql_fetch_assoc($res) ){
+            while ( $row = xf_db_fetch_assoc($res) ){
                 $proxy->addAlias($row['name'], $row['alias']);
             }
-            @mysql_free_result($res);
+            @xf_db_free_result($res);
             $proxy->setSourceLanguage($this->sourceLanguage);
             $proxy->setProxyLanguage($this->proxyLanguage);
             $this->_proxyWriter = $proxy;

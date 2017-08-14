@@ -368,7 +368,7 @@ class SweteWebpage {
 			'date_posted'=>date('Y-m-d H:i:s')
 		));
 		$res = $rec->save($secure);
-		if ( PEAR::isError($res) ) throw new Exception(mysql_error(df_db()));
+		if ( PEAR::isError($res) ) throw new Exception(xf_db_error(df_db()));
 		
 		return $rec;
 	}
