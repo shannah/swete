@@ -125,14 +125,12 @@ class actions_swete_handle_request{
 		}
 
 		if ( $site->getRecord()->val('log_translation_misses') or @$_COOKIE['--swete-capture'] == '1' ){
-			echo "logging misses";
 			$server->logTranslationMisses = true;
 			if ( isset($server->logger) ){
 				// If we are logging translation misses we also need to log requests
 				$server->logger->requestLoggingEnabled = true;
 			}
 		} else {
-			echo "not logging misses";
 			$server->logTranslationMisses = false;
 		}
 		$server->URL = $url;
