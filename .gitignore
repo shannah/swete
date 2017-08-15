@@ -1,5 +1,6 @@
 swete-admin/livecache/
 swete-admin/templates_c/
+swete-admin/snapshots
 swete-admin/conf.db.ini
 .DS_Store
 swete-admin/sites

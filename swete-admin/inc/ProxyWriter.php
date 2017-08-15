@@ -2,17 +2,17 @@
 /**
  * SWeTE Server: Simple Website Translation Engine
  * Copyright (C) 2012  Web Lite Translation Corp.
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -20,12 +20,12 @@
 require_once 'lib/http_build_url.php';
 
 /**
- * @brief A class that converts transforms HTML from a source webpage into HTML for a 
+ * @brief A class that converts transforms HTML from a source webpage into HTML for a
  * target proxy.  It transforms URLs to work with the proxy, and it translates text
  * using a specified translation memory.
  *
  * <h3>Example Usage:</h3>
- * 
+ *
  * @code
  * $writer = new ProxyWriter();
  * $writer->setSrcUrl('http://xataface.com');
@@ -48,15 +48,19 @@ class ProxyWriter {
     public $generifyResourceProtocols = false;
 
     public $useHtml5Parser = false;
-    
+
     public $useHtml5Serializer = false;
+
+		public $snapshotsPath;
+
+		public $snapshotPage;
 
 	/**
 	 * @brief The locale for parsing dates.  E.g. en_CA
 	 * @type string
 	 */
     public $sourceDateLocale = null;
-    
+
     /**
      * @brief The locale for writing dates.  E.g. fr_CA
      * @type string
@@ -67,79 +71,79 @@ class ProxyWriter {
         directly from the source server.
     */
     public $unproxifyResourcePaths = true;
-    
+
 	/**
 	 * @brief The source URL to use as URL conversions.
 	 * @type string
 	 */
 	private $_srcUrl;
-	
+
 	private $_srcLang;
 	private $_proxyLang;
-	
+
 	/**
 	 * @brief The proxy URL to use for URL conversions.
 	 * @type string
 	 */
 	private $_proxyUrl;
-	
+
 	/**
 	 * @brief Cached storage for the parsed source URL (using parse_url)
 	 */
 	private $_srcParts;
-	
+
 	/**
 	 * @brief Cached storage for the parsed proxy URL (using parse_url).
 	 * @type array
 	 */
 	private $_proxyParts;
-	
+
 	/**
 	 * @brief Map of aliases for path components.  This maps path components for
 	 * the source URL to path components for the proxy URL.
 	 * @type array
 	 */
 	private $aliases = array();
-	
+
 	/**
-	 * @brief Reverse map of aliases mapping path components in the proxy to 
+	 * @brief Reverse map of aliases mapping path components in the proxy to
 	 * corresponding path components in the source.
 	 * @type array
 	 */
 	private $reverseAliases = array();
-	
+
 	/**
 	 * @brief Reference to the translation memory that should be used for
 	 * the translateHtml() method.
 	 * @type XFTranslationDictionary
 	 */
 	private $translationMemory = null;
-	
+
 	/**
 	 * @brief The minimum status of strings in the translation memory to use
 	 * in applying translations.
 	 * @type int
 	 */
 	private $minStatus = 3;
-	
+
 	/**
-	 * @brief The maximum status of strings in the translation memory to use in 
+	 * @brief The maximum status of strings in the translation memory to use in
 	 * applying translations.
 	 */
 	private $maxStatus = 5;
-	
+
 	/**
 	 * @brief Container for the last extracted strings that was produced
 	 * by the translateHtml function.
 	 */
 	public $lastStrings = null;
-	
+
 	public function __construct(){
 	    if ( defined('SWETE_UNPROXIFY_RESOURCE_PATHS') and !SWETE_UNPROXIFY_RESOURCE_PATHS ){
 	        $this->unproxifyResourcePaths = false;
 	    }
 	}
-	
+
 	/**
 	 * @brief Sets the source language of the proxy.
 	 * @param string $lang The 2-digit language code.
@@ -151,8 +155,8 @@ class ProxyWriter {
 	public function setSourceLanguage($lang){
 		$this->_srcLang = $lang;
 	}
-	
-	
+
+
 	/**
 	 * @brief Sets the target language of the proxy.
 	 * @param string $lang The 2-digit language code.
@@ -164,8 +168,8 @@ class ProxyWriter {
 	public function setProxyLanguage($lang){
 		$this->_proxyLang = $lang;
 	}
-	
-	
+
+
 	/**
 	 * @brief Returns the 2-digit language code of the source language of the proxy.
 	 * @returns string 2-digit language code
@@ -175,7 +179,7 @@ class ProxyWriter {
 	 *
 	 */
 	public function getSourceLanguage(){ return $this->_srcLang;}
-	
+
 	/**
 	 * @brief Returns the 2-digit language code of the target language of the proxy.
 	 * @returns string 2-digit language code.
@@ -184,7 +188,7 @@ class ProxyWriter {
 	 * @see setProxyLanguage()
 	 */
 	public function getProxyLanguage(){ return $this->_proxyLang;}
-	
+
 	/**
 	 * @brief Sets the translation memory to use when performing translations.
 	 * @param XFTranslationMemory $mem The translation memory to use.
@@ -196,23 +200,23 @@ class ProxyWriter {
 	 */
 	public function setTranslationMemory(XFTranslationDictionary $mem){
 		$this->translationMemory = $mem;
-		
+
 	}
-	
+
 	/**
-	 * @brief Gets the translation memory that is to be used for performing 
+	 * @brief Gets the translation memory that is to be used for performing
 	 * translations.
-	 * @return XFTranslationDictionary The translation memory object. 
+	 * @return XFTranslationDictionary The translation memory object.
 	 * @see translateHtml()
 	 * @see setTranslationMemory()
 	 */
 	public function getTranslationMemory(){
 		return $this->translationMemory;
 	}
-	
-	
+
+
 	/**
-	 * @brief Sets the minimum status of strings that can be used in applying 
+	 * @brief Sets the minimum status of strings that can be used in applying
 	 * translations.
 	 *
 	 * @param int $s The status id.  This should be one of:
@@ -225,9 +229,9 @@ class ProxyWriter {
 	public function setMinTranslationStatus($s){
 		$this->minStatus = $s;
 	}
-	
+
 	/**
-	 * @brief Sets the minimum status of strings that can be used in applying 
+	 * @brief Sets the minimum status of strings that can be used in applying
 	 * translations.
 	 *
 	 * @param int $s The status id.  This should be one of:
@@ -242,8 +246,8 @@ class ProxyWriter {
 	public function setMaxTranslationStatus($s){
 		$this->maxStatus = $s;
 	}
-	
-	
+
+
 	/**
 	 * @brief Gets the maximum status of strings that can be used in applying
 	 * translations.
@@ -260,8 +264,8 @@ class ProxyWriter {
 	public function getMaxTranslationStatus(){
 		return $this->maxStatus;
 	}
-	
-	
+
+
 	/**
 	 * @brief Gets the minimum status of strings that can be used in applying
 	 * translations.
@@ -277,8 +281,8 @@ class ProxyWriter {
 	 */
 	public function getMinTranslationStatus(){
 		return $this->minStatus;
-	}	
-	
+	}
+
 	/**
 	 * @brief Sets the base URL of the proxy (i.e. the target URL of conversions).
 	 * @param string $url The base URL of the proxy.
@@ -289,8 +293,8 @@ class ProxyWriter {
 		$this->_proxyUrl = $url;
 		$this->_proxyParts = parse_url($url);
 	}
-	
-	
+
+
 	/**
 	 * @brief Sets the source URL of the proxy (i.e. the source URL of conversions).
 	 * @param string $url The base URL of the proxy.
@@ -303,7 +307,7 @@ class ProxyWriter {
 		$this->_srcUrl = $url;
 		$this->_srcParts = parse_url($url);
 	}
-	
+
 	/**
 	 * @brief Adds an alias for a path component.  Aliases are used for using different
 	 * URLs in the proxy than in the source site.  E.g. We might translate all path components
@@ -319,7 +323,7 @@ class ProxyWriter {
 		$this->aliases[strtolower($src)] = $val;
 		$this->reverseAliases[strtolower($val)] = $src;
 	}
-	
+
 	/**
 	 * @brief Removes an alias for a path component.
 	 * @param string $src The source path component.
@@ -332,9 +336,9 @@ class ProxyWriter {
 		unset($this->aliases[strtolower($src)]);
 		unset($this->reverseAliases[strtolower($val)]);
 	}
-	
+
 	/**
-	 * @brief Strips the base path from a URL.  This is useful for obtaining 
+	 * @brief Strips the base path from a URL.  This is useful for obtaining
 	 * only the portion of a URL that comes after a base URL.  This will detect
 	 * whether the URL is complete, absolute, or relative and work accordingly.
 	 *
@@ -348,8 +352,8 @@ class ProxyWriter {
 	public function stripBasePath($url, $base=null){
 		if ( !isset($base) ) $base = $this->_proxyParts['path'];
 		if ( preg_match('#^[a-zA-Z]{3,10}://#', $url) ){
-			
-			
+
+
 			$parts = parse_url($url);
 			$path = $parts['path'];
 			if ( !$path ) $path = '/';
@@ -367,28 +371,28 @@ class ProxyWriter {
 			if ( @$bparts['query'] ) $bpath.='?'.$bparts['query'];
 			if ( @$bparts['fragment'] ) $bpath.='#'.$parts['fragment'];
 			$base = $bpath;
-			
+
 		}
 		$basePath = $base;
 		if ( !$basePath ) $basePath = '/';
 		if ( $basePath{strlen($basePath)-1} != '/' ) $basePath .= '/';
 			// Basepath should end with a slash.
-			
+
 		// Let's deal with the case where the path is just the path to the basepath but
 		// doesn't have a trailing slash.... we'll complete it in this case
 		// to make matching easier.
 		if ( $path.'/' == $basePath ) $path .= '/';
-		
+
 		if ( strpos($path, $basePath) !== 0 ){
 			throw new Exception("$url Does not have the correct basepath (found $path but required $basePath).");
 		}
-		
-		
-		
+
+
+
 		$path = substr($path, strlen($basePath));
 		return $path;
 	}
-	
+
 	/**
 	 * @brief Applies alias map to convert a path in proxy space into source space.
 	 *		This does not translate the path to the source base URL - it only applies
@@ -416,12 +420,12 @@ class ProxyWriter {
 			$path = implode('/', $pp);
 		}
 		return $path;
-		
+
 	}
-	
-	
+
+
 	/**
-	 * @brief Converts a path from the source site to the proxy site by applying 
+	 * @brief Converts a path from the source site to the proxy site by applying
 	 * aliases to each path component.  This does not translate the path to the proxy
 	 * base URL - it only applies aliases to the path components.  To translate
 	 * the path to the proxy base URl see proxifyUrl()
@@ -446,10 +450,10 @@ class ProxyWriter {
 			$path = implode('/', $pp);
 		}
 		return $path;
-	
+
 	}
 
-	
+
 	/**
 	 * @brief Converts a URL in the proxy site to a URL in the source site.  This
 	 * both converts the base URL and applies aliases to the path components.  This will
@@ -464,8 +468,8 @@ class ProxyWriter {
 	public function unproxifyUrl($url){
 		return self::changeBase($this->_proxyParts, $this->_srcParts, $url, $this->reverseAliases);
 	}
-	
-	
+
+
 	/**
 	 * @brief Changes a URL from one base to another.  It will also translate paths
 	 * in the remaining path based on a specified translation dictionary.  This function
@@ -487,7 +491,7 @@ class ProxyWriter {
 		if ( $newBase['path'] and $newBase['path']{strlen($newBase['path'])-1} != '/' ) $newBase['path'] .= '/';
 		if ( !$oldBase['path'] ) $oldBase['path'] = '/';
 		if ( !$newBase['path'] ) $newBase['path'] = '/';
-		
+
 		if ( !$url ) return $url;
 		if ( $url{0} == '/' and (@$url{1} != '/' or @$url{2} == '/') ){
 			// absolute URL
@@ -495,13 +499,13 @@ class ProxyWriter {
 				// The URL falls outside of the old base so we don't perform the transformation
 				return $url;
 			}
-			
+
 			$url = substr($url, strlen($oldBase['path']));
 			$url = self::replacePathSegments($url, $pathDict);
 			$url = $newBase['path'].$url;
 			return $url;
-			
-		
+
+
 		} else if ( strpos($url, 'http://') === 0 or strpos($url, 'https://') === 0 or strpos($url, '//') === 0 ){
 			// Absolute URL
 			$parts = parse_url($url);
@@ -514,18 +518,18 @@ class ProxyWriter {
 				$parts[$el] = @$newBase[$el];
 			}
 			$parts['path'] = self::changeBase($oldBase, $newBase, $parts['path'], $pathDict);
-	
+
 			return http_build_url($parts);
-			
-		
+
+
 		} else {
 			return self::replacePathSegments($url, $pathDict);
 		}
 	}
-	
+
 	/**
 	 * @brief Translates the path components of the specified path using a translation
-	 * dictionary.  
+	 * dictionary.
 	 *
 	 * @param string $path The path to be converted.  (Path should be delimited by a slash
 	 *	'/'
@@ -548,8 +552,8 @@ class ProxyWriter {
 		}
 		return implode('/', $parts);
 	}
-	
-	
+
+
 	/**
 	 * @brief Converts a URL from source site space to proxy site space.
 	 * @param string $url The url to be converted.
@@ -560,9 +564,9 @@ class ProxyWriter {
 	 */
 	public function proxifyUrl($url){
 		return self::changeBase($this->_srcParts, $this->_proxyParts, $url, $this->aliases);
-		
+
 	}
-	
+
 	/**
 	 * @private
 	 *
@@ -578,7 +582,7 @@ class ProxyWriter {
 			'href_'.$this->_proxyLang => 'href',
 			'action_'.$this->_proxyLang => 'action'
 		);
-		
+
 		foreach ($atts as $att){
 			if ( $element->hasAttribute($att) and !$element->hasAttribute('data-swete-translate') ){
 			    $element->setAttribute($att, $this->proxifyUrl($element->getAttribute($att)));
@@ -593,7 +597,7 @@ class ProxyWriter {
 				            or
 				         ($tagName == 'script' and $att == 'src')
 				            or
-				         ($tagName == 'embed' and $att == 'src')  
+				         ($tagName == 'embed' and $att == 'src')
 				    ){
 				        $element->setAttribute($att, $this->unproxifyUrl($element->getAttribute($att)));
 				        $url = $element->getAttribute($att);
@@ -610,17 +614,17 @@ class ProxyWriter {
                             }
                             $element->setAttribute($att, $url);
                         }
-                        
+
 				    }
-			
+
 				}
 			}
 		}
-		
-		
-		
+
+
+
 	}
-	
+
 	/**
 	 * @private
 	 *
@@ -629,8 +633,83 @@ class ProxyWriter {
 	public function _cssCallback($match){
 		return 'url('.$match[1].$this->proxifyUrl($match[2]).$match[3].')';
 	}
-	
-	
+
+	private function _getElementById($id, DOMNode $root) {
+			$doc = $root->ownerDocument ? $root->ownerDocument : $root;
+			$xpath = new DOMXPath($doc);
+			$matches = $xpath->query(".//*[@id='".$id."']", $root);
+			foreach ($matches as $match) {
+					return $match;
+			}
+			return null;
+	}
+
+	/**
+	 * Injects dynamic content from $srcNode into the corresponding spot of
+	 * $targetNode.
+	 */
+	private function injectDynamicContent(DOMNode $targetNode, DOMNode $srcNode) {
+			$staticDom = $targetNode instanceof DOMDocument ? $targetNode : $targetNode->ownerDocument;
+			$dynamicDom = $srcNode instanceof DOMDocument ? $srcNode : $srcNode->ownerDocument;
+			$xpathS = new DOMXPath($staticDom);
+			$matches = $xpathS->query(".//*[@data-swete-static and @id]", $targetNode);
+			foreach ($matches as $match) {
+					if ($match->getAttribute("data-swete-static" == "0")) {
+							$node = $this->_getElementById($match->getAttribute("id"), $srcNode);
+							if ($node) {
+									$importedNode = $node;
+									if ($importedNode->ownerDocument !== $match->ownerDocument) {
+											$importedNode = $staticDom->importNode($node, true);
+									}
+									$parent = $match->parentNode;
+									if ($parent) {
+											$replacedNode = $parent->replaceChild($importedNode, $match);
+											if ($replacedNode) {
+													$this->injectStaticSnapshot($importedNode, $replacedNode);
+											}
+									}
+							}
+					}
+			}
+	}
+
+	/**
+	 * Injects static snapshots contained in $srcNode into the corresponding
+	 * nodes in $targetNode.  $srcNode is assumed to originate from the DOM of
+	 * a static snapshot of the page that $targetNode is from.
+	 *
+	 */
+	private function injectStaticSnapshot(DOMNode $targetNode, DOMNode $srcNode) {
+		$dynamicDom = $targetNode instanceof DOMDocument ? $targetNode : $targetNode->ownerDocument;
+		$staticDom = $srcNode instanceof DOMDocument ? $srcNode : $srcNode->ownerDocument;
+		$xpathD = new DOMXPath($dynamicDom);
+		$matches = $xpathD->query(".//*[@data-swete-static and @id]", $targetNode);
+
+		foreach ($matches as $match) {
+
+				if ($match->getAttribute("data-swete-static") == "1") {
+
+						$node = $this->_getElementById($match->getAttribute("id"), $srcNode);
+						if ($node) {
+								$importedNode = $node;
+								if ($importedNode->ownerDocument !== $match->ownerDocument) {
+										$importedNode = $dynamicDom->importNode($node, true);
+								}
+								$parent = $match->parentNode;
+								if ($parent) {
+
+										$replacedNode = $parent->replaceChild($importedNode, $match);
+
+										if ($replacedNode) {
+												$this->injectDynamicContent($importedNode, $replacedNode);
+										}
+								}
+						}
+
+				}
+		}
+	}
+
 	/**
 	 * @brief Converts HTML from source space to proxy space.  This will convert
 	 * all URLs.
@@ -641,26 +720,25 @@ class ProxyWriter {
 	public function proxifyHtml($html){
         $fullDoc = true;
         $doc = null;
+
 		if ( is_string($html) ){
 			if ( stripos($html, '<body') === false and stripos($html, '<head') === false ) $fullDoc = false;
 			if ( $this->useHtml5Parser ){
                 $intro = substr($html,0, 255);
                 if ( stripos($intro, '<!DOCTYPE html>') !== false ){
-                    // this is html5 so we'll use the html5 
+                    // this is html5 so we'll use the html5
                     require_once 'lib/HTML5.php';
                     $doc =  HTML5::loadHTML($html);
-                    // noscripts contents are treated like text which causes problems when 
+                    // noscripts contents are treated like text which causes problems when
                     // filters/replacements are run on them.  Let's just remove them
                     $noscripts = $doc->getElementsByTagName('noscript');
                     foreach ( $noscripts as $noscript ){
                         $noscript->parentNode->removeChild($noscript);
                     }
-                    
                 }
             }
             if ( !isset($doc) ){
                 $doc = new DOMDocument;
-                
                 $res = @$doc->loadHtml('<?xml encoding="UTF-8">'.$html);
                 // dirty fix
                 foreach ($doc->childNodes as $item)
@@ -668,19 +746,19 @@ class ProxyWriter {
                         $doc->removeChild($item); // remove hack
                 $doc->encoding = 'UTF-8'; // insert proper
                 if ( !$res ) throw new Exception("Failed to convert to HTML.  Expecting Object by got something else.");
-            }
+						}
 		} else if ( $html instanceof DOMDocument ){
 		    $doc = $html;
 		}
-		
-		
+
+
 		$xpath = new DOMXPath($doc);
 		$matches = $xpath->query('//*[@href or @src or @action or @src_'.$this->_proxyLang.' or @href_'.$this->_proxyLang.']');
 		foreach ($matches as $match){
 			//echo "Callback for element";
 			$this->_domCallback($match);
 		}
-		
+
 		$matches = $xpath->query('//style');
 		foreach ($matches as $match){
 			//echo "Found style: ".$match->textContent;
@@ -688,9 +766,9 @@ class ProxyWriter {
 		}
 		$matches = $xpath->query('//*[@style]');
 		foreach ($matches as $match){
-			$match->setAttribute('style',$this->proxifyCss($match->getAttribute('style'))); 
+			$match->setAttribute('style',$this->proxifyCss($match->getAttribute('style')));
 		}
-		
+
 		$body = $xpath->query('//body');
 		foreach ($body as $b){
 			$class = '';
@@ -698,7 +776,7 @@ class ProxyWriter {
 			$class .= ' x-swete-translation-'.$this->_proxyLang;
 			$b->setAttribute('class', $class);
 		}
-		
+
 		// Now for the script tags
 		$scriptTexts = $xpath->query('//script/text()');
 		foreach ($scriptTexts as $txt){
@@ -710,8 +788,69 @@ class ProxyWriter {
 			$txt->nodeValue = preg_replace('/\b('.preg_quote($this->_srcUrl,'/').')/', $this->_proxyUrl, $txt->nodeValue);
 			$txt->nodeValue = preg_replace('/\b('.preg_quote($src,'/').')/', $dest, $txt->nodeValue);
 		}
-		
+
 		//$html->set_callback(array($this, '_domCallback'));
+		if (isset($this->snapshotsPath) and (!@$_COOKIE['--swete-static'] or @$_COOKIE['--swete-static'] === 'true')) {
+				$staticSections = $xpath->query("//*[@data-swete-static]");
+				$found = false;
+				foreach ($staticSections as $sec) {
+						$found = true;
+						break;
+				}
+				if ($found) {
+						// Now check to see if
+
+						if (file_exists($this->snapshotsPath)) {
+								$snapshotIndex = $this->snapshotsPath.DIRECTORY_SEPARATOR.'index.txt';
+								if (file_exists($snapshotIndex)) {
+										$currSnapshot = trim(file_get_contents($snapshotIndex));
+										if ($currSnapshot and intval($currSnapshot) > 0) {
+												$snapshotPath = $this->snapshotsPath.DIRECTORY_SEPARATOR.intval($currSnapshot);
+												$pageId = sha1($this->snapshotPage);
+												$snapshotPath = $snapshotPath.DIRECTORY_SEPARATOR.$pageId;
+												if (file_exists($snapshotPath)) {
+														$snapHtml = file_get_contents($snapshotPath);
+														$snapDoc = null;
+														if ( stripos($snapHtml, '<body') === false and stripos($snapHtml, '<head') === false ) $snapFullDoc = false;
+														if ( $this->useHtml5Parser ){
+									                $intro = substr($snapHtml,0, 255);
+									                if ( stripos($intro, '<!DOCTYPE html>') !== false ){
+									                    // this is html5 so we'll use the html5
+									                    require_once 'lib/HTML5.php';
+									                    $snapDoc =  HTML5::loadHTML($snapHtml);
+									                    // noscripts contents are treated like text which causes problems when
+									                    // filters/replacements are run on them.  Let's just remove them
+									                    $noscripts = $snapDoc->getElementsByTagName('noscript');
+									                    foreach ( $noscripts as $noscript ){
+									                        $noscript->parentNode->removeChild($noscript);
+									                    }
+									                }
+								            }
+								            if ( !isset($snapDoc) ){
+								                $snapDoc = new DOMDocument;
+								                $res = @$snapDoc->loadHtml('<?xml encoding="UTF-8">'.$snapHtml);
+								                // dirty fix
+								                foreach ($snapDoc->childNodes as $item)
+								                    if ($item->nodeType == XML_PI_NODE)
+								                        $snapDoc->removeChild($item); // remove hack
+								                $snapDoc->encoding = 'UTF-8'; // insert proper
+								                if ( !$res ) throw new Exception("Failed to convert to HTML in snapshot.  Expecting Object by got something else.");
+														}
+
+														if (isset($snapDoc)) {
+
+																$this->injectStaticSnapshot($doc, $snapDoc);
+														}
+												}
+
+										}
+								}
+						}
+				}
+
+		}
+
+
 		if ( !$fullDoc ){
 			$out = $doc->saveXml($xpath->query('//body')->item(0));
 			$start = strpos($out, '>')+1;
@@ -719,7 +858,7 @@ class ProxyWriter {
 			$out = substr($out, $start, $end-$start);
 		} else {
 		    if ($this->useHtml5Serializer) {
-		        require_once 'lib/HTML5.php'; 
+		        require_once 'lib/HTML5.php';
 		        $out = HTML5::saveHTML($doc);
 		        $out = preg_replace('/(<script[^>]*>)'.preg_quote('<![CDATA[', '/').'/', '$1', $out);
 		        $out = preg_replace('/'.preg_quote(']]></script>', '/').'/', '</script>', $out);
@@ -730,7 +869,7 @@ class ProxyWriter {
 		unset($doc);
 		return $out;
 	}
-	
+
 	/**
 	 * @brief Translates HTML using the specified translation memory and settings.
 	 *
@@ -744,7 +883,7 @@ class ProxyWriter {
 		$mem = $this->translationMemory;
 		$minStatus = $this->minStatus;
 		$maxStatus = $this->maxStatus;
-		
+
 		if ( isset($this->translationParserVersion) ){
 		    $v = intval($this->translationParserVersion);
 		    require_once 'inc/WebLite_Translate_v'.$v.'.class.php';
@@ -769,12 +908,12 @@ class ProxyWriter {
 			$strings[$k] = TMTools::encode($v, $params);
 			$paramsArr[$k] = $params;
 		}
-	
+
 		$translations = $mem->getTranslations($strings, $minStatus, $maxStatus);
 
 		$matches = 0;
 		$misses = 0;
-		
+
 		$log = array();
 		if ( !$logMisses ){
 			foreach ($translations as $k=>$v){
@@ -795,7 +934,7 @@ class ProxyWriter {
 					$misses++;
 				}
 			}
-			
+
 		}
 
 		$stats = array(
@@ -810,27 +949,27 @@ class ProxyWriter {
 					//print_r($paramsArr[$k]);
 					$log[$k] = TMTools::decode($v, $paramsArr[$k]);
 				} catch (Exception $ex){
-					echo $ex->getMessage();
-					exit;
+					//echo $ex->getMessage();
+					//exit;
 				}
 			}
 			$stats['log'] = $log;
 		}
-			
-		
-		
+
+
+
 		foreach ($strings as $k=>$v){
 			$translator->strings[$k] = TMTools::decode($v, $paramsArr[$k]);
-			
+
 		}
 
 
 		$html = $translator->replaceStrings($html2);
 		return $html;
-		
-	
+
+
 	}
-	
+
 	/**
 	 * @brief Converts URLs in CSS.
 	 * @param string $css The CSS to convert.
@@ -839,27 +978,31 @@ class ProxyWriter {
 	public function proxifyCss($css){
 		return preg_replace_callback('/url\((["\']?)(.*?)(["\']?)\)/i', array($this, '_cssCallback'), $css);
 	}
-	
+
 	public function proxifyHeaders($headers, $doCharset = false){
-	
+		require_once('inc/SweteTools.php');
 		$out = array();
 		foreach ($headers as $header){
-		
-			
+
+
    			if ( preg_match( '/^(?:Content-Type|Content-Language|Set-Cookie|Location|Etag|Pragma|Cache-Control|Last-Modified|Accept-Ranges|Date|Server):/i', $header ) ) {
-      	
-      
+
+
       			if ( preg_match('/^Location:(.*)$/i', $header, $matches) ){
       			    if ( strpos($header, '&SWETE_NO_PROXIFY=1') !== false ){
       			        $header = str_replace('&SWETE_NO_PROXIFY=1', '', $header);
       			    } else {
       				    $header = 'Location: '.$this->proxifyUrl(trim($matches[1]));
       				}
-      				
-      				
+
+
       			} else if ( preg_match('/^(Set-Cookie:)(.*)$/i', $header, $matches) ){
       				$cookieStr = $matches[2];
+<<<<<<< HEAD
       				
+=======
+
+>>>>>>> swete-master/master
       				$domainMatch = '';
       				if (preg_match('/domain=([^;]+)/i', $cookieStr, $matches2)) {
       				    $domainMatch = $matches2[1];
@@ -877,11 +1020,19 @@ class ProxyWriter {
       				        if ($domainMatch{0} !== '.') {
                                 $domainMatch = '.' . $domainMatch;
                             }
+<<<<<<< HEAD
                             
                             if (SweteTools::endsWith($this->_proxyParts['host'], $domainMatch)) {
                                 // The cookie is already valid for the proxy domain
                                 // leave it alone 
                                  
+=======
+
+                            if (SweteTools::endsWith($this->_proxyParts['host'], $domainMatch)) {
+                                // The cookie is already valid for the proxy domain
+                                // leave it alone
+
+>>>>>>> swete-master/master
                             } else {
                                 $replaceDomain = true;
                             }
@@ -903,19 +1054,19 @@ class ProxyWriter {
       					$header = 'Set-Cookie:'.$cookieStr;
       				}
       					// Yes, we are adding the cookie twice.  We want the cookie to be valid
-      					// for both the source domain and for our own domain, so we are making a copy 
+      					// for both the source domain and for our own domain, so we are making a copy
       					// of it.
       			}
       			if ( $doCharset ) $header = preg_replace('/^(Content-Type:.*charset=)(.*)$/i', '$1UTF-8', $header);
       			$out[] = $header;
       		}
-      		
-      		
+
+
      	 }
      	 //print_r($out);exit;
      	 return $out;
 	}
-	
+
 	private static $json_div_id_prefix = 'jsondiv_';
 	private static $json_script_id_prefix = 'jsonscript_';
 	private function _jsonToHtml(array &$stream, array &$json, array $textkeys, array $htmlkeys, $forceTranslateType=null){
@@ -942,7 +1093,7 @@ class ProxyWriter {
                         },
                         $v
                     );
-                
+
                     $i = count($stream);
                     $stream[] = '<div id="'.self::$json_div_id_prefix.$i.'">'.$v.'</div>';
                     $json[$k] = 'sweteplaceholder://'.$i;
@@ -952,7 +1103,7 @@ class ProxyWriter {
             }
         }
 	}
-	
+
 	private function _getJsonKeys(&$json){
 	    $textkeys = self::$default_json_keys['text'];//array();
         $htmlkeys = self::$default_json_keys['html'];//array('cell');
@@ -967,33 +1118,33 @@ class ProxyWriter {
             'text' => $textkeys
         );
 	}
-	
+
 	public function jsonToHtml(&$json){
 	    $this->_scriptStack = array();
         $stream = array();
         $keys = $this->_getJsonKeys($json);
         $this->_jsonToHtml($stream, $json, $keys['text'], $keys['html']);
-        
+
         $out =  '<!doctype html><html><head></head><body>'.implode("\n", $stream).'</body></html>';
         return $out;
-	    
+
 	}
-	
+
 	public function htmlToJson(array &$json, $html){
-	    
+
 	    $doc = SweteTools::loadHtml($html);
 	    $keys = $this->_getJsonKeys($json);
 	    $this->_htmlToJson($doc, $json, $keys['text'], $keys['html']);
 	    $this->_scriptStack = array();
 	    return json_encode($json);
 	}
-	
+
 	private function getElementById(DOMDocument $doc, $id)
     {
         $xpath = new DOMXPath($doc);
         return $xpath->query("//*[@id='$id']")->item(0);
     }
-	
+
 	private function _htmlToJson(DOMDocument $doc, array &$json, array $textkeys, array $htmlkeys, $translateType = null){
 	    foreach ( $json as $k=>$v ){
 	        if ( is_array($v) ){

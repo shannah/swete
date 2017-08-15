@@ -26,8 +26,8 @@ class SweteDb {
 			}
 			return $res;
 		} else {
-			$res = mysql_query($sql, df_db());
-			if ( !$res ) throw new Exception(mysql_error(df_db()));
+			$res = xf_db_query($sql, df_db());
+			if ( !$res ) throw new Exception(xf_db_error(df_db()));
 			return $res;
 		}
 	}

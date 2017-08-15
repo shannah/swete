@@ -160,12 +160,12 @@ class SweteJob {
 		$hash = md5($estring);
 		
 		$res = SweteDb::q("select job_id from job_inputs_webpages_strings where job_id='".addslashes($this->_rec->val('job_id'))."' and string_hash='".addslashes($hash)."' limit 1");
-		if ( mysql_num_rows($res) > 0 ){
-			@mysql_free_result($res);
+		if ( xf_db_num_rows($res) > 0 ){
+			@xf_db_free_result($res);
 			return true;
 		}
 		
-		@mysql_free_result($res);
+		@xf_db_free_result($res);
 		
 		$res = SweteDb::q("select job_id 
 			from 
@@ -177,11 +177,11 @@ class SweteJob {
 				tml.string_hash = '".addslashes($hash)."'
 			limit 1");
 			
-		if ( mysql_num_rows($res) > 0 ){
-			@mysql_free_result($res);
+		if ( xf_db_num_rows($res) > 0 ){
+			@xf_db_free_result($res);
 			return true;
 		} else {
-			@mysql_free_result($res);
+			@xf_db_free_result($res);
 			return false;
 		}
 	}
@@ -278,12 +278,12 @@ class SweteJob {
 				.addslashes($webpage->getRecord()->val('webpage_id'))."'");
 				
 		
-		if ( mysql_num_rows($res) > 0 ){
-			@mysql_free_result($res);
+		if ( xf_db_num_rows($res) > 0 ){
+			@xf_db_free_result($res);
 			return true;
 		}
 		
-		@mysql_free_result($res);
+		@xf_db_free_result($res);
 		return false;
 	}
 	
@@ -312,7 +312,7 @@ class SweteJob {
 		
 		
 		$pages = array();		
-		while ($row = mysql_fetch_assoc($res) ){
+		while ($row = xf_db_fetch_assoc($res) ){
 			$pages[] = $row;
 		}
 		return $pages;
@@ -354,7 +354,7 @@ class SweteJob {
 		$res = SweteDb::q($q);
 		
 		$pages = array();		
-		while ($row = mysql_fetch_assoc($res) ){
+		while ($row = xf_db_fetch_assoc($res) ){
 			$pages[] = $row;
 		}
 		return $pages;
@@ -382,7 +382,7 @@ class SweteJob {
 			$res = SweteDb::q($q);
 		
 			$pages = array();		
-			while ($row = mysql_fetch_assoc($res) ){
+			while ($row = xf_db_fetch_assoc($res) ){
 				$pages[] = $row;
 			}	
 		
@@ -403,7 +403,7 @@ class SweteJob {
 			
 			$res = SweteDb::q($q);
 			$pages = array();		
-			while ($row = mysql_fetch_assoc($res) ){
+			while ($row = xf_db_fetch_assoc($res) ){
 				$pages[] = $row;
 			}
 		}
@@ -424,7 +424,7 @@ class SweteJob {
 							.addslashes($this->_rec->val('job_id'))."'");
 		
 		$pageRecords = array();		
-		while ($row = mysql_fetch_assoc($res) ){
+		while ($row = xf_db_fetch_assoc($res) ){
 			$rec = new Dataface_Record("webpages", $row);
 			$pageRecords[] = $rec;
 		}
@@ -444,7 +444,7 @@ class SweteJob {
 							.addslashes($this->_rec->val('job_id'))."'");
 		
 		$translatables = array();
-		while ($row = mysql_fetch_assoc($res)){
+		while ($row = xf_db_fetch_assoc($res)){
 			$translatables[$row['webpage_id']] = $row;
 		}
 		
@@ -468,7 +468,7 @@ class SweteJob {
 		
 		$totalStrings = 0;
 		$totalWords = 0;
-		while ($row = mysql_fetch_assoc($res)){
+		while ($row = xf_db_fetch_assoc($res)){
 			$totalStrings += substr_count($row['translatable_contents'], "<div>");
 			$totalWords += $row['word_count'];
 		}
@@ -483,7 +483,7 @@ class SweteJob {
 							where job_translatable.job_id='"
 							.addslashes($this->_rec->val('job_id'))."'");
 		$content = "";
-		while ($row = mysql_fetch_assoc($res)){
+		while ($row = xf_db_fetch_assoc($res)){
 			$content .= $row['full_contents'];
 		}
 		
@@ -546,7 +546,7 @@ class SweteJob {
 							.addslashes($this->_rec->val('job_id'))."'");
 		$content = "";
 		$previousTranslations = array();
-		while ($row = mysql_fetch_assoc($res)){
+		while ($row = xf_db_fetch_assoc($res)){
 			$content .=  $row['translatable_contents'];
 			$previousTranslations = array_merge($previousTranslations, unserialize($row['previous_translations']));
 		}
@@ -607,10 +607,10 @@ class SweteJob {
 		$res = SweteDb::q("select username from job_roles where job_id='".addslashes($this->_rec->val('job_id'))."'");
 		
 		$users = array();
-		while ($row = mysql_fetch_assoc($res) ){
+		while ($row = xf_db_fetch_assoc($res) ){
 			$users[] = $row['username'];
 		}
-		@mysql_free_result($res);
+		@xf_db_free_result($res);
 		
 		return $users;
 	}
@@ -635,19 +635,19 @@ class SweteJob {
 					tml.webpage_id is not null");
 			
 			$missedWebpageIds = array();
-			while ($row = mysql_fetch_assoc($res) ){
+			while ($row = xf_db_fetch_assoc($res) ){
 				
 				$missedWebpageIds[$row['webpage_id']][] = $row;
 			}
 			
-			@mysql_free_result($res);
+			@xf_db_free_result($res);
 			
 			
 			
 			// 1. Get all of the webpages 
 			$res = SweteDb::q("select webpage_id from job_inputs_webpages where job_id='".addslashes($this->_rec->val('job_id'))."'");
 			$wpids = array();
-			while ($row = mysql_fetch_row($res) ){
+			while ($row = xf_db_fetch_row($res) ){
 				$wpids[] = $row[0];
 			}
 			
@@ -656,7 +656,7 @@ class SweteJob {
 			
 			$jobWordCount = 0;
 			
-			@mysql_free_result($res);
+			@xf_db_free_result($res);
 			foreach ($wpids as $webpageId){
 				$webpage = SweteWebpage::loadById($webpageId, $this->_rec->val('source_language'));
 				if ( !$webpage ){
@@ -686,11 +686,11 @@ class SweteJob {
 				
 				$res = SweteDb::q("select `string` from job_inputs_webpages_strings where job_id='".addslashes($this->_rec->val('job_id'))."' and webpage_id='".addslashes($webpageId)."'");
 				
-				while ( $row = mysql_fetch_row($res) ){
+				while ( $row = xf_db_fetch_row($res) ){
 				
 					$strings[] = $row[0];
 				}
-				@mysql_free_result($res);
+				@xf_db_free_result($res);
 				
 				
 				// Lets see if there are any other strings that were added individually to this page.
@@ -812,14 +812,14 @@ class SweteJob {
 					inner join job_inputs_translation_misses jitm on jitm.translation_miss_log_id=tml.translation_miss_log_id
 					where jitm.job_id='".addslashes($this->_rec->val('job_id'))."'");
 			$hrids = array();
-			while ($row = mysql_fetch_assoc($res) ){
+			while ($row = xf_db_fetch_assoc($res) ){
 				$hrids[$row['http_request_log_id']][] = $row;
 			}
 			
 			//$site = $this->getSite();
 			//$proxyWriter = $site->getProxyWriter();
 			
-			@mysql_free_result($res);
+			@xf_db_free_result($res);
 			foreach ($hrids as $hrid=>$tmlids){
 				$hrRecord = df_get_record('http_request_log', array('http_request_log_id'=>'='.$hrid));
 				if ( !$hrRecord ){
@@ -1068,12 +1068,12 @@ class SweteJob {
 	public function isJobAssigned($username){
 	
 		$res = SweteDb::q("select * from jobs where job_id='".addslashes($this->_rec->val('job_id'))."' and assigned_to='".addslashes($username)."'");
-		if ( mysql_num_rows($res) > 0 ){
-			@mysql_free_result($res);
+		if ( xf_db_num_rows($res) > 0 ){
+			@xf_db_free_result($res);
 			return true;
 		}
 		
-		@mysql_free_result($res);
+		@xf_db_free_result($res);
 		
 	}
 	
@@ -1101,10 +1101,10 @@ class SweteJob {
 		$res = SweteDb::q("select * from users where username ='"
 							.addslashes($assignTo)."'");
 		$userRec = null;
-		if ( mysql_num_rows($res) > 0 ){
-			$userRec = mysql_fetch_assoc($res);
+		if ( xf_db_num_rows($res) > 0 ){
+			$userRec = xf_db_fetch_assoc($res);
 		}
-		@mysql_free_result($res);
+		@xf_db_free_result($res);
 		
 		if ($userRec==null){
 			throw new Exception("Failed to retrieve user info for email notification. Username [$assignTo]");

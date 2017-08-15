@@ -2,24 +2,24 @@
 /**
  * SWeTE Server: Simple Website Translation Engine
  * Copyright (C) 2012  Web Lite Translation Corp.
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
  * @brief A class that is meant to serve as a smart reverse proxy that respects HTTP
  * caching headers.  This class is set up as a gatekeeper to the system (especially
- * for the swete_handle_request action so that files that don't require processing 
+ * for the swete_handle_request action so that files that don't require processing
  * can be piped directly through to the client, and files that require processing
  * can be held for further processing.
  *
@@ -31,41 +31,41 @@
 class LiveCache {
 
     public $DEBUG = false;
-    
+
     /**
      * @brief The directory where cache files are stored.
      */
     public static $cacheDir = './livecache';
-    
+
     public $useHtml5Parser = false;
-    
+
     public $useHtml5Serializer = false;
-    
+
     /**
-     * @brief The singleton instance of the live cache so that it can 
+     * @brief The singleton instance of the live cache so that it can
      * be retrieved from anywhere in the application.
      *
      * @see getCurrentPage()
      * @type LiveCache
      */
     private static $currentPage = null;
-    
+
     /**
      * @brief Optional logger object to handle logging.
      * @type SweteLogger
      */
     public $logger = null;
-    
+
     /**
      * @brief The proxified URL for the request.  When requests are made, they are
-     * made inside the proxy namespace.  Such urls are considered "proxified".  In 
+     * made inside the proxy namespace.  Such urls are considered "proxified".  In
      * order to actually fetch the resource from the source server, the URLs must
      * be converted to "unproxified" URLs.
-     * 
+     *
      * @type string
      */
     public $proxifiedUrl = null;
-    
+
     /**
      * @brief The unproxified URL for the request.  This is the URL in the source server's
      * namespace.
@@ -76,49 +76,49 @@ class LiveCache {
 
     /**
      * @brief The expiration time for the cached version of this request.  This is
-     * stored as a unix timestamp (seconds since epoch), and is calculated by the 
+     * stored as a unix timestamp (seconds since epoch), and is calculated by the
      * calculateExpiry() method based on the headers that have been received.
      *
      * @type int
      */
     public $expires = 0;
-    
+
     /**
      * @brief The creation time of the cache entry.  This is marked every time
      * it is saved.
-     * 
+     *
      * @type int
      */
     public $created = 0;
-    
+
     /**
      * @brief The response headers that were received from the server for this request.
-     * appropriate headers should be passed on each time the resource is returned to 
+     * appropriate headers should be passed on each time the resource is returned to
      * a client.
      *
      * @type array(string)
      */
     public $headers = null;
-    
+
     /**
      * @brief Stores just the cache control response header.  This is handy since
      * we are frequently interested in this value -- saves us from looping through
-     * the headers each time we need to access this.  All cache-control headers 
+     * the headers each time we need to access this.  All cache-control headers
      * are concatenated in a single string for this value.
-     * @var type 
+     * @var type
      * @see cacheControl()
      * @see resetCacheControl()
      */
     public $cacheControl = null;
-    
+
     /**
      * @brief The content of this resource.  This is populated when the page is loaded
      * from the source.
      */
     public $content = null;
-    
+
     public $client = null;
-    
+
     public $noServerCache = false;
     public $siteId = null;
     public $live = false;
@@ -133,39 +133,39 @@ class LiveCache {
     public $sourceDateLocale = null;
     public $targetDateLocale = null;
     public $translationParserVersion = null;
-    
+
     /**
      * If conservative caching is enabled, only pages with Cache-Control = public in the
-     * response headers will be saved on the server.  This is the *safest* in multi-user 
+     * response headers will be saved on the server.  This is the *safest* in multi-user
      * applications.
-     * @var type 
+     * @var type
      */
     public $useConservativeCaching = true;
-    
+
     public $defaultCacheTTL = 3600;
-    
-    
+
+
     /**
-     * @brief Returns the path to the cached object for a resource as the given 
+     * @brief Returns the path to the cached object for a resource as the given
      * proxified URL.
-     * 
+     *
      * @param string $proxifiedUrl The proxified URL of the resource.  I.e. in proxy space.
      * @returns string The path to the cached LiveCache object.
      */
     public static function getCachePathForProxifiedUrl($proxifiedUrl){
         return self::$cacheDir.DIRECTORY_SEPARATOR.sha1($proxifiedUrl);
     }
-    
+
     /**
      * @brief Returns the path to the content of a resource - given by the proxified URL.
-     * 
+     *
      * @param string $proxifiedUrl The proxified URL of the resource.  I.e. in proxy space.
      * @returns string The path to the actual content of the resource that is cached.
      */
     public static function getCacheContentPathForProxifiedUrl($proxifiedUrl){
         return self::getCachePathForProxifiedUrl($proxifiedUrl).'.content';
     }
-    
+
     /**
      * @brief Returns the path to the cached content for this resource.
      * @returns string The path.
@@ -173,7 +173,7 @@ class LiveCache {
     public function getCacheContentPath(){
         return self::getCacheContentPathForProxifiedUrl($this->proxifiedUrl);
     }
-    
+
     /**
      * @brief Returns the path to the cached serialized LiveCache object for this object.
      * @returns string The path.
@@ -181,7 +181,7 @@ class LiveCache {
     public function getCachePath(){
         return self::getCachePathForProxifiedUrl($this->proxifiedUrl);
     }
-    
+
     public function cacheControl(){
         if ( !isset($this->cacheControl)){
             if ( !is_array($this->headers) ){
@@ -196,20 +196,20 @@ class LiveCache {
         }
         return $this->cacheControl;
     }
-    
+
     public function resetCacheControl(){
         $this->cacheControl = null;
     }
-    
-    
-    
+
+
+
     /**
      * @brief Loads a LiveCache object to encapsulate the specified resource.  The resource
      * is specified with a proxified URL (i.e. in proxy space).  If no such object has
      * been cached, then a new LiveCache object is created with its @l $proxifiedUrl attribute
      * set to the given @l $proxifiedUrl parameter.
      *
-     * @param $proxifiedUrl The URL to the resource whose descriptor we wish to load.  The 
+     * @param $proxifiedUrl The URL to the resource whose descriptor we wish to load.  The
      * URL is expressed in proxy space.
      * @returns LiveCache A LiveCache object describing the specified resource.
      */
@@ -219,18 +219,18 @@ class LiveCache {
             $content = file_get_contents($path);
             $obj = unserialize($content);
             return $obj;
-            
+
         } else {
             $obj = new LiveCache;
             $obj->proxifiedUrl = $proxifiedUrl;
             return $obj;
         }
-        
-        
+
+
     }
-    
+
     /**
-     * @brief Returns a LiveCache object for the current page as specified by the current 
+     * @brief Returns a LiveCache object for the current page as specified by the current
      * request URL (using MOD_REWRITE).
      * @returns LiveCache The LiveCache object for the currently requested resource.
      */
@@ -249,7 +249,7 @@ class LiveCache {
                 $qstr = $_SERVER['REDIRECT_QUERY_STRING'];
                 $parts = explode('&', $qstr);
                 $qstrout = array();
-                
+
                 foreach($parts as $pt){
                     if ( preg_match('/^swete\:/', $pt) ){
                         list($d1,$d2) = explode('=', $pt);
@@ -260,14 +260,14 @@ class LiveCache {
                 }
                 $url .= '?'.implode('&', $qstrout);
             }
-            
+
             $url = self::df_absolute_url($url);
-            
+
             self::$currentPage = self::load($url);
         }
         return self::$currentPage;
     }
-    
+
     public static function df_absolute_url($url){
         $host = $_SERVER['HTTP_HOST'];
         $port = $_SERVER['SERVER_PORT'];
@@ -282,7 +282,7 @@ class LiveCache {
         if ( (strpos($_SERVER['HTTP_HOST'], ':') === false) and !($protocol == 'https' and $port == 443 ) and !($protocol == 'http' and $port == 80) ){
             $HOST_URI .= ':'.$port;
         }
-    
+
         if ( !$url ) return $HOST_URI;
         else if ( $url{0} == '/' ){
             return $HOST_URI.$url;
@@ -295,31 +295,31 @@ class LiveCache {
                 if ($site_url{0} == '/' ) $host_uri = $host_uri.$site_url;
                 else $host_uri = $host_uri.'/'.$site_url;
             }
-            
+
             return $host_uri.'/'.$url;
         }
     }
-    
+
     public static function touchSite($siteId){
         touch(self::$cacheDir.DIRECTORY_SEPARATOR.'site-'.intval($siteId).'-refresh-time');
     }
-    
+
     public static function touchTranslationMemory($translationMemoryId){
         touch(self::$cacheDir.DIRECTORY_SEPARATOR.'translation-memory-'.intval($translationMemoryId).'-refresh-time');
     }
-    
+
     public static function getSiteModificationTime($siteId){
         $path = self::$cacheDir.DIRECTORY_SEPARATOR.'site-'.intval($siteId).'-refresh-time';
         if (!file_exists($path) ) return 0;
         return filemtime($path);
     }
-    
+
     public static function getTranslationMemoryModificationTime($translationMemoryId){
         $path = self::$cacheDir.DIRECTORY_SEPARATOR.'translation-memory-'.intval($translationMemoryId).'-refresh-time';
         if (!file_exists($path) ) return 0;
         return filemtime($path);
     }
-    
+
     /**
      * @brief Saves the LiveCache object as a serialized object in the cache directory.
      * It can be reloaded with the load() method given its proxified URL.
@@ -331,8 +331,8 @@ class LiveCache {
         $path = $this->getCachePathForProxifiedUrl($this->proxifiedUrl);
         file_put_contents($path, serialize($this));
     }
-    
-    
+
+
     /**
      * @brief Magic function called when serializing.  It specifies which fields
      * should be serialized.
@@ -358,7 +358,7 @@ class LiveCache {
             'translationParserVersion'
         );
     }
-    
+
     /**
      * @brief Flushes the cached content out to the browser.   This outputs the headers
      * and streams the content of the resource out to the browse.
@@ -386,17 +386,17 @@ class LiveCache {
         flush();
         exit;
     }
-    
+
     public function q($sql){
         $db = $this->dbConnect();
-        $res = mysql_query($sql, $db);
-        if ( !$res ) throw new Exception(mysql_error($db));
+        $res = xf_db_query($sql, $db);
+        if ( !$res ) throw new Exception(xf_db_error($db));
         return $res;
     }
-        
+
     /**
      * @brief Loads and streams the current resource from its source location.  If the content
-     * is html or css, then it won't stream it.  Instead it will save the content in 
+     * is html or css, then it won't stream it.  Instead it will save the content in
      * the @l $content property.
      * <p>If the content is not html or CSS it will flush the content and then exit execution.</p>
      *
@@ -415,7 +415,7 @@ class LiveCache {
         $client->REQUEST_HEADERS['Accept-Language'] = $this->proxyLanguage;
         $client->passThruHeaders[] = 'If-None-Match';
         $client->passThruHeaders[] = 'If-Modified-Since';
-        
+
         $client->URL = $this->unproxifiedUrl;
         $savedCacheContent = false;
         if ( !$this->noServerCache ){
@@ -424,13 +424,13 @@ class LiveCache {
             $client->flushOutputFile = $this->getCacheContentPath();
             $savedCacheContent = true;
         }
-        
+
         if ( isset($this->logger) ){
             $this->logger->requestMethod = $client->SERVER['REQUEST_METHOD'];
             $this->logger->requestUrl = $client->URL;
             $this->logger->requestPostVars = serialize($client->POST);
         }
-        
+
         //echo "About to process ".$client->URL;
         $this->mark("Making background request for {$client->URL}");
         $client->process();
@@ -459,8 +459,8 @@ class LiveCache {
         }
         $this->content = $client->content;
         $this->calculateExpires();
-        
-        
+
+
         if ( isset($this->logger) ){
             $this->logger->responseHeaders = serialize($client->headers);
             //$this->logger->responseBody = $client->content;
@@ -468,13 +468,13 @@ class LiveCache {
             $this->logger->responseStatusCode = $client->status['http_code'];
         }
     }
-    
+
     /**
      * @brief Goes through all of the headers in the $headers property to determine
      * what the expiry date of this content should be.  It uses the Cache-control, Pragma,
      * and Expires headers for this.
      *
-     * <p>If the content is marked private (in Cache-control) then the expiry date will 
+     * <p>If the content is marked private (in Cache-control) then the expiry date will
      * be the current time  (i.e. it is already expired).</p>
      */
     public function calculateExpires(){
@@ -508,15 +508,15 @@ class LiveCache {
             }
         }
         if ( !$private ){
-        
+
             if ( !$expires ) $expires = time() + $this->defaultCacheTTL; // If no expiry was set and this isn't private - then let it persist for 1 hour
             $this->expires = $expires;
-            
+
         } else {
             $this->expires = time();
         }
     }
-    
+
     /**
      * @brief A callback that is called by the ProxyClient immediately after flushing non-html/css content.
      * This performs the cleanup and saves the descriptor to the file system so that it is cached.
@@ -530,20 +530,20 @@ class LiveCache {
     public function afterBinaryFlush(ProxyClient $client){
         // After the flush, we need to save the cache
         $this->headers = array();
-        
+
         $this->headers = preg_grep('/^(Content|Location|ETag|Last|Server|Vary|Expires|Allow|Cache|Pragma)/i', $client->headers);
         $this->calculateExpires();
         $this->save();
         exit;
     }
-    
-    
-    
+
+
+
     /**
-     * @brief Flushes the content encapsulated by this resource, but obeying the caching rules.  It 
+     * @brief Flushes the content encapsulated by this resource, but obeying the caching rules.  It
      * will check both the request headers and the cached response headers to determine if the content
      * needs to be refreshed from the server.  If it needs to be refreshed, then it will pass control
-     * to flushSource().  If it doesn't need to be refreshed and a cached version exists, then it 
+     * to flushSource().  If it doesn't need to be refreshed and a cached version exists, then it
      * will just return the content directly from the cache.
      *
      * This method will end execution after the flush if:
@@ -574,7 +574,7 @@ class LiveCache {
             if ( !$public ){
                 $this->noServerCache = true;
             }
-            
+
         }
         $this->mark('Oldest created: '.date('Y-m-d H:i:s', $oldestCreated));
         if ( !$this->noServerCache and (!$oldestCreated or $oldestCreated < $this->created) and $this->expires > time() and file_exists($this->getCacheContentPath()) ){
@@ -587,43 +587,47 @@ class LiveCache {
                 @unlink($this->getCacheContentPath());
             }
             $this->flushSource();
-            
-        }   
+
+        }
     }
-    
+
     public function mark($str){
         if ( $this->DEBUG )error_log('[LiveCache]['.$this->unproxifiedUrl.']['.getmypid().']['.microtime().']'.$str);
     }
-    
+
     /**
      * @brief Saves the content of this resource to the cache path.
      */
     public function saveContent(){
         file_put_contents($this->getCacheContentPath(), $this->content);
     }
-    
+
     public function dbConnect(){
-        if ( !is_resource($this->db) ){
+        if ( !is_resource($this->db) && !is_object($this->db) ){
             $info = parse_ini_file('conf.db.ini', true);
-            $this->db = mysql_connect($info['_database']['host'], $info['_database']['user'], $info['_database']['password']);
-            mysql_select_db($info['_database']['name'], $this->db);
-            mysql_query('set character_set_results = \'utf8\'', $this->db);
-            mysql_query("SET NAMES utf8", $this->db);
-            mysql_query('set character_set_client = \'utf8\'', $this->db);
+            if ( !isset($info['_database']['driver']) ){
+      				$info['_database']['driver'] = 'mysql';
+      			}
+      			require_once 'xataface/xf/db/drivers/'.basename($info['_database']['driver']).'.php';
+            $this->db = xf_db_connect($info['_database']['host'], $info['_database']['user'], $info['_database']['password']);
+            xf_db_select_db($info['_database']['name'], $this->db);
+            xf_db_query('set character_set_results = \'utf8\'', $this->db);
+            xf_db_query("SET NAMES utf8", $this->db);
+            xf_db_query('set character_set_client = \'utf8\'', $this->db);
         }
         return $this->db;
     }
-    
-    
-    
+
+
+
     public function handleRequest(){
         $this->flush();
         $now = time();
-        
-        if ( 
+
+        if (
             !$this->skipLiveCache and
-            isset($this->client) and 
-            isset($this->client->content) and 
+            isset($this->client) and
+            isset($this->client->content) and
             isset($this->siteId) and
             self::getSiteModificationTime($this->siteId) < $this->created and
             $this->live and
@@ -641,7 +645,7 @@ class LiveCache {
             $isHtml = preg_match('/html|xml/', $this->client->contentType);
             $isCSS = preg_match('/css/', $this->client->contentType);
             $isJson = (preg_match('/json/', $this->client->contentType) or $this->client->content{0}=='{' or $this->client->content{0}=='[');
-        
+
             $proxyWriter = $this->getProxyWriter();
             $json = null;
             if ( $isJson ){
@@ -655,19 +659,19 @@ class LiveCache {
                         $isJson = false;
                     }
                 } else {
-                    $isJson = false;                
+                    $isJson = false;
                 }
             }
-            
+
             ProxyClientPreprocessor::$db = $this->dbConnect();
             $delegate = new ProxyClientPreprocessor($this->siteId);
             $delegate->preprocessHeaders($this->client->headers);
             $headers = $proxyWriter->proxifyHeaders($this->client->headers, true);
             $locHeaders = preg_grep('/^Location:/i', $headers);
             $translationMode = $delegate->getTranslationMode($this->client);
-            if ( !$locHeaders 
+            if ( !$locHeaders
                 and ($isHtml or $isCSS or ($translationMode === ProxyClient::TRANSLATION_MODE_TRANSLATE) )
-                and ( $translationMode !== ProxyClient::TRANSLATION_MODE_NOTRANSLATE)  
+                and ( $translationMode !== ProxyClient::TRANSLATION_MODE_NOTRANSLATE)
             )
             {
                 if ( $isHtml ){
@@ -688,12 +692,14 @@ class LiveCache {
                     $this->client->content = $proxyWriter->proxifyHtml($this->client->content);
                     $this->mark('PROXIFY HTML END');
 
+
+
                     if ( $isJson ){
                         $this->client->content = $proxyWriter->htmlToJson($json, $this->client->content);
                     }
                 } else if (  $isCSS ){
                     $this->mark('PROXIFY CSS START');
-                    $this->client->content = $proxyWriter->proxifyCss($this->client->content);  
+                    $this->client->content = $proxyWriter->proxifyCss($this->client->content);
                     $this->mark('PROXIFY CSS END');
                 }
 
@@ -731,8 +737,8 @@ class LiveCache {
             }
         }
     }
-        
-    
+
+
     public function getProxyWriter(){
         if ( !isset($this->_proxyWriter) ){
             require_once 'inc/ProxyWriter.php';
@@ -740,6 +746,8 @@ class LiveCache {
             if ( isset($this->translationParserVersion) ){
                 $proxy->translationParserVersion = intval($this->translationParserVersion);
             }
+            $proxy->snapshotsPath = 'snapshots'.DIRECTORY_SEPARATOR.$this->siteId;
+
             $proxy->useHtml5Parser = $this->useHtml5Parser;
             $proxy->useHtml5Serializer = $this->useHtml5Serializer;
             $proxy->sourceDateLocale = $this->sourceDateLocale;
@@ -747,14 +755,15 @@ class LiveCache {
             $proxy->setProxyUrl($this->proxyUrl);
             $proxy->setSrcUrl($this->siteUrl);
             $res = $this->q("select `name`,`alias` from path_aliases where website_id='".addslashes($this->siteId)."'");
-            while ( $row = mysql_fetch_assoc($res) ){
+            while ( $row = xf_db_fetch_assoc($res) ){
                 $proxy->addAlias($row['name'], $row['alias']);
             }
-            @mysql_free_result($res);
+            @xf_db_free_result($res);
             $proxy->setSourceLanguage($this->sourceLanguage);
             $proxy->setProxyLanguage($this->proxyLanguage);
+            $proxy->snapshotPage = $proxy->stripBasePath($this->proxifiedUrl);
             $this->_proxyWriter = $proxy;
-            
+
         }
         return $this->_proxyWriter;
     }

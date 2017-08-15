@@ -87,10 +87,10 @@ class conf_ApplicationDelegate {
                 
 		$res = df_q("select language_code, language_label from languages");
 		$langs = array();
-		while ($row = mysql_fetch_row($res) ){
+		while ($row = xf_db_fetch_row($res) ){
 			$langs[$row[0]] = $row[1];
 		}
-		@mysql_free_result($res);
+		@xf_db_free_result($res);
 		$app->_conf['languages'] = $langs;
 		$app->registerEventListener('tm.setTranslationStatus', array($this, 'handleTranslationStatusChanged'));
 		Dataface_JavascriptTool::getInstance()->import('swete/global.js');

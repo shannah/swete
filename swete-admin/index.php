@@ -1,24 +1,40 @@
 <?php
+
 date_default_timezone_set('America/Los Angeles');
 ini_set('memory_limit', '2048M');
 /**
  * SWeTE Server: Simple Website Translation Engine
  * Copyright (C) 2012  Web Lite Translation Corp.
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-//print_r($_SERVER);exit;
+if (($pos = strpos(@$_SERVER['REDIRECT_URL'], '!swete:')) !== false) {
+    $sweteCmd = substr(@$_SERVER['REDIRECT_URL'], $pos);
+    $arg = substr($sweteCmd, strpos($sweteCmd, ':')+1);
+    switch ($arg) {
+        case 'start-capture':
+            setcookie('--swete-capture', '1');
+            break;
+
+        case 'stop-capture':
+            setcookie('--swete-capture', '0', time()-3600);
+            break;
+
+    }
+    header('Location: '.substr($_SERVER['REDIRECT_URL'], 0, $pos));
+    return;
+}
 if ( @$_SERVER['UNENCODED_URL'] and !@$_SERVER['REDIRECT_URL'] ){
     if ( ($pos = strpos($_SERVER['UNENCODED_URL'],'?')) !== false ){
         $_SERVER['REDIRECT_URL'] = substr($_SERVER['UNENCODED_URL'], 0, $pos);
@@ -47,22 +63,21 @@ if ( isset($_SERVER['REDIRECT_UNPROXIFY_RESOURCE_PATHS']) and intval(@$_SERVER['
 if ( isset($_SERVER['REDIRECT_DEFAULT_CACHE_TTL']) ){
     define('SWETE_DEFAULT_CACHE_TTL', intval($_SERVER['REDIRECT_DEFAULT_CACHE_TTL']));
 }
-if (!function_exists('apache_request_headers')) { 
-    eval(' 
-        function apache_request_headers() { 
-            foreach($_SERVER as $key=>$value) { 
-                if (substr($key,0,5)=="HTTP_") { 
-                    $key=str_replace(" ","-",ucwords(strtolower(str_replace("_"," ",substr($key,5))))); 
-                    $out[$key]=$value; 
-                } 
-            } 
-            return $out; 
-        } 
-    '); 
-} 
+if (!function_exists('apache_request_headers')) {
+    eval('
+        function apache_request_headers() {
+            foreach($_SERVER as $key=>$value) {
+                if (substr($key,0,5)=="HTTP_") {
+                    $key=str_replace(" ","-",ucwords(strtolower(str_replace("_"," ",substr($key,5)))));
+                    $out[$key]=$value;
+                }
+            }
+            return $out;
+        }
+    ');
+}
 require_once 'inc/LiveCache.php';
 if ( @$_GET['-action'] == 'swete_handle_request' ){
-	
 	define('XATAFACE_NO_SESSION',1);
 	define('XATAFACE_DISABLE_AUTH',1);
 	//error_log('[SWeTE Profiler]['.getmypid().'] start time: '.microtime());
@@ -86,7 +101,7 @@ if ( @$_GET['-action'] == 'swete_handle_request' ){
 		try {
 			$liveCache->handleRequest();
 		} catch (Exception $ex){
-			//  The first time a resource is requested, it will likely 
+			//  The first time a resource is requested, it will likely
 			// throw an exception because we don't yet know the unproxified
 			// url
 			error_log("LiveCache Warning: ".$ex->getMessage());
@@ -104,7 +119,7 @@ require_once 'include/functions.inc.php';
 require_once 'xataface/public-api.php';
 $conf = array();
 if ( isset($liveCache) ){
-	if ( is_resource($liveCache->db) ){
+	if ( is_resource($liveCache->db) or is_object($liveCache->db) ){
 		$conf['db'] = $liveCache->db;
 	}
 }

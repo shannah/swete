@@ -145,8 +145,8 @@ class CSVStringImporter {
                 $translationMemory->getRecord()->val('translation_memory_id')
             ));
             
-            if ( mysql_num_rows($res) == 0 ){
-                @mysql_free_result($res);
+            if ( xf_db_num_rows($res) == 0 ){
+                @xf_db_free_result($res);
                 // This string is not in the translation miss log yet.  We
                 // will import it now
                 $tlogEntry = new Dataface_Record('translation_miss_log', array());
@@ -171,8 +171,8 @@ class CSVStringImporter {
                     );
                     continue;
                 }
-                list($websiteId) = mysql_fetch_row($res);
-                @mysql_free_result($res);
+                list($websiteId) = xf_db_fetch_row($res);
+                @xf_db_free_result($res);
 
                 $hstr = md5($string);
 

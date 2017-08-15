@@ -50,8 +50,8 @@ class tables_job_translatable {
 	
 	function getTranslationMemoryId($record, $source, $dest){
 		$res = df_q("select translation_memory_id from jobs where job_id='".addslashes($record->val('job_id'))."'");
-		list($tmid) = mysql_fetch_row($res);
-		@mysql_free_result($res);
+		list($tmid) = xf_db_fetch_row($res);
+		@xf_db_free_result($res);
 		return $tmid;
 	}
 }

@@ -465,6 +465,33 @@ class WebLite_HTML_Translator_v2 {
 			//}
 		}
 		
+		foreach ($xpath->query('//*[@placeholder or @title or @data-swete-translate-atts]') as $el){
+		    $atts = array('placeholder', 'title');
+		    if ($el->hasAttribute('data-swete-translate-atts')) {
+		        $append = array_map('trim', explode(' ', $el->getAttribute('data-swete-translate-atts')));
+		        foreach ($append as $a) {
+		            $atts[] = $a;
+		        }
+		    }
+			foreach ($atts as $att) {
+			    if (!$el->hasAttribute($att)) {
+			        continue;
+			    }
+			    $content = _n($el->getAttribute($att));
+			    
+			
+			
+                if ( isset($stringsIndex[$content]) ){
+                    $index = $stringsIndex[$content];
+                } else {
+                    $index = count($strings);
+                    $strings[] = $content;
+                    $stringsIndex[$content] = $index;
+                }
+                $el->setAttribute($att, '{{$'.$index.'$}}');
+            }
+		}
+		
 	
 		$this->strings = array_map(array($this,'cleanString'), $this->strings);
 		//return $dom->save();

@@ -55,7 +55,7 @@ class actions_swete_job_serve_content {
 		}
 		
 		$res = df_q("select * from job_content where job_content_id='".addslashes($resource->val('job_content_id'))."' limit 1");
-		$content = mysql_fetch_object($res);
+		$content = xf_db_fetch_object($res);
 		$output = $content->content;
 		
 		if ( preg_match('#css#', $content->content_type) ){

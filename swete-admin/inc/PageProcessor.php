@@ -159,7 +159,7 @@ class PageProcessor {
 				$translatedPage = SweteWebpage::loadById($page->val('webpage_id'), $this->site->getDestinationLanguage());
 				$translatedPage->getRecord()->setValue('webpage_content', $translatedContent);
 				$res = $translatedPage->getRecord()->save();
-				if ( PEAR::isError($res) ) throw new Exception(mysql_error(df_db()));
+				if ( PEAR::isError($res) ) throw new Exception(xf_db_error(df_db()));
 				
 				
 				

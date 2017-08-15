@@ -1,9 +1,6 @@
 [submodule "swete-admin/modules/g2"]
 	path = swete-admin/modules/g2
 	url = https://github.com/shannah/xataface-module-g2.git
-[submodule "swete-admin/modules/tm"]
-	path = swete-admin/modules/tm
-	url = https://github.com/shannah/xataface-module-tm.git
 [submodule "swete-admin/xataface"]
 	path = swete-admin/xataface
 	url = https://github.com/shannah/xataface.git

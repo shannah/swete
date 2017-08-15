@@ -1,0 +1,18 @@
+{use_macro file="Dataface_Main_Template.html"}
+    {fill_slot name="main_column"}
+        <h1>Validate XLIFF Content</h1>
+        
+        <p>Please paste in the contents XLIFF document that you would like to validate and press "Validate"</p>
+        
+        <textarea id="xliff-content" cols="50" rows="20"></textarea>
+        <button id="xliff-validate-btn">Validate Now</button>
+        <div id="processing-xliff" style="display:none">
+            Processing XLIFF Content.  Please wait ... <img src="{$ENV.DATAFACE_URL}/images/progress.gif"/>
+        </div>
+        <div id="xliff-results" style="display:none">
+            <h3>Results</h3>
+            
+            <textarea id="validation-results" cols="50" rows="10"></textarea>
+        </div>
+    {/fill_slot}
+{/use_macro}

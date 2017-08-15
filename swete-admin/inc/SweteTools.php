@@ -117,12 +117,12 @@ class SweteTools {
 		require_once 'inc/SweteDb.class.php';
 		$res = SweteDb::q('select distinct `target_language` from websites');
 		$languages = array();
-		while ($row = mysql_fetch_row($res) ) $languages[] = $row[0];
-		@mysql_free_result($res);
+		while ($row = xf_db_fetch_row($res) ) $languages[] = $row[0];
+		@xf_db_free_result($res);
 		
 		$res = SweteDb::q('select distinct `source_language` from websites');
-		while ($row = mysql_fetch_row($res) ) $languages[] = $row[0];
-		@mysql_free_result($res);
+		while ($row = xf_db_fetch_row($res) ) $languages[] = $row[0];
+		@xf_db_free_result($res);
 		
 		$languages = array_unique($languages);
 		
@@ -349,10 +349,10 @@ END
 							.addslashes(self::getUser()->val('username'))."'");
 		
 		$jobs = array();		
-		while ($row = mysql_fetch_assoc($res) ){
+		while ($row = xf_db_fetch_assoc($res) ){
 			$jobs[] = $row;
 		}
-		@mysql_free_result($res);
+		@xf_db_free_result($res);
 		return $jobs;
 	
 	}
