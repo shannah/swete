@@ -18,7 +18,22 @@ ini_set('memory_limit', '2048M');
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-//print_r($_SERVER);exit;
+if (($pos = strpos(@$_SERVER['REDIRECT_URL'], '!swete:')) !== false) {
+    $sweteCmd = substr(@$_SERVER['REDIRECT_URL'], $pos);
+    $arg = substr($sweteCmd, strpos($sweteCmd, ':')+1);
+    switch ($arg) {
+        case 'start-capture':
+            setcookie('--swete-capture', '1');
+            break;
+
+        case 'stop-capture':
+            setcookie('--swete-capture', '0', time()-3600);
+            break;
+
+    }
+    header('Location: '.substr($_SERVER['REDIRECT_URL'], 0, $pos));
+    return;
+}
 if ( @$_SERVER['UNENCODED_URL'] and !@$_SERVER['REDIRECT_URL'] ){
     if ( ($pos = strpos($_SERVER['UNENCODED_URL'],'?')) !== false ){
         $_SERVER['REDIRECT_URL'] = substr($_SERVER['UNENCODED_URL'], 0, $pos);
@@ -62,7 +77,6 @@ if (!function_exists('apache_request_headers')) {
 }
 require_once 'inc/LiveCache.php';
 if ( @$_GET['-action'] == 'swete_handle_request' ){
-
 	define('XATAFACE_NO_SESSION',1);
 	define('XATAFACE_DISABLE_AUTH',1);
 	//error_log('[SWeTE Profiler]['.getmypid().'] start time: '.microtime());
@@ -104,7 +118,7 @@ require_once 'include/functions.inc.php';
 require_once 'xataface/public-api.php';
 $conf = array();
 if ( isset($liveCache) ){
-	if ( is_resource($liveCache->db) ){
+	if ( is_resource($liveCache->db) or is_object($liveCache->db) ){
 		$conf['db'] = $liveCache->db;
 	}
 }

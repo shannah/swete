@@ -2,17 +2,17 @@
 /**
  * SWeTE Server: Simple Website Translation Engine
  * Copyright (C) 2012  Web Lite Translation Corp.
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -43,7 +43,7 @@ class actions_swete_handle_request{
 			$qstr = $_SERVER['REDIRECT_QUERY_STRING'];
 			$parts = explode('&', $qstr);
 			$qstrout = array();
-			
+
 			foreach($parts as $pt){
 				if ( preg_match('/^swete\:/', $pt) ){
 					list($d1,$d2) = explode('=', $pt);
@@ -58,22 +58,22 @@ class actions_swete_handle_request{
 		//echo "The URL: ".$url;
 		//echo "$url";exit;
 		$site = SweteSite::loadSiteByUrl($url);
-		
+
 		if ( !$site and $url and $url{strlen($url)-1} != '/' ){
 			$url .= '/';
 			$site = SweteSite::loadSiteByUrl($url);
 			if ( $site ){
 				header('Location: '.$url);
 				exit;
-			
+
 			}
 		}
-		
-	
+
+
 		if ( !$site ){
 			die("[ERROR] No site found");
 		}
-		
+
 		$server = new ProxyServer;
 		if ( defined('SWETE_USE_HTML5_PARSER') and SWETE_USE_HTML5_PARSER ){
 		    $server->useHtml5Parser = true;
@@ -110,34 +110,36 @@ class actions_swete_handle_request{
 		    } else {
 		        die("[ERROR] Both swete:key and swete:salt must be provided");
 		    }
-		    
+
 		}
-		
-		
+
+
 		//$server->buffer = true;
 		$server->logTranslationMisses = true;
 		$server->site = $site;
-		
+
 		if ( $site->getRecord()->val('log_requests') ){
 			if ( isset($server->logger) ) $server->logger->requestLoggingEnabled = true;
 		} else {
 			if ( isset($server->logger) ) $server->logger->requestLoggingEnabled = false;
 		}
-		
-		if ( $site->getRecord()->val('log_translation_misses') ){
+
+		if ( $site->getRecord()->val('log_translation_misses') or @$_COOKIE['--swete-capture'] == '1' ){
+			echo "logging misses";
 			$server->logTranslationMisses = true;
 			if ( isset($server->logger) ){
 				// If we are logging translation misses we also need to log requests
 				$server->logger->requestLoggingEnabled = true;
 			}
 		} else {
+			echo "not logging misses";
 			$server->logTranslationMisses = false;
 		}
 		$server->URL = $url;
-		
+
 		// Deal with live cache
 		// The first time a page is requested, it won't yet have a livecache
-		// descriptor, so we needed to wait until we had loaded the 
+		// descriptor, so we needed to wait until we had loaded the
 		// site so we can calculate the unproxified url.
 		// Then we will try to flush it again.
 		$isPost = (strtolower($server->SERVER['REQUEST_METHOD']) === 'post');
@@ -147,24 +149,24 @@ class actions_swete_handle_request{
 				$server->liveCache->unproxifiedUrl = $server->site->getProxyWriter()->unproxifyUrl($server->URL);
 				$server->liveCache->logger = $server->logger;
 				$server->liveCache->flush();
-				
+
 			}
-			
+
 		}
-		
-		// 
-		
-		
+
+		//
+
+
 		$server->handleRequest();
 		//print_r($server->headerBuffer);
-		
-		
-		
-		
-		
+
+
+
+
+
 		//$site = SweteSite::loadSiteByUrl(
-		
-		
-	
+
+
+
 	}
 }

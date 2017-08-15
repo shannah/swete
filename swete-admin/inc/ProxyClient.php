@@ -2,17 +2,17 @@
 /**
  * SWeTE Server: Simple Website Translation Engine
  * Copyright (C) 2012  Web Lite Translation Corp.
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -32,36 +32,36 @@
  *		$client->POST = $this->POST;
  *		$client->COOKIE = $this->COOKIE;
  *		$proxyWriter = $this->site->getProxyWriter();
- *		
+ *
  *		$client->URL = $this->site->getProxyWriter()->unproxifyUrl($this->URL);
  *		$logger = $this->logger;
  *		$logger->requestMethod = $client->SERVER['request_method'];
  *		$logger->requestUrl = $client->URL;
  *		$logger->requestPostVars = serialize($client->POST);
- *		
+ *
  *		$client->process();
  *		$logger->responseHeaders = serialize($client->headers);
  *		$logger->responseBody = $client->content;
  *		$logger->responseContentType = $client->contentType;
  *		$logger->responseStatusCode = $client->status['http_code'];
- *		
- *		
+ *
+ *
  *		return $client;
- *		
+ *
  *	}
  *
  * // Then later on ....
  * 		$client = $this->getSourcePage();
- *		
+ *
  *		//echo "We got the source page.";
  *		//print_r($client->headers);
- *		
+ *
  *		$isHtml = preg_match('/html|xml/', $client->contentType);
  *		$isCSS = preg_match('/css/', $client->contentType);
- *		
+ *
  *		$headers = $proxyWriter->proxifyHeaders($client->headers, true);
- *		
- *		
+ *
+ *
  *		// Let's see if this should be a passthru
  *		if ( !$isHtml and !$isCSS ){
  *			//$skip_decoration_phase = true;
@@ -91,7 +91,7 @@ class ProxyClient {
 	 * text/html or application/pdf
 	 */
 	public $contentType = null;
-	
+
 	/**
 	 * @type array
 	 *
@@ -100,7 +100,7 @@ class ProxyClient {
 	 * after the request is complete.
 	 */
 	public $status = null;
-	
+
 	/**
 	 * @brief Read-only array with the HTTP response headers from the request.  Each element
 	 * of this array is a raw header string.
@@ -108,13 +108,13 @@ class ProxyClient {
 	 * @type array
 	 */
 	public $headers = array();
-	
+
 	/**
 	 * @brief Read-only parameter with the HTTP response content body from the request.
 	 * @type string
 	 */
 	public $content = null;
-	
+
 	/**
 	 * @type array
 	 *
@@ -125,7 +125,7 @@ class ProxyClient {
 	 * set the $this->SERVER['REQUEST_METHOD'] = 'post'.
 	 */
 	public $SERVER=array();
-	
+
 	/**
 	 * @type array
 	 *
@@ -133,7 +133,7 @@ class ProxyClient {
 	 * set explicitly, it will default to a copy of the $_REQUEST array.
 	 */
 	public $REQUEST=array();
-	
+
 	/**
 	 * @type array
 	 *
@@ -141,7 +141,7 @@ class ProxyClient {
 	 * set explicitly, it will default to a copy of the $_COOKIE array.
 	 */
 	public $COOKIE=array();
-	
+
 	/**
 	 * @type array
 	 *
@@ -149,7 +149,7 @@ class ProxyClient {
 	 * set explicitly, it will default to a copy of the $_GET array.
 	 */
 	public $GET=array();
-	
+
 	/**
 	 * @type array
 	 *
@@ -157,46 +157,46 @@ class ProxyClient {
 	 * set explicitly, it will default to a copy of the $_POST array.
 	 */
 	public $POST=array();
-	
+
 	/**
 	 * @type string
 	 *
 	 * @brief Writable property to specify the URL of the page to request.
 	 */
 	public $URL=null;
-	
+
 	/**
 	 * @type array
 	 *
-	 * @brief An array of HTTP request headers to send with the request.  If this 
+	 * @brief An array of HTTP request headers to send with the request.  If this
 	 * is not set, it defaults to the result of <a href="http://ca3.php.net/apache_request_headers">apache_request_headers</a>.
 	 */
 	public $REQUEST_HEADERS=null;
-	
+
 	/**
 	 * @type boolean
 	 *
-	 * @brief Writable property that allows you to specify not to retrieve the body.  If this is 
+	 * @brief Writable property that allows you to specify not to retrieve the body.  If this is
 	 * set to true, then the request will be sent as a HEAD request and retrieve no body.
 	 */
 	public $noBody = false;
-	
+
 	/**
 	 * @type boolean
 	 *
-	 * @brief Writable property that allows you to specify whether cookies (in the COOKIE array) 
+	 * @brief Writable property that allows you to specify whether cookies (in the COOKIE array)
 	 * should be passed on to the request.
 	 */
 	public $send_cookies = true;
-	 
+
 	/**
 	 * @type boolean
-	 * @brief Writable property that allows you to specify whether the SID should be 
+	 * @brief Writable property that allows you to specify whether the SID should be
 	 * passed along with the request.
 	 *
-	 */ 
+	 */
 	public $send_session = true;
-	
+
 	/**
 	 * @type string
 	 *
@@ -204,7 +204,7 @@ class ProxyClient {
 	 */
 	public $user_agent = //'Mozilla/5.0 (Macintosh; U; PPC Mac OS X Mach-O; en-US; rv:1.8.1a2) Gecko/20060512 BonEcho/2.0a2 sweteloader';
 		'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_3) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.79 Safari/535.11';
-	
+
 	/**
 	 * @brief A delegate object that contains callback functions to handle certain situations.
 	 * @type ProxyClientDelegate
@@ -213,27 +213,27 @@ class ProxyClient {
 
 	/**
 	 * @brief A regular expression to match content types that should be just flushed (as opposed to returned).
-	 *   Often it is desirable to pass content directly through to the browser for performance reasons.  If 
-	 *  this regex is set, then that is how the request will be handled.  It will relay the headers out 
+	 *   Often it is desirable to pass content directly through to the browser for performance reasons.  If
+	 *  this regex is set, then that is how the request will be handled.  It will relay the headers out
 	 *  to the browser and flush the body also as it is received.  It will not try to modify any information
 	 *  in the middle.
 	 *
 	 * @type string
 	 */
 	public $flushableContentTypeRegex = null;
-	
+
 	public $clearOutputBufferBeforeFlush = true;
-	
+
 	/**
 	 * @brief Optional path to a file to store the contents of the request.  If this is set
 	 * then the curl_exec method will not return the page contents.  The contents will
-	 * be instead piped directly to a file.  This is definitely preferred for large 
+	 * be instead piped directly to a file.  This is definitely preferred for large
 	 * responses so that we don't fill up memory.
 	 *
 	 * @type string
 	 */
 	public $outputFile = null;
-	
+
 	/**
 	 * @brief The output file handle that is used by curl_exec when writing to an output file.
 	 * It is opened and closed internally.
@@ -241,7 +241,7 @@ class ProxyClient {
 	 * @type resource
 	 */
 	private $outputFileHandle = null;
-	
+
 	/**
 	 * @brief An output file that is only used for flushable content.  It provides a backup/caching
 	 * mechanism so that while the output for a request is flushed directly to browser, it can
@@ -250,7 +250,7 @@ class ProxyClient {
 	 * @type string
 	 */
 	public $flushOutputFile = null;
-	
+
 	/**
 	 * @brief An output stream for the $flushOutputFile when flushing the content.  This is opened
 	 * when flushing content is enabled and it is determined that the returned content
@@ -264,29 +264,29 @@ class ProxyClient {
 	 * @type array
 	 */
 	private $headerBuff = array();
-	
+
 	/**
-	 * @brief A flag that is set when it is determined that the output should just be 
+	 * @brief A flag that is set when it is determined that the output should just be
 	 * flushed and the execution ended.  This is related to the $flushableContentTypeRegex
 	 * parameter.
 	 * @type boolean
 	 */
 	private $flushAndExit = false;
-	
+
 	public $afterFlushCallback = null;
-        
+
         public $passThruHeaders = array(
 			'X-SWeTE-Language',
 			'X-Requested-With'
 		);
-	
+
 	/**
 	 * @brief Initializes the client object, setting default values for most properties.
 	 *
 	 * @param string $url The URL to request.
 	 */
 	public function __construct($url=null){
-	
+
 		$this->SERVER = $_SERVER;
 		$this->REQUEST = $_REQUEST;
 		$this->GET = $_GET;
@@ -301,7 +301,7 @@ class ProxyClient {
 		$this->URL = $url;
 		$this->REQUEST_HEADERS = apache_request_headers();
 	}
-	
+
 	/*
 	 * @brief Clears all of the evironment array (e.g. $POST, $GET, etc..).  This does
 	 * not clear the $URL parameter.
@@ -313,18 +313,18 @@ class ProxyClient {
 		$this->COOKIE = array();
 		$this->POST = array();
 		$this->REQUEST_HEADERS = array();
-	
+
 	}
-	
-	
+
+
 	/**
-	 * @brief Adds a response header.  This is called when processing the response to the 
+	 * @brief Adds a response header.  This is called when processing the response to the
 	 * request.
 	 */
 	private function header($h){
 		$this->headers[] = $h;
 	}
-	
+
 	public function read_header($ch, $string){
 		//echo "in read_header";
 		if ( !$this->flushAndExit ){
@@ -356,7 +356,7 @@ class ProxyClient {
 		}
 		return strlen($string);
 	}
-	
+
 	private $bodyStart = false;
 	//private $content = '';
 	public function read_body($ch, $string){
@@ -392,7 +392,7 @@ class ProxyClient {
 		}
 		return strlen($string);
 	}
-	
+
 
 	/**
 	 * @brief Actually performs a request.  This is more or less a wrapper around
@@ -434,7 +434,7 @@ class ProxyClient {
 			}
 		} else {
 			if ( $this->outputFile ){
-				
+
 				curl_setopt($ch, CURLOPT_FILE, $this->outputFileHandle);
 				//curl_setopt($ch, CURLOPT_RETURNTRANSFER, false);
 			} else {
@@ -442,23 +442,23 @@ class ProxyClient {
 			}
 			$content = curl_exec($ch);
 			//error_log("Finished curl_exec");
-			
+
 			if ( $this->outputFile ){
-				
-				
+
+
 				return;
 			}
-			
+
 		}
-		
-		
-		
+
+
+
 		$encoding = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
 		$this->contentType = $encoding;
-		
+
 		if ( !preg_match('/text|html|xml/', $encoding) ){
 			//$skip_decoration_phase = true;
-	
+
 			return $content;
 		}
 		if ( $encoding and preg_match('/charset=[\'"]?([a-zA-Z0-9\-]+)[\'"]?/i', $encoding, $matches )){
@@ -466,7 +466,7 @@ class ProxyClient {
 		} else {
 			$encoding = null;
 		}
-		
+
 		//if ( !$encoding ){
 			//echo "No encoding in header";
 			//if ( preg_match('/<meta[^>]+http-equiv=[\'"]?content-type[\'"]?[^>]*>/i', $content, $matches) ){
@@ -475,17 +475,17 @@ class ProxyClient {
 			$encoding = $matches[2];
 			$content = preg_replace($regex, '\\1UTF-8\\3', $content);
 		}
-		
+
 		$regex = '/(<meta[^>]+charset=[\'"]?)([a-zA-Z0-9\-]+)([\'"]?)/i';
 		if ( preg_match($regex, $content, $matches) ){
 			$encoding = $matches[2];
 			$content = preg_replace($regex, '\\1UTF-8\\3', $content);
-			
+
 		}
-			
-			
+
+
 		//}
-		
+
 		/*
 		//DISABLED BECAUSE PAGES WITH MULTIPLE ENCODINGS CAUSE PROBEMS HERE
 		// BETTER FOR SERVER OR PAGE TO EXPLICITLY STATE ENCODING
@@ -501,7 +501,7 @@ class ProxyClient {
 		}
 		//return array('content'=>$content, 'encoding'=>$encoding);
 	}
-	
+
 	/**
 	 * @brief Performs the HTTP request.  This sets up the cURL query, executes it
 	 * and processes it.
@@ -510,7 +510,7 @@ class ProxyClient {
 	 */
 	public function process(){
 		$url = $this->URL;
-		
+
 		if ( !$url ) throw new Exception("No URL specified to retrieve");
 		$ch = curl_init( $url );
         if ( strtolower(@$this->SERVER['REQUEST_METHOD']) == 'post' ) {
@@ -533,14 +533,27 @@ class ProxyClient {
 				}
 				curl_setopt( $ch, CURLOPT_POST, true );
 				curl_setopt( $ch, CURLOPT_POSTFIELDS, $postStr );
-				
+
 			}
 		}
-		
+
 		if ( @$this->send_cookies and @$this->REQUEST_HEADERS['Cookie']) {
-		    curl_setopt( $ch, CURLOPT_COOKIE, $this->REQUEST_HEADERS['Cookie']);
+        $cookies = explode("; ", $this->REQUEST_HEADERS['Cookie']);
+        $cookies2 = array();
+        foreach ($cookies as $cookie) {
+            // We use --swete- prefix on cookies intended for SWeTE
+            // only.  We don't pass these onto the server
+            if (strpos($cookie, "--swete-") !== 0) {
+                $cookies2[] = $cookie;
+            }
+        }
+        $cookiesStr = implode("; ", $cookies2);
+        if (trim($cookiesStr)) {
+            curl_setopt( $ch, CURLOPT_COOKIE, $cookiesStr);
+        }
+
 		}
-		  
+
 		curl_setopt( $ch, CURLOPT_HEADER, true );
 		if ( $this->noBody ) curl_setopt( $ch, CURLOPT_NOBODY, true );
 		curl_setopt( $ch, CURLOPT_USERAGENT, @$this->user_agent ? @$this->user_agent : @$this->SERVER['HTTP_USER_AGENT'] );
@@ -550,7 +563,7 @@ class ProxyClient {
 		}
 		$reqHeaders = array();
 		$reqHeaderCandidates = $this->passThruHeaders;
-                
+
 		foreach ($reqHeaderCandidates as $h){
 			if ( isset($headers[$h]) ){
 				$reqHeaders[] = $h.': '.$headers[$h];
@@ -562,7 +575,7 @@ class ProxyClient {
 		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 		/*
-		    This fixes an issue with big commerce connecting to the 
+		    This fixes an issue with big commerce connecting to the
 		    checkout page.  We just got a blank page with no errors.
 		    http://stackoverflow.com/a/18217538
 		*/
@@ -571,13 +584,13 @@ class ProxyClient {
 		    curl_setopt($ch, CURLOPT_SSL_CIPHER_LIST, SWETE_CLIENT_SSL_CIPHER_LIST);
 		}
 		$contents = $this->curl_exec( $ch );
-		
+
 		if ( $this->outputFile ){
 			curl_close($ch);
 			fclose($this->outputFileHandle);
 			return;
 		}
-		
+
 		$headerLen = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
 		$header = substr($contents, 0, $headerLen);
 		$contents = substr($contents, $headerLen);
@@ -585,19 +598,19 @@ class ProxyClient {
 		//echo "Status : $status";print_r($status);exit;
 		$this->status = $status;
 		curl_close( $ch );
-	  
+
 		if ( !$this->headers ){
 			// Split header text into an array.
 			$header_text = preg_split( '/[\r\n]+/', $header );
-			
-			
-			
+
+
+
 			// Propagate headers to response.
 			foreach ( $header_text as $header ) {
 			  $this->header( $header, false );
 			}
 		}
-		
+
 		//$contents = decorateContents($contents);
 		//$len = strlen($contents);
 		//header('Content-Length: '.$len);
@@ -611,15 +624,15 @@ class ProxyClient {
 		if ( isset($this->delegate) and method_exists($this->delegate, $method) ){
 			$contents = $this->delegate->$method($contents);
 		}
-		
+
 		$this->content = $contents;
 
 		return $contents;
-	
+
 	}
-	
-	
-	
+
+
+
 
 }
 
@@ -638,8 +651,8 @@ class ProxyClientPreprocessor implements ProxyClientDelegate {
 	private $prefilters = null;
 	public static $db = null;
 	private $delegate = null;
-	
-	
+
+
 	protected function delegate($delegate = null){
 		if ( isset($delegate) ){
 			$this->delegate = $delegate;
@@ -658,7 +671,7 @@ class ProxyClientPreprocessor implements ProxyClientDelegate {
 						if ( !class_exists($class) ){
 							error_log('Loaded '.$path.' but no class '.$class.' was found... skipping preprocessing.');
 							return null;
-						}	
+						}
 					}
 				}
 				$obj = null;
@@ -666,42 +679,42 @@ class ProxyClientPreprocessor implements ProxyClientDelegate {
 					$obj = new $class;
 					$this->delegate = $obj;
 					return $this->delegate;
-					
+
 				}
 				return null;
 			}
 		}
 	}
-	
-	
+
+
 	private function &getPrefilters(){
 		if ( !isset($this->prefilters) ){
 			$this->prefilters = array();
-			$sql = "select tf.pattern, tf.replacement 
-				from 
-					text_filters tf 
+			$sql = "select tf.pattern, tf.replacement
+				from
+					text_filters tf
 					inner join site_text_filters stf on stf.filter_id=tf.filter_id
-				where 
-					stf.website_id='".addslashes($this->siteId)."' 
+				where
+					stf.website_id='".addslashes($this->siteId)."'
 					and
 					stf.filter_type='Prefilter'
 				order by stf.filter_order, tf.default_order";
-				
+
 			$res = self::q($sql);
 			while ($row = xf_db_fetch_assoc($res) ){
 				$this->prefilters[] = $row;
 			}
-			@xf_db_free_result($res);			
+			@xf_db_free_result($res);
 		}
 		//print_r($this->prefilters);exit;
 		return $this->prefilters;
 	}
-	
+
 	public function __construct($siteId){
 		$this->siteId = $siteId;
-		
+
 	}
-	
+
 	public static function q($sql){
 		$db = self::$db;
 		if ( !is_resource($db) and function_exists('df_db') ) $db = df_db();
@@ -709,14 +722,14 @@ class ProxyClientPreprocessor implements ProxyClientDelegate {
 		if ( !$res ) throw new Exception(xf_db_error($db));
 		return $res;
 	}
-	
+
 	public function preprocessHeaders(&$headers){
 		$obj = $this->delegate();
 		if ( isset($obj) and method_exists($obj, 'preprocessHeaders') ){
 			$obj->preprocessHeaders($headers);
 		}
 	}
-	
+
 	public function isOnWhiteList($url) {
 	    $urlParts = parse_url($url);
 	    $urlPath = $urlParts['path'];
@@ -747,7 +760,7 @@ class ProxyClientPreprocessor implements ProxyClientDelegate {
 		    return true;
 		}
 	}
-	
+
 	protected function _processText($string, $index, &$count){
 		$filters =& $this->getPrefilters();
 		if ( $index>count($filters)-1 ) return $string;
@@ -768,11 +781,11 @@ class ProxyClientPreprocessor implements ProxyClientDelegate {
 		} else {
 			return $this->_processText($string, $index+1, $count);
 		}
-		
-		
+
+
 		//return preg_replace('/\b(?<!&\#)([0-9]+[\/\.\-,]?)+/', '<span data-swete-translate="0">$0</span>', $string);
 	}
-	
+
 	/**
 	 * @brief Returns the translation mode for the current request.  This can be used
 	 * to override whether or not the content should be translated.  By default
@@ -792,7 +805,7 @@ class ProxyClientPreprocessor implements ProxyClientDelegate {
 	    }
 	    return ProxyClient::TRANSLATION_MODE_DEFAULT;
 	}
-	
+
 	public function preprocess($html){
 		$obj = $this->delegate();
 		if ( isset($obj) and method_exists($obj, 'fixHtml') ){
@@ -804,8 +817,8 @@ class ProxyClientPreprocessor implements ProxyClientDelegate {
 		} catch (Exception $ex){
 			return $html;
 		}
-		
-		
+
+
 		if ( isset($obj) and method_exists($obj, 'preprocess') ){
 			$obj->preprocess($doc);
 		}
@@ -813,21 +826,21 @@ class ProxyClientPreprocessor implements ProxyClientDelegate {
 		$txt = $xpath->query('//text()');
 		if ( $txt->length > 0 ){
 			foreach ( $txt as $txtEl){
-				if ( in_array(strtolower($txtEl->parentNode->tagName), array('style','title','script')) ) continue; 
+				if ( in_array(strtolower($txtEl->parentNode->tagName), array('style','title','script')) ) continue;
 				if ( $txtEl->parentNode->getAttribute('data-swete-text-filter') === 'disabled' ) continue;
-				
+
 				if ( !trim($txtEl->nodeValue) ) continue;
-				
+
 				$count = 0;
 				$nodeValue = $this->_processText(htmlspecialchars($txtEl->nodeValue), 0, $count);
-				
+
 				if ( $count > 0 ){
 					$f = $doc->createDocumentFragment();
 					$fres = $f->appendXML($nodeValue);
 					$txtEl->parentNode->replaceChild($f, $txtEl);
 				}
 			}
-		}	
-		return $doc->saveHtml();	
+		}
+		return $doc->saveHtml();
 	}
 }
