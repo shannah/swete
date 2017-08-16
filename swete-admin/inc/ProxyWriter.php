@@ -998,11 +998,7 @@ class ProxyWriter {
 
       			} else if ( preg_match('/^(Set-Cookie:)(.*)$/i', $header, $matches) ){
       				$cookieStr = $matches[2];
-<<<<<<< HEAD
-      				
-=======
 
->>>>>>> swete-master/master
       				$domainMatch = '';
       				if (preg_match('/domain=([^;]+)/i', $cookieStr, $matches2)) {
       				    $domainMatch = $matches2[1];
@@ -1020,19 +1016,11 @@ class ProxyWriter {
       				        if ($domainMatch{0} !== '.') {
                                 $domainMatch = '.' . $domainMatch;
                             }
-<<<<<<< HEAD
-                            
-                            if (SweteTools::endsWith($this->_proxyParts['host'], $domainMatch)) {
-                                // The cookie is already valid for the proxy domain
-                                // leave it alone 
-                                 
-=======
 
                             if (SweteTools::endsWith($this->_proxyParts['host'], $domainMatch)) {
                                 // The cookie is already valid for the proxy domain
                                 // leave it alone
 
->>>>>>> swete-master/master
                             } else {
                                 $replaceDomain = true;
                             }
