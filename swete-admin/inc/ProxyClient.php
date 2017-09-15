@@ -501,6 +501,13 @@ class ProxyClient {
 		}
 		//return array('content'=>$content, 'encoding'=>$encoding);
 	}
+    private static function case_insensitive_keys(array $array) {
+        $out = array();
+        foreach ($array as $k=>$v) {
+            $out[strtolower($k)] = $v;
+        }
+        return $out;
+    }
 
 	/**
 	 * @brief Performs the HTTP request.  This sets up the cURL query, executes it
@@ -536,37 +543,38 @@ class ProxyClient {
 
 			}
 		}
-
-		if ( @$this->send_cookies and @$this->REQUEST_HEADERS['Cookie']) {
-        $cookies = explode("; ", $this->REQUEST_HEADERS['Cookie']);
-        $cookies2 = array();
-        foreach ($cookies as $cookie) {
-            // We use --swete- prefix on cookies intended for SWeTE
-            // only.  We don't pass these onto the server
-            if (strpos($cookie, "--swete-") !== 0) {
-                $cookies2[] = $cookie;
+        $headers = self::case_insensitive_keys($this->REQUEST_HEADERS);
+        //print_r($this->REQUEST_HEADERS);exit;
+		if ( @$this->send_cookies and @$headers['cookie']) {
+            $cookies = explode("; ", $headers['cookie']);
+            $cookies2 = array();
+            foreach ($cookies as $cookie) {
+                // We use --swete- prefix on cookies intended for SWeTE
+                // only.  We don't pass these onto the server
+                if (strpos($cookie, "--swete-") !== 0) {
+                    $cookies2[] = $cookie;
+                }
             }
-        }
-        $cookiesStr = implode("; ", $cookies2);
-        if (trim($cookiesStr)) {
-            curl_setopt( $ch, CURLOPT_COOKIE, $cookiesStr);
-        }
+            $cookiesStr = implode("; ", $cookies2);
+            if (trim($cookiesStr)) {
+                curl_setopt( $ch, CURLOPT_COOKIE, $cookiesStr);
+            }
 
 		}
 
 		curl_setopt( $ch, CURLOPT_HEADER, true );
 		if ( $this->noBody ) curl_setopt( $ch, CURLOPT_NOBODY, true );
 		curl_setopt( $ch, CURLOPT_USERAGENT, @$this->user_agent ? @$this->user_agent : @$this->SERVER['HTTP_USER_AGENT'] );
-		$headers = $this->REQUEST_HEADERS;
-		if ( @$headers['Referer'] ){
-            curl_setopt( $ch, CURLOPT_REFERER, @$headers['Referer']);
+		
+		if ( @$headers['referer'] ){
+            curl_setopt( $ch, CURLOPT_REFERER, @$headers['referer']);
 		}
 		$reqHeaders = array();
 		$reqHeaderCandidates = $this->passThruHeaders;
 
 		foreach ($reqHeaderCandidates as $h){
-			if ( isset($headers[$h]) ){
-				$reqHeaders[] = $h.': '.$headers[$h];
+			if ( isset($headers[strtolower($h)]) ){
+				$reqHeaders[] = $h.': '.$headers[strtolower($h)];
 			}
 		}
 		if ( $reqHeaders ){
