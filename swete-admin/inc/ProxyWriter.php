@@ -1005,7 +1005,7 @@ class ProxyWriter {
       				}
 					$proxyHost = $this->_proxyParts['host'];
       				$domainReplacement = 'domain=.'.$proxyHost;
-					if (substr($proxyHost, 0 4) === 'www.') {
+					if (substr($proxyHost, 0, 4) === 'www.') {
 						$domainReplacement = 'domain=.'.substr($proxyHost, 4);
 					}
 					$replaceDomain = false;
