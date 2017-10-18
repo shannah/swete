@@ -1003,9 +1003,13 @@ class ProxyWriter {
       				if (preg_match('/domain=([^;]+)/i', $cookieStr, $matches2)) {
       				    $domainMatch = $matches2[1];
       				}
-      				$domainReplacement = 'domain=.'.$this->_proxyParts['host'];
-      				$replaceDomain = false;
-      				if ($domainMatch === $this->_srcParts['host']) {
+					$proxyHost = $this->_proxyParts['host'];
+      				$domainReplacement = 'domain=.'.$proxyHost;
+					if (substr($proxyHost, 0 4) === 'www.') {
+						$domainReplacement = 'domain=.'.substr($proxyHost, 4);
+					}
+					$replaceDomain = false;
+      				if ($domainMatch === $proxyHost) {
                         // keep default domain replacement
                         $replaceDomain = true;
       				} else if ($domainMatch) {
@@ -1017,7 +1021,7 @@ class ProxyWriter {
                                 $domainMatch = '.' . $domainMatch;
                             }
 
-                            if (SweteTools::endsWith($this->_proxyParts['host'], $domainMatch)) {
+                            if (SweteTools::endsWith($proxyHost, $domainMatch)) {
                                 // The cookie is already valid for the proxy domain
                                 // leave it alone
 
@@ -1029,7 +1033,7 @@ class ProxyWriter {
       				$domainCount = 0;
       				if ($replaceDomain) {
                         $domainPattern = '/domain=[^;]+/i';
-                        if ( count(explode('.', $this->_proxyParts['host'])) < 2 ){
+                        if ( count(explode('.', $proxyHost)) < 2 ){
                             $domainReplacement = '';
                             $domainPattern = '/domain=[^;]+;?/i';
                         }
