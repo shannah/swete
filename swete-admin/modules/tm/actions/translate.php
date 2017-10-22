@@ -135,7 +135,7 @@ class actions_translate {
 			$tfields = $tlangs[$dest];
 			
 			
-			//$tr = $this->getTranslationRow($record, $dest);
+			$tr = $this->getTranslationRow($record, $dest);
 			//print_r($tr); echo $dest;exit;
 		
 			$row['data'] = array();
