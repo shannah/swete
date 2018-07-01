@@ -4,3 +4,5 @@ swete-admin/snapshots
 swete-admin/conf.db.ini
 .DS_Store
 swete-admin/sites
+/swete-admin/xataface/modules/g2/nbproject/private/
+.lamprunner.data
