@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<project>
+	<app root="swete-admin">
+		<dir path="templates_c" writable="true"/>
+		<dir path="livecache" writable="true"/>
+		<dir path="snapshots" writable="true"/>
+		<db name="swete"/>
+	</app>
+</project>
