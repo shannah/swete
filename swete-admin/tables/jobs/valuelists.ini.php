@@ -1,0 +1,10 @@
+;<?php exit;
+[websites]
+__sql__ = "select website_id, website_name from websites"
+
+[statuses]
+1 = New
+2 = Assigned
+3 = Feedback
+4 = Resolved
+5 = Closed

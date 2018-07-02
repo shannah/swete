@@ -2,7 +2,9 @@ swete-admin/livecache/
 swete-admin/templates_c/
 swete-admin/snapshots
 swete-admin/conf.db.ini
+Swete-admin/conf.db.ini.php
 .DS_Store
 swete-admin/sites
 /swete-admin/xataface/modules/g2/nbproject/private/
+/swete-admin/xataface
 .lamprunner.data
