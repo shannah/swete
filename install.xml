@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<project>
-	<app root="swete-admin">
+<project default="swete-admin">
+	<app name="swete-admin" root="swete-admin" start="swete-admin/index.php">
 		<dir path="templates_c" writable="true"/>
 		<dir path="livecache" writable="true"/>
 		<dir path="snapshots" writable="true"/>
