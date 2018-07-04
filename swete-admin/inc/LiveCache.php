@@ -604,7 +604,11 @@ class LiveCache {
 
     public function dbConnect(){
         if ( !is_resource($this->db) && !is_object($this->db) ){
-            $info = parse_ini_file('conf.db.ini', true);
+        	$confDbIni = 'conf.db.ini';
+        	if (!is_readable($confDbIni)) {
+        		$confDbIni = 'conf.db.ini.php';
+        	}
+            $info = parse_ini_file($confDbIni, true);
             if ( !isset($info['_database']['driver']) ){
       				$info['_database']['driver'] = 'mysql';
       			}
