@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project default="swete-admin">
+<project name="SWeTE" default="swete-admin" icon="https://swete.weblite.ca/images/swete-logo-sq.png">
 	<app name="root" router="swete-admin/router.php"/>
 	<app name="swete-admin" root="swete-admin" start="swete-admin/index.php">
 		<dir path="templates_c" writable="true"/>
