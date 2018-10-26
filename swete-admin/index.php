@@ -1,6 +1,6 @@
 <?php
 
-date_default_timezone_set('America/Los Angeles');
+//date_default_timezone_set('America/Los Angeles');
 ini_set('memory_limit', '2048M');
 /**
  * SWeTE Server: Simple Website Translation Engine

@@ -1689,4 +1689,31 @@ END
 						df_clear_cache();
 				} catch (Exception $ex) {}
 		}
+		
+	function update_4962() {
+	    $sql[] = "create table if not exists `page_refresh_jobs` (
+	        `page_refresh_job_id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	        `website_id` INT(11) NOT NULL,
+	        `start_time` datetime,
+	        `end_time` datetime,
+	        `num_pages_scheduled` INT(11),
+	        `num_pages_completed` INT(11),
+	        `num_pages_successful` INT(11),
+	        `last_modified` datetime,
+	        `complete` TINYINT(1),
+	        `cancelled` TINYINT(1)
+	    ) ENGINE=InnoDB";
+	    $sql[] = "create table if not exists `page_refresh_log` (
+	        `page_refresh_log_id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	        `page_refresh_job_id` int(11) NOT NULL,
+	        `website_id` int(11) NOT NULL,
+	        `page_url` varchar(255),
+	        `response_code` int(5),
+	        `response_body` longtext,
+	        `refresh_time` datetime
+	        ) ENGINE=InnoDB";
+	    df_q($sql);
+	    
+	    
+	}
 }

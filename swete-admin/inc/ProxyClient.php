@@ -277,7 +277,8 @@ class ProxyClient {
 
         public $passThruHeaders = array(
 			'X-SWeTE-Language',
-			'X-Requested-With'
+			'X-Requested-With',
+			'X-Forwarded-For'
 		);
 
 	/**

@@ -415,6 +415,7 @@ class LiveCache {
         $client->REQUEST_HEADERS['Accept-Language'] = $this->proxyLanguage;
         $client->passThruHeaders[] = 'If-None-Match';
         $client->passThruHeaders[] = 'If-Modified-Since';
+        //$client->passThruHeaders[] = 'X-Forwarded-For';
 
         $client->URL = $this->unproxifiedUrl;
         $savedCacheContent = false;
