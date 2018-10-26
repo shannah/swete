@@ -4,11 +4,11 @@
 	{fill_slot name="head_slot"}
 		<link rel="stylesheet" type="text/css" href="{$ENV.DATAFACE_SITE_URL}/css/swete/actions/dashboard.css"/>
 	{/fill_slot}
-	
+
 	{fill_slot name="main_section"}
 		<h1 class="logo"><span>SWeTE Server</span></h1>
-		
-		
+
+
 		<div id="summary-stats" class="block">
 			<h2>Summary</h2>
 			<table>
@@ -26,11 +26,11 @@
 				<tr>
 					<th>Words</th><td><span>Translated: {$systemStats.translatedWords|escape}</span>,<br/> <span>Untranslated: {$systemStats.untranslatedWords|escape}</span>, <br/><span>Total: {$systemStats.numWords|escape}</span></td>
 				</tr>
-				
+
 			</table>
 		</div>
 		<div class="block" id="websites-block">
-		
+
 			<h2>Websites</h2>
 			<table>
 			{foreach from=$results item=row}
@@ -54,7 +54,7 @@
 								</a>
 								<ul class="menuitems">
 									<li>
-										<a href="{$ENV.DATAFACE_SITE_HREF}?-action=edit&amp;-table=websites&amp;website_id={$row->website_id|escape}">Edit</a>
+										<a href="{$ENV.DATAFACE_SITE_HREF}?-action=view&amp;-table=websites&amp;website_id={$row->website_id|escape}">Details</a>
 									</li>
 									<li>
 										<a href="{$ENV.DATAFACE_SITE_HREF}?-action=swete_tool_bar&amp;-table=websites&amp;website_id={$row->website_id|escape}">Capture Strings</a>
@@ -72,8 +72,8 @@
 								</ul>
 							</li>
 						</ul>
-						
-						
+
+
 					</td>
 					<td>
 						<a href="#" class="site-stats" title="View the stats for this site" data-website-id="{$row->website_id|escape}"><span>Info</span></a>
@@ -112,7 +112,7 @@
 									<tr>
 										<th># Translated Phrases</th>
 										<td class="right">
-											<a href="{$ENV.DATAFACE_SITE_HREF}?-action=list&amp;-table=swete_strings&amp;website_id={$row->website_id|escape}&amp;normalized_translation_value=&gt;">	
+											<a href="{$ENV.DATAFACE_SITE_HREF}?-action=list&amp;-table=swete_strings&amp;website_id={$row->website_id|escape}&amp;normalized_translation_value=&gt;">
 												{$row->translated_phrases|escape}
 											</a>
 										</td>
@@ -141,10 +141,10 @@
 											</a>
 										</td>
 									</tr>
-										
+
 								</table>
 							*}</div>
-						
+
 						</div>
 					</td>
 					<td>
@@ -159,9 +159,9 @@
 				<button id="create-new-website" onclick="window.location.href='{$ENV.DATAFACE_SITE_HREF}?-table=websites&amp;-action=new';">Create New Website</button>
 			</div>
 		</div>
-	
-		
-	
+
+
+
 		<div style="clear:both">&nbsp;</div>
 		<div class="swete-version">
 			Currently running SWeTE version {$swete_version}

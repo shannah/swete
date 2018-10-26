@@ -148,11 +148,11 @@
 	label="Google Translate"
 	url="#"
 
-[swete_tool_bar]
+[swete_capture_strings]
 	category=record_actions
 	label="Capture Strings"
-	condition="$record and $record->table()->tablename=='websites' and $record->val('enable_live_translation')"
-	url="{$site_href}?-action=swete_tool_bar&-table=websites&website_id={$record->val('website_id')}"
+	condition="$record and $record->table()->tablename=='websites'"
+	url="{$site_href}?-action=swete_capture_strings&-table=websites&website_id={$record->val('website_id')}"
 
 [dashboard]
 	permission=view
