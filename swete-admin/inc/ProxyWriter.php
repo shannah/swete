@@ -54,6 +54,7 @@ class ProxyWriter {
 		public $snapshotsPath;
 
 		public $snapshotPage;
+		public $snapshotId=-1;
 
 	/**
 	 * @brief The locale for parsing dates.  E.g. en_CA
@@ -802,8 +803,8 @@ class ProxyWriter {
 
 						if (file_exists($this->snapshotsPath)) {
 								$snapshotIndex = $this->snapshotsPath.DIRECTORY_SEPARATOR.'index.txt';
-								if (file_exists($snapshotIndex)) {
-										$currSnapshot = trim(file_get_contents($snapshotIndex));
+								if ($this->snapshotId >= 0 or file_exists($snapshotIndex)) {
+										$currSnapshot = $this->snapshotId >= 0 ? $this->snapshotId : trim(file_get_contents($snapshotIndex));
 										if ($currSnapshot and intval($currSnapshot) > 0) {
 												$snapshotPath = $this->snapshotsPath.DIRECTORY_SEPARATOR.intval($currSnapshot);
 												$pageId = sha1($this->snapshotPage);

@@ -767,6 +767,7 @@ class LiveCache {
             $proxy->setSourceLanguage($this->sourceLanguage);
             $proxy->setProxyLanguage($this->proxyLanguage);
             $proxy->snapshotPage = $proxy->stripBasePath($this->proxifiedUrl);
+            $proxy->snapshotId = @$_COOKIE['--swete-snapshot-id'] ? intval($_COOKIE['--swete-snapshot-id']) : -1;
             $this->_proxyWriter = $proxy;
 
         }
