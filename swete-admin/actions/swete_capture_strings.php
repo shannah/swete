@@ -7,11 +7,9 @@ class actions_swete_capture_strings {
             $urls = preg_split("/\\r\\n|\\r|\\n/", file_get_contents($path));
             $proxyWriter = $site->getProxyWriter();
             foreach ($urls as $k=>$v) {
-                $spacePos = strpos($v, ' ');
-                if ($spacePos !== false) {
-                    $urls[$k] = substr($v, 0, $spacePos);
-                }
-                $urls[$k] = $proxyWriter->proxifyUrl($urls[$k]);
+                $v = preg_split('/\s+/', $v)[0];
+                
+                $urls[$k] = $proxyWriter->proxifyUrl($v);
             }
             return $urls;
         }

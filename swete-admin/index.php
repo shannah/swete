@@ -97,7 +97,7 @@ if ( @$_GET['-action'] == 'swete_handle_request' ){
 	if ( defined('SWETE_DEFAULT_CACHE_TTL') ){
 	    $liveCache->defaultCacheTTL = SWETE_DEFAULT_CACHE_TTL;
 	}
-	if ( strtolower(@$_SERVER['REQUEST_METHOD']) == 'get'){
+	if ( strtolower(@$_SERVER['REQUEST_METHOD']) == 'get' and !(@$_COOKIE['--swete-capture'] == '1')){
 		try {
 			$liveCache->handleRequest();
 		} catch (Exception $ex){

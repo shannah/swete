@@ -255,7 +255,8 @@ class ProxyServer {
 		$proxyWriter = $this->site->getProxyWriter();
 		$proxyWriter->useHtml5Parser = $this->useHtml5Parser;
 		$proxyWriter->useHtml5Serializer = $this->useHtml5Serializer;
-    $proxyWriter->snapshotPage = $proxyWriter->stripBasePath($url);
+        $proxyWriter->snapshotPage = $proxyWriter->stripBasePath($url);
+        $proxyWriter->snapshotId = @$_COOKIE['--swete-snapshot-id'] ? intval($_COOKIE['--swete-snapshot-id']) : -1;
 		$logger = $this->logger;
 		$logger->proxyRequestUrl = $url;
 		$isPost = (strtolower($this->SERVER['REQUEST_METHOD']) === 'post');
