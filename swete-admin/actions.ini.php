@@ -156,6 +156,9 @@
 
 [dashboard]
 	permission=view
+	
+[dashboard_site_stats]
+    permission=view
 
 [export_found_strings_as_xliff]
 	label="Export found strings as XLIFF"

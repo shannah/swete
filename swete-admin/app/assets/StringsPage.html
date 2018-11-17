@@ -1,0 +1,50 @@
+<ons-page>
+    <div id="translation-stats">
+        <table>
+            <thead>
+                <tr><th></th><th>Words</th><th>Phrases</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>Translated</th>
+                    <td><span id="translated-words">?</span></td>
+                    <td><span id="translated-phrases">?</span></td>
+                </tr>
+                <tr>
+                    <th>Untranslated</th>
+                    <td><span id="untranslated-words">?</span></td>
+                    <td><span id="untranslated-phrases">?</span></td>
+                </tr>
+                <tr>
+                    <th>Total</th>
+                    <td><span id="total-words">?</span></td>
+                    <td><span id="total-phrases">?</span></td>
+                </tr>
+            </tbody>
+
+
+
+        </table>
+    </div>
+    <h2>Translation Form</h2>
+    <ons-button modifier="large" id="open-translation-form-untranslated">Filter Untranslated</ons-button>
+    <ons-button modifier="large" id="open-translation-form-all">No Filter</ons-button>
+    
+    <h2>Capture Strings</h2>
+    <div id="capture-strings-inactive">
+        <p>Click the button below to initiate a string capture process.  This will take some time, as it crawls all of the pages in the site's white list and records any phrases that have
+            changed since the last translation.</p>
+
+        <ons-button modifier="large" id="start-capture">Start Capture</ons-button>
+    </div>
+    <div id="capture-strings-active" style="display:none">
+        A string capture is currently in progress.
+        <p>Processing page <span id="capture-progress-current-page">x</span> <span>of</span> <span id="capture-progress-total-pages">y</span></p>
+        <div>
+            <ons-progress-bar id="capture-progress-bar"/>
+            
+        </div>
+        <ons-button id="capture-cancel">Cancel</ons-button>
+    </div>
+    
+</ons-page>
