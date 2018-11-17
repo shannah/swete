@@ -6,16 +6,15 @@ class tables_snapshots {
       import('inc/SweteSite.class.php');
       $site = $siteRec ? new SweteSite($siteRec) : null;
       $pages = $rec->val('pagelist');
-      $lines = preg_split ('/$\R?^/m', $pages);
+      $lines = preg_split("/\\r\\n|\\r|\\n/", $pages);
       $proxyUrl = $site ? $site->getProxyurl() : null;
       $siteUrl = $site ? $site->getSiteUrl() : null;
 
 
       foreach($lines as $k=>$line) {
           $line = trim($line);
-          if (($pos = strpos($line, ' ')) !== false) {
-              $line = substr($line, 0, $pos);
-          }
+          $line = preg_split('/\s+/', $line)[0];
+          
           if ($site) {
               $pos = strpos($line, $proxyUrl);
               if ($pos === 0) {
@@ -34,6 +33,19 @@ class tables_snapshots {
       }
 
       $rec->setValue('pagelist', implode("\n", $lines));
+    }
+
+    function pagelist__default() {
+        $app = Dataface_Application::getInstance();
+        $record = $app->getRecord();
+        if ($record and $record->table()->tablename == 'websites') {
+            $whitelist = 'sites/'.basename($record->val('website_id')).'/whitelist.txt';
+            if (is_readable($whitelist)) {
+                return file_get_contents($whitelist);
+            }
+        }
+        return '';
+        
     }
 
     function section__pages(Dataface_Record $record) {

@@ -415,6 +415,7 @@ class LiveCache {
         $client->REQUEST_HEADERS['Accept-Language'] = $this->proxyLanguage;
         $client->passThruHeaders[] = 'If-None-Match';
         $client->passThruHeaders[] = 'If-Modified-Since';
+        //$client->passThruHeaders[] = 'X-Forwarded-For';
 
         $client->URL = $this->unproxifiedUrl;
         $savedCacheContent = false;
@@ -766,6 +767,7 @@ class LiveCache {
             $proxy->setSourceLanguage($this->sourceLanguage);
             $proxy->setProxyLanguage($this->proxyLanguage);
             $proxy->snapshotPage = $proxy->stripBasePath($this->proxifiedUrl);
+            $proxy->snapshotId = @$_COOKIE['--swete-snapshot-id'] ? intval($_COOKIE['--swete-snapshot-id']) : -1;
             $this->_proxyWriter = $proxy;
 
         }

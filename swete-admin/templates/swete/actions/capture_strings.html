@@ -1,0 +1,36 @@
+{use_macro file="Dataface_Record_Template.html"}
+    {fill_slot name="record_content"}
+    
+    <input type="hidden" id="swete-site-id" value="{$websiteID|escape}"/>
+    {collapsible_sidebar heading="Current String Capture Job" id="capture_strings"}
+
+    
+        <div id="job" style="display:none">
+            <h3>String Capture in Progress</h3>
+            <p>Job started <span class="start-time">start time</span></p>
+            <div class="progress"> </div>
+            <div>Completed <span class="completed">x</span> of <span class="scheduled">y</span> pages.</div>
+            <div><button class="cancel">Cancel</button></div>
+        </div>
+        <div id="no-job" style="display:none">
+            <p>Use this form to crawl site and capture the current strings. This requires that you have provided a white list of URLs to crawl in sites/{$websiteID|escape}/whitelist.txt</p>
+            
+            <button class="start">Start Capture Now</button>
+            <p><a href="sites/{$websiteID|escape}/whitelist.txt">View Whitelist</a></p>
+        </div>
+        <div id="job-starting" style="display:none">
+            <h3>Capture Job Starting</h3>
+            <p>Please wait.  A progress bar should appear in a moment</p>
+        </div>
+    {/collapsible_sidebar}
+    <hr/>
+    {collapsible_sidebar heading="Capture Log" id="capture_log"}
+        <div id="capture-string-history">
+        
+        
+            <p>Review a log of page string capture jobs for this site <a href="index.php?-table=page_refresh_jobs&amp;website_id={$websiteID|escape}&-sort=last_modified+desc">here</a></p>
+        </div>
+    {/collapsible_sidebar}
+    
+    {/fill_slot}
+{/use_macro}

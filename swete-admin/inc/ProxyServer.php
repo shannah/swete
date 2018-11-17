@@ -255,7 +255,8 @@ class ProxyServer {
 		$proxyWriter = $this->site->getProxyWriter();
 		$proxyWriter->useHtml5Parser = $this->useHtml5Parser;
 		$proxyWriter->useHtml5Serializer = $this->useHtml5Serializer;
-    $proxyWriter->snapshotPage = $proxyWriter->stripBasePath($url);
+        $proxyWriter->snapshotPage = $proxyWriter->stripBasePath($url);
+        $proxyWriter->snapshotId = @$_COOKIE['--swete-snapshot-id'] ? intval($_COOKIE['--swete-snapshot-id']) : -1;
 		$logger = $this->logger;
 		$logger->proxyRequestUrl = $url;
 		$isPost = (strtolower($this->SERVER['REQUEST_METHOD']) === 'post');
@@ -367,7 +368,7 @@ class ProxyServer {
 					// If this content is private then we cannot cache it
 					$cacheControlSet = true;
 					if ( preg_match('/private|no-store|max-age=0|s-maxage=0/', $matches[1]) ){
-						Dataface_Application::getInstance()->_conf['nocache'];
+						Dataface_Application::getInstance()->_conf['nocache'] = 1;
 					}
 				}
 				$this->header($h);
@@ -540,11 +541,8 @@ class ProxyServer {
 
 		$this->mark('Loading the translation miss log');
 		$tlogEntry = new Dataface_Record('translation_miss_log', array());
-
-		//error_log("Request url is ".$this->URL);
+    //error_log("Request url is ".$this->URL);
 		if ( $this->logTranslationMisses and @$stats['log'] and $delegate->isOnWhiteList($this->URL)){
-
-
 			$this->mark('ITERATING TRANSLATION MISSES START ('.count($stats['log']).')');
 			foreach ($stats['log'] as $str){
 

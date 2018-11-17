@@ -71,7 +71,11 @@ class actions_dashboard_site_stats {
 			//$row->target_label = @$languages[$row->target_language] ? $languages[$row->target_language] : $row->target_language;
 			
 		}
-		
+		if (@$query['--format'] == 'json') {
+		    header('Content-type: application/json; charset="UTF-8"');
+		    echo json_encode(array('results' => $results));
+		    exit;
+		}
 		df_display(array(
 			'results' => $results
 			), 'swete/actions/dashboard_site_stats.html');
