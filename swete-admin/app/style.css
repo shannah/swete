@@ -1,0 +1,368 @@
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    position: fixed; 
+    overflow: hidden;
+    width: 100%;
+    height: 100%
+}
+/* Holy Mother!!  This snippet is required so that IE 11 doesn't completely
+   block our event listeners!!! */
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+   body {
+        overflow: visible;
+        overflow-y: scroll;
+        height: auto;
+   }
+}
+body::-webkit-scrollbar { width: 0 !important }
+
+#codenameone-canvas {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.cn1-edit-string, .cn1-string-picker {
+    position: absolute;
+    background-color: transparent;
+    z-index: 1000;
+    box-sizing: content-box;
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing:content-box;
+    resize:none;
+}
+
+.cn1-native-peer {
+    position: absolute;
+    border:none;
+}
+
+.cn1-capture-dialog {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    border: 1px solid black;
+    background: rgba(33,33,33,33);
+}
+
+.cn1-capture-dialog video {
+    
+    margin: 0 auto;
+}
+.cn1-capture-preview-dialog {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    border: 1px solid black;
+    background: rgba(33,33,33,33);
+    z-index: 1000;
+    
+}
+
+
+
+#cn1-splash {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-left: -100px;
+    margin-top: -150px;
+    text-align:center;
+    font-family: sans-serif;
+    color: #666;
+    
+}
+
+#cn1-splash img.icon {
+    width: 256px;
+    display: block;
+}
+
+div.cn1-image-capture-dialog {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: #333;
+
+    
+}
+
+div.cn1-image-capture-dialog video, div.cn1-image-capture-dialog.state-accept-snapshot canvas {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -540px;
+    margin-top: -540px;
+    width: 1080px;
+    
+    
+}
+@media(max-width: 480px) {
+    div.cn1-image-capture-dialog video, div.cn1-image-capture-dialog.state-accept-snapshot canvas {
+        
+        margin-left: -240px;
+        margin-top: -240px;
+        width: 480px;
+    }
+}
+
+@media(max-width: 640px) {
+    div.cn1-image-capture-dialog video, div.cn1-image-capture-dialog.state-accept-snapshot canvas {
+        
+        margin-left: -320px;
+        margin-top: -320px;
+        width: 640px;
+    }
+}
+
+
+div.cn1-image-capture-dialog div.buttons {
+    position: fixed;
+    bottom: 1in;
+    left: 0;
+    width: 100%;
+    height: 20%;
+    text-align: center;
+    z-index: 1000;
+}
+
+div.cn1-image-capture-dialog button {
+    display: none;
+    background: none;
+    border: none;
+    
+
+
+}
+
+div.cn1-image-capture-dialog button span {
+    display: none;
+}
+
+div.cn1-image-capture-dialog button i {
+    color: #ccc;
+    opacity: 0.7;
+    font-size: 3em;
+}
+
+div.cn1-image-capture-dialog.state-stream button.capture-btn {
+    display:inline;
+    
+}
+div.cn1-image-capture-dialog.state-stream button.capture-btn i {
+    color: red;
+}
+
+div.cn1-image-capture-dialog.state-stream button.cancel-btn {
+    display:inline;
+}
+
+div.cn1-image-capture-dialog.state-accept-snapshot video{
+    display: none;
+}
+
+div.cn1-image-capture-dialog.state-accept-snapshot .use-btn {
+    display: inline;
+}
+
+div.cn1-image-capture-dialog.state-accept-snapshot .dontuse-btn {
+    display: inline;
+}
+
+@font-face {
+    font-family: native-MainThin;
+    src: local("HelveticaNeueUltraLightCondensed"), 
+        local("HelveticaNeue-Ultra-Light-Condensed"),
+        local("HelveticaNeue-Ultra-Light"), 
+        local("Helvetica Neue Ultra Light"), 
+        local("HelveticaNeue"), 
+        local("Helvetica Neue"), 
+        local('TeXGyreHerosCnRegular'), 
+        local("Arial Narrow"), 
+        local("Arial"), 
+        local("sans-serif"); 
+    font-weight:100; 
+    font-stretch:condensed;
+}
+
+@font-face {
+    font-family: native-MainLight;
+    src: local("HelveticaNeueLightCondensed"), 
+        local("HelveticaNeue-Light-Condensed"), 
+        local("Helvetica Neue Light Condensed"), 
+        local("HelveticaNeueLight"), 
+        local("HelveticaNeue-Light"), 
+        local("Helvetica Neue Light"), 
+        local("HelveticaNeue"), 
+        local("Helvetica Neue"), 
+        local('TeXGyreHerosCnRegular'), 
+        local("Helvetica"), 
+        local("Tahoma"), 
+        local("Geneva"), 
+        local("Arial Narrow"), 
+        local("Arial"), 
+        local("sans-serif"); 
+    font-weight:300; 
+    font-stretch:condensed;
+}
+
+@font-face {
+    font-family: native-MainRegular;
+    src: local("HelveticaNeueMedium"), 
+        local("HelveticaNeue-Medium"), 
+        local("Helvetica Neue Medium"), 
+        local("HelveticaNeue"), 
+        local("Helvetica Neue"), 
+        local('TeXGyreHerosRegular'), 
+        local("Helvetica"), 
+        local("Tahoma"), 
+        local("Geneva"), 
+        local("Arial"), 
+        local("sans-serif"); 
+    font-weight:500; 
+    font-stretch:normal;
+}
+
+@font-face {
+    font-family: native-MainBold;
+    src: local("HelveticaNeueBold"), 
+        local("HelveticaNeue-Bold"), 
+        local("Helvetica Neue Bold"), 
+        local("HelveticaNeue")
+        local("Helvetica Neue"), 
+        local('TeXGyreHerosBold'), 
+        local("Helvetica"), 
+        local("Tahoma"), 
+        local("Geneva"), 
+        local("Arial"), 
+        local("sans-serif"); 
+    font-weight:600; 
+    font-stretch:normal;
+}
+
+@font-face {
+    font-family: native-MainBlack;
+    src: local("HelveticaNeueBlackCondensed"), 
+        local("HelveticaNeue-Black-Condensed"), 
+        local("Helvetica Neue Black Condensed"), 
+        local("HelveticaNeueBlack"), 
+        local("HelveticaNeue-Black"), 
+        local("Helvetica Neue Black"), 
+        local("HelveticaNeue"), 
+        local("Helvetica Neue"), 
+        local('TeXGyreHerosCnBold'), 
+        local("Arial Narrow"), 
+        local("Arial"), 
+        local("sans-serif"); 
+    font-weight:800; 
+    font-stretch:condensed;
+}
+
+
+@font-face {
+    font-family: native-ItalicThin;
+    src: local("HelveticaNeueUltraLightCondensed"), 
+         local("HelveticaNeue-Ultra-Light-Condensed"), 
+         local("Helvetica Neue Ultra Light Condensed"), 
+         local("HelveticaNeueUltraLight"), 
+         local("HelveticaNeue-Ultra-Light"), 
+         local("Helvetica Neue Ultra Light"), 
+         local("HelveticaNeue"), 
+         local("Helvetica Neue"), 
+         local('TeXGyreHerosCnRegular'), 
+         local("Arial Narrow"), 
+         local("Arial"), 
+         local("sans-serif"); 
+    font-weight:100; 
+    font-stretch:condensed;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: native-ItalicLight;
+    src: local("HelveticaNeueLightCondensed"), 
+        local("HelveticaNeue-Light-Condensed"), 
+        local("Helvetica Neue Light Condensed"), 
+        local("HelveticaNeueLight"), 
+        local("HelveticaNeue-Light"), 
+        local("Helvetica Neue Light"), 
+        local("HelveticaNeue"), 
+        local("Helvetica Neue"), 
+        local('TeXGyreHerosCnRegular'), 
+        local("Helvetica"), 
+        local("Tahoma"), 
+        local("Geneva"), 
+        local("Arial Narrow"), 
+        local("Arial"), 
+        local("sans-serif"); 
+    font-weight:300; 
+    font-stretch:condensed;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: native-ItalicRegular;
+    src: local("HelveticaNeueMedium"), 
+        local("HelveticaNeue-Medium"), 
+        local("Helvetica Neue Medium"), 
+        local("HelveticaNeue"), 
+        local("Helvetica Neue"), 
+        local('TeXGyreHerosRegular'), 
+        local("Helvetica"), 
+        local("Tahoma"), 
+        local("Geneva"), 
+        local("Arial"), 
+        local("sans-serif"); 
+    font-weight:500; 
+    font-stretch:normal;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: native-ItalicBold;
+    src: local("HelveticaNeueBold"), 
+        local("HelveticaNeue-Bold"), 
+        local("Helvetica Neue Bold"), 
+        local("HelveticaNeue")
+        local("Helvetica Neue"), 
+        local('TeXGyreHerosBold'), 
+        local("Helvetica"), 
+        local("Tahoma"), 
+        local("Geneva"), 
+        local("Arial"), 
+        local("sans-serif"); 
+    font-weight:600; 
+    font-stretch:normal;
+    font-style: italic;
+}
+
+
+#cn1-peers-container {
+    z-index: -1000;
+    padding:0;
+    margin:0;
+    position:absolute;
+    padding:0;
+    margin:0;
+
+    top:0;
+    left:0;
+
+    width: 100%;
+    height: 100%;
+    background:transparent;
+}

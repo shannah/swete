@@ -24,16 +24,32 @@ if (($pos = strpos(@$_SERVER['REDIRECT_URL'], '!swete:')) !== false) {
     $arg = substr($sweteCmd, strpos($sweteCmd, ':')+1);
     switch ($arg) {
         case 'start-capture':
-            setcookie('--swete-capture', '1');
+            setcookie('--swete-capture', '1', 0, '/');
             break;
 
         case 'stop-capture':
-            setcookie('--swete-capture', '0', time()-3600);
+            setcookie('--swete-capture', '0', time()-3600, '/');
             break;
 
     }
     header('Location: '.substr($_SERVER['REDIRECT_URL'], 0, $pos));
     return;
+}
+if (@$_SERVER['HTTP_X_CN1_COOKIE']) {
+    // This is so that the CN1 app can send cookies.
+    $cookies = preg_split('/;/', $_SERVER['HTTP_X_CN1_COOKIE']);
+    foreach ($cookies as $cookie) {
+        list($key, $val) = explode('=', $cookie);
+        setcookie(trim($key), trim($val), 0, '/');
+        if (@$_COOKIE[trim($key)] != trim($val)) {
+            //$_COOKIE[trim($key)] = trim($val);
+            header('Location: '.$_SERVER['REDIRECT_URL']);
+            exit;
+            
+        }
+        //echo "set cookie $key=$val";
+        //exit;
+    }
 }
 if ( @$_SERVER['UNENCODED_URL'] and !@$_SERVER['REDIRECT_URL'] ){
     if ( ($pos = strpos($_SERVER['UNENCODED_URL'],'?')) !== false ){

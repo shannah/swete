@@ -1,0 +1,58 @@
+CACHE MANIFEST
+# This is a comment.
+# Cache manifest version 1.0.1542493285218
+# If you change the version number in this comment,
+# the cache manifest is no longer byte-for-byte
+# identical.
+# From https://developer.apple.com/library/content/documentation/iPhone/Conceptual/SafariJSDatabaseGuide/OfflineApplicationCache/OfflineApplicationCache.html#//apple_ref/doc/uid/TP40007256-CH7-SW2
+
+CACHE:
+.
+favicon.png
+index.html
+manifest.appcache
+manifest.json
+progress.gif
+style.css
+icon.png
+js/bootstrap.min.js
+js/fontmetrics.js
+js/jquery.min.js
+js/manup.js
+js/push.js
+js/upup.min.js
+css/bootstrap-theme.min.css
+css/bootstrap.min.css
+css/font-awesome.min.css
+sw.js
+teavm/classes.js
+
+
+assets/theme.res
+assets/cn1-version-numbers
+assets/material-design-font.ttf
+assets/StringsPage.html
+assets/Welcome.html
+assets/CN1Resource.res
+assets/iOS7Theme.res
+includes/com_codename1_htmlform_HTMLFormNative.js
+includes/com_codename1_htmlform_BrowserWindowNative.js
+includes/com_codename1_onsen_Updater.js
+icons/tiny.png
+icons/square.png
+favicon.png
+icons/square144.png
+icons/widelogo.310x150.png
+icons/apple-touch-icon-72x72-precomposed.png
+icons/apple-touch-icon-57x57-precomposed.png
+icons/apple-touch-icon-76x76-precomposed.png
+icons/apple-touch-icon-60x60-precomposed.png
+icons/apple-touch-icon-120x120-precomposed.png
+icons/apple-touch-icon-152x152-precomposed.png
+icons/apple-touch-icon-114x114-precomposed.png
+icons/icon-512x512.png
+icons/nice-highres.png
+icons/niceicon.png
+
+NETWORK:
+*

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html manifest="manifest.appcache">
+  <head>
+    
+    <title>SWeTEApp</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"> 
+    <script>
+        window.cn1_debug_flags = {
+              disableTouchstart: false,
+              disableTouchend: false,
+              disableHover: false,
+              disableMouseup: false,
+              disableMousedown: false,
+              disableWheel: false,
+              debugLog: false,
+              useNativeQueue: false
+        };
+    </script>
+    <link rel="icon" type="image/png" href="icon.png">
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="mobile-web-app-capable" content="yes" />
+    <!--<meta name="viewport" content="user-scalable=no" />-->
+    <meta name="viewport"
+      content="
+        height = device-height,
+        width = device-width,
+        initial-scale = 1.0,
+        minimum-scale = 1.0,
+        maximum-scale = 1.0,
+        user-scalable = no,
+        target-densitydpi = device-dpi
+        " />
+    
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+
+    
+    
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="manifest" href="manifest.json"/>
+    
+    
+    
+    <!-- 
+        This value points to the location of the proxy servlet that allows us to 
+        avoid cross origin policy issues! You will need to deploy a proxy servlet 
+        or equivalent on your server.  If you are using the .war distribution for
+        your app, then a compatible proxy comes bundled already.  It will be 
+        accessible at the URL http://yourdomain.com/yourapp/cn1-cors-proxy.
+    
+        If you are deploying on App Engine, you should use the GAE proxy instead
+        which is also bundled with the .war distribution and is accessible at
+        http://yourdomain.com/yourapp/cn1-gae-cors-proxy.
+    
+        By default, your application will be configured to use this bundled 
+        proxy.  You can disable it using the build hint:
+            javascript.inject_proxy=false
+        
+        Alternatively you are not using the .war distribution or you want to use
+        the proxy separately, you can specify the build hint:
+            javascript.proxy.url=http://yourdomain.com/yourapp/cn1-cors-proxy?_target=
+    
+        You can also set this value inside your application using:
+    
+            Display.getInstance().setProperty("javascript.proxy.url", "http://yourdomain.com/yourapp/cn1-cors-proxy?_target=");
+    
+        For more information about the CORS proxy, see https://github.com/shannah/cors-proxy
+    -->
+    <script type="text/javascript">
+        
+        
+        //Uncomment the following line to specify the URL to your proxy.
+        //window.cn1CORSProxyURL='/cn1-cors-proxy?_target=';
+        
+    </script>
+    
+  </head>
+  <body onload="main()">
+    <!-- BEFORE-BODY-INCLUDES -->
+    <div id="cn1-splash">
+        <img class="icon" src="icon.png"/>
+        
+        <img class="progress" src="progress.gif"/>
+        <p>...Loading...</p>
+    </div>
+    <canvas width="320" height="480" id="codenameone-canvas"></canvas>
+    <script type="text/javascript" charset="utf-8" src="js/push.js?v=1.0.1542493285218"></script>
+    <script type="text/javascript" charset="utf-8" src="js/jquery.min.js?v=1.0.1542493285218"></script>
+    <script type="text/javascript" charset="utf-8" src="js/fontmetrics.js?v=1.0.1542493285218"></script>
+    <!-- As of 0.6.0-cn1003 runtime.js is merged with classes.js -->
+    <!--<script type="text/javascript" charset="utf-8" src="teavm/runtime.js?v=1.0.1542493285218"></script>-->
+    <script type="text/javascript" charset="utf-8" src="teavm/classes.js?v=1.0.1542493285218"></script>
+    <script type="text/javascript" src="includes/com_codename1_htmlform_BrowserWindowNative.js"></script>
+<script type="text/javascript" src="includes/com_codename1_htmlform_HTMLFormNative.js"></script>
+<script type="text/javascript" src="includes/com_codename1_onsen_Updater.js"></script>
+
+    <script type="text/javascript">
+        jQuery("div#cn1-splash").fadeOut(100, function(){ jQuery(this).remove(); });
+    </script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/upup.min.js"></script>
+    <!-- OMIT-FOR-OFFLINE -->
+    <script>
+    (function() {
+        /*
+        if ('serviceWorker' in navigator) {
+            var script = document.createElement('script');
+            script.setAttribute('src', 'js/pwa.js?v=1.0.1542493285218');
+            $('body').append(script);
+        }*/
+        if ('UpUp' in window && window.UpUp && 'start' in window.UpUp && window.UpUp.start) {
+            UpUp.start({
+                'content-url': 'offline.html',
+                'assets': [
+                    'css/font-awesome.min.css', 
+                    'css/bootstrap.min.css', 
+                    'css/bootstrap-theme.min.css', 
+                    'style.css', 
+                    'js/push.js?v=1.0.1542493285218',  
+                    'js/jquery.min.js?v=1.0.1542493285218', 
+                    'js/fontmetrics.js?v=1.0.1542493285218',
+                    'js/manup.js',
+                    'teavm/runtime.js?v=1.0.1542493285218', 
+                    'teavm/classes.js?v=1.0.1542493285218',
+                    'js/bootstrap.min.js',
+                    'js/upup.min.js',
+                    'progress.gif',
+                    'icon.png'
+                   ,
+    'assets/theme.res',
+    'assets/cn1-version-numbers',
+    'assets/material-design-font.ttf',
+    'assets/StringsPage.html',
+    'assets/Welcome.html',
+    'assets/CN1Resource.res',
+    'assets/com_codename1_htmlform_HTMLFormNative.js',
+    'assets/com_codename1_htmlform_BrowserWindowNative.js',
+    'assets/iOS7Theme.res',
+    'assets/com_codename1_onsen_Updater.js', 'favicon.png', 'icons/tiny.png', 'icons/square.png', 'icons/widelogo.310x150.png', 'icons/apple-touch-icon-72x72-precomposed.png', 'icons/apple-touch-icon-57x57-precomposed.png', 'icons/apple-touch-icon-76x76-precomposed.png', 'icons/apple-touch-icon-60x60-precomposed.png', 'icons/apple-touch-icon-120x120-precomposed.png', 'icons/apple-touch-icon-152x152-precomposed.png', 'icons/apple-touch-icon-114x114-precomposed.png', 'icons/nice-highres.png', 'icons/icon-512x512.png', 'icons/niceicon.png'
+
+                ],
+                'service-worker-url': 'sw.js',
+                'cache-version' : '1.0.1542493285218'
+            });
+        }
+    })();
+    
+    </script>
+    <!-- /OMIT-FOR-OFFLINE -->
+    <script src="js/manup.js"></script>
+    <!-- AFTER-BODY-INCLUDES -->
+  </body>
+</html>
