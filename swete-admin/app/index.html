@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html manifest="manifest.appcache">
+<html manifest="manifest.appcache" data-cn1-app-version="1.0.1546905925037">
   <head>
     
     <title>SWeTEApp</title>
@@ -15,8 +15,75 @@
               debugLog: false,
               useNativeQueue: false
         };
-    </script>
-    <link rel="icon" type="image/png" href="icon.png">
+   (function(){
+    var cn1ToLoad = {
+        /*
+         'file1' : {size:1000, loaded:false},
+         'file2' : {size:1045, loaded:false},
+         'file3' : {size:1000, loaded:false},
+         'file4' : {size:10450, loaded:false},
+         'file5' : {size:1000, loaded:false},
+         'file6' : {size:1045, loaded:false},
+        */
+    
+    };
+    
+    cn1ToLoad['teavm/classes.js'] = {size:0, loaded:false};
+cn1ToLoad['style.css'] = {size:4260, loaded:false};
+cn1ToLoad['js/manup.js'] = {size:6493, loaded:false};
+cn1ToLoad['js/jquery.min.js'] = {size:84319, loaded:false};
+cn1ToLoad['js/bootstrap.min.js'] = {size:35951, loaded:false};
+cn1ToLoad['js/push.js'] = {size:12310, loaded:false};
+cn1ToLoad['js/upup.min.js'] = {size:939, loaded:false};
+cn1ToLoad['js/fontmetrics.js'] = {size:80902, loaded:false};
+cn1ToLoad['js/pwa.js'] = {size:622, loaded:false};
+cn1ToLoad['css/bootstrap.min.css'] = {size:117305, loaded:false};
+cn1ToLoad['css/bootstrap-theme.min.css'] = {size:19963, loaded:false};
+cn1ToLoad['assets/theme.res'] = {size:10125, loaded:false};
+cn1ToLoad['assets/cn1-version-numbers'] = {size:41, loaded:false};
+cn1ToLoad['assets/material-design-font.ttf'] = {size:128180, loaded:false};
+cn1ToLoad['assets/StringsPage.html'] = {size:1955, loaded:false};
+cn1ToLoad['assets/Welcome.html'] = {size:124, loaded:false};
+cn1ToLoad['assets/CN1Resource.res'] = {size:5961, loaded:false};
+cn1ToLoad['assets/com_codename1_htmlform_HTMLFormNative.js'] = {size:558, loaded:false};
+cn1ToLoad['assets/com_codename1_htmlform_BrowserWindowNative.js'] = {size:3247, loaded:false};
+cn1ToLoad['assets/iOS7Theme.res'] = {size:300158, loaded:false};
+cn1ToLoad['assets/android_holo_light.res'] = {size:114442, loaded:false};
+cn1ToLoad['assets/com_codename1_onsen_Updater.js'] = {size:305, loaded:false};
+
+    var cn1LoadingProgressHandle = window.setInterval(function() {
+        if (!window.jQuery) return;
+        if (jQuery('#cn1-splash').length == 0) {
+            clearInterval(cn1LoadingProgressHandle);
+            return;
+        }
+        var bytesRequired = 0;
+        var bytesLoaded = 0;
+        for (var f in cn1ToLoad) {
+            bytesRequired += cn1ToLoad[f].size;
+            if (cn1ToLoad[f].loaded) {
+                bytesLoaded += cn1ToLoad[f].size;
+            }
+        }
+        var progressBar = jQuery('#cn1-splash > .progress-bar');
+        //jQuery('#cn1-splash > img.progress').hide();
+        progressBar.show();
+        var percentLoaded = Math.round(bytesLoaded / bytesRequired * 100.0)+'%';
+        jQuery('.progress-bar-internal', progressBar).css('width', percentLoaded);
+    }, 200);
+    
+    window.cn1LoadedFile = function(filename) {
+        if (filename.indexOf('?') >= 0) {
+            filename = filename.substring(0, filename.indexOf('?'));
+        }
+        
+        if (cn1ToLoad[filename]) {
+            cn1ToLoad[filename].loaded = true;
+        }
+    };
+    })();
+   </script>
+    <link rel="icon" type="image/png" href="icon.png?v=1.0.1546905925037">
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <meta name="mobile-web-app-capable" content="yes" />
@@ -32,17 +99,16 @@
         target-densitydpi = device-dpi
         " />
     
-    <link rel="stylesheet" href="css/font-awesome.min.css">
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css?v=1.0.1546905925037">
 
     <!-- Optional theme -->
-    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css?v=1.0.1546905925037">
 
     
     
-    <link rel="stylesheet" type="text/css" href="style.css">
-    <link rel="manifest" href="manifest.json"/>
+    <link rel="stylesheet" type="text/css" href="style.css?v=1.0.1546905925037">
+    <link rel="manifest" href="manifest.json?v=1.0.1546905925037"/>
     
     
     
@@ -80,80 +146,95 @@
     </script>
     
   </head>
-  <body onload="main()">
+  <body>
     <!-- BEFORE-BODY-INCLUDES -->
     <div id="cn1-splash">
         <img class="icon" src="icon.png"/>
-        
+        <div style="display:none" class='progress-bar'>
+            <div class='progress-bar-internal'> </div>
+        </div>
         <img class="progress" src="progress.gif"/>
         <p>...Loading...</p>
     </div>
     <canvas width="320" height="480" id="codenameone-canvas"></canvas>
-    <script type="text/javascript" charset="utf-8" src="js/push.js?v=1.0.1542638628806"></script>
-    <script type="text/javascript" charset="utf-8" src="js/jquery.min.js?v=1.0.1542638628806"></script>
-    <script type="text/javascript" charset="utf-8" src="js/fontmetrics.js?v=1.0.1542638628806"></script>
+    <script type="text/javascript" charset="utf-8" src="js/push.js?v=1.0.1546905925037"></script>
+    <script>window.cn1LoadedFile('js/push.js')</script>
+    <script type="text/javascript" charset="utf-8" src="js/jquery.min.js?v=1.0.1546905925037"></script>
+    <script>window.cn1LoadedFile('js/jquery.min.js')</script>
+    <script type="text/javascript" charset="utf-8" src="js/fontmetrics.js?v=1.0.1546905925037"></script>
+    <script>window.cn1LoadedFile('js/fontmetrics.js')</script>
     <!-- As of 0.6.0-cn1003 runtime.js is merged with classes.js -->
-    <!--<script type="text/javascript" charset="utf-8" src="teavm/runtime.js?v=1.0.1542638628806"></script>-->
-    <script type="text/javascript" charset="utf-8" src="teavm/classes.js?v=1.0.1542638628806"></script>
+    <!--<script type="text/javascript" charset="utf-8" src="teavm/runtime.js?v=1.0.1546905925037"></script>-->
+    <script type="text/javascript" charset="utf-8" src="teavm/classes.js?v=1.0.1546905925037"></script>
+    <script>window.cn1LoadedFile('teavm/classes.js')</script>
+    <script>jQuery(document).ready(function() {main()});</script>
     <script type="text/javascript" src="includes/com_codename1_htmlform_BrowserWindowNative.js"></script>
 <script type="text/javascript" src="includes/com_codename1_htmlform_HTMLFormNative.js"></script>
 <script type="text/javascript" src="includes/com_codename1_onsen_Updater.js"></script>
 
-    <script type="text/javascript">
-        jQuery("div#cn1-splash").fadeOut(100, function(){ jQuery(this).remove(); });
-    </script>
+
     <!-- Latest compiled and minified JavaScript -->
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/upup.min.js"></script>
+    <script src="js/bootstrap.min.js?v=1.0.1546905925037"></script>
+    <script>window.cn1LoadedFile('js/bootstrap.min.js')</script>
+    <script src="js/upup.min.js?v=1.0.1546905925037"></script>
+    <script>window.cn1LoadedFile('js/upup.min.js')</script>
     <!-- OMIT-FOR-OFFLINE -->
     <script>
     (function() {
         /*
         if ('serviceWorker' in navigator) {
             var script = document.createElement('script');
-            script.setAttribute('src', 'js/pwa.js?v=1.0.1542638628806');
+            script.setAttribute('src', 'js/pwa.js?v=1.0.1546905925037');
             $('body').append(script);
         }*/
-        if ('UpUp' in window && window.UpUp && 'start' in window.UpUp && window.UpUp.start) {
-            UpUp.start({
-                'content-url': 'offline.html',
-                'assets': [
-                    'css/font-awesome.min.css', 
-                    'css/bootstrap.min.css', 
-                    'css/bootstrap-theme.min.css', 
-                    'style.css', 
-                    'js/push.js?v=1.0.1542638628806',  
-                    'js/jquery.min.js?v=1.0.1542638628806', 
-                    'js/fontmetrics.js?v=1.0.1542638628806',
-                    'js/manup.js',
-                    'teavm/runtime.js?v=1.0.1542638628806', 
-                    'teavm/classes.js?v=1.0.1542638628806',
-                    'js/bootstrap.min.js',
-                    'js/upup.min.js',
-                    'progress.gif',
-                    'icon.png'
-                   ,
-    'assets/theme.res',
-    'assets/cn1-version-numbers',
-    'assets/material-design-font.ttf',
-    'assets/StringsPage.html',
-    'assets/Welcome.html',
-    'assets/CN1Resource.res',
-    'assets/com_codename1_htmlform_HTMLFormNative.js',
-    'assets/com_codename1_htmlform_BrowserWindowNative.js',
-    'assets/iOS7Theme.res',
-    'assets/com_codename1_onsen_Updater.js', 'favicon.png', 'icons/tiny.png', 'icons/square.png', 'icons/widelogo.310x150.png', 'icons/apple-touch-icon-72x72-precomposed.png', 'icons/apple-touch-icon-57x57-precomposed.png', 'icons/apple-touch-icon-76x76-precomposed.png', 'icons/apple-touch-icon-60x60-precomposed.png', 'icons/apple-touch-icon-120x120-precomposed.png', 'icons/apple-touch-icon-152x152-precomposed.png', 'icons/apple-touch-icon-114x114-precomposed.png', 'icons/nice-highres.png', 'icons/icon-512x512.png', 'icons/niceicon.png'
+        window.loadServiceWorker = function() {
+            if ('UpUp' in window && window.UpUp && 'start' in window.UpUp && window.UpUp.start) {
+                //window.addEventListener('load', function() {
+                    setTimeout(function() {
 
-                ],
-                'service-worker-url': 'sw.js',
-                'cache-version' : '1.0.1542638628806'
-            });
-        }
+                        UpUp.start({
+                            'content-url': 'offline.html',
+                            'assets': [
+                                'css/font-awesome.min.css?v=1.0.1546905925037', 
+                                'css/bootstrap.min.css?v=1.0.1546905925037', 
+                                'css/bootstrap-theme.min.css?v=1.0.1546905925037', 
+                                'style.css?v=1.0.1546905925037', 
+                                'js/push.js?v=1.0.1546905925037',  
+                                'js/jquery.min.js?v=1.0.1546905925037', 
+                                'js/fontmetrics.js?v=1.0.1546905925037',
+                                'js/manup.js?v=1.0.1546905925037',
+                                'teavm/classes.js?v=1.0.1546905925037',
+                                'js/bootstrap.min.js?v=1.0.1546905925037',
+                                'js/upup.min.js?v=1.0.1546905925037',
+                                'progress.gif?v=1.0.1546905925037',
+                                'icon.png?v=1.0.1546905925037'
+                               ,
+    'assets/theme.res?v=1.0.1546905925037',
+    'assets/cn1-version-numbers?v=1.0.1546905925037',
+    'assets/material-design-font.ttf?v=1.0.1546905925037',
+    'assets/StringsPage.html?v=1.0.1546905925037',
+    'assets/Welcome.html?v=1.0.1546905925037',
+    'assets/CN1Resource.res?v=1.0.1546905925037',
+    'assets/com_codename1_htmlform_HTMLFormNative.js?v=1.0.1546905925037',
+    'assets/com_codename1_htmlform_BrowserWindowNative.js?v=1.0.1546905925037',
+    'assets/iOS7Theme.res?v=1.0.1546905925037',
+    'assets/android_holo_light.res?v=1.0.1546905925037',
+    'assets/com_codename1_onsen_Updater.js?v=1.0.1546905925037', 'favicon.png', 'icon.png', '_icons/tiny.png', '_icons/square.png', '_icons/widelogo.310x150.png', '_icons/apple-touch-icon-72x72-precomposed.png', '_icons/apple-touch-icon-57x57-precomposed.png', '_icons/apple-touch-icon-76x76-precomposed.png', '_icons/apple-touch-icon-60x60-precomposed.png', '_icons/apple-touch-icon-120x120-precomposed.png', '_icons/apple-touch-icon-152x152-precomposed.png', '_icons/apple-touch-icon-114x114-precomposed.png', '_icons/nice-highres.png', '_icons/icon-512x512.png', '_icons/niceicon.png'
+
+                            ],
+                            'service-worker-url': 'sw.js',
+                            'cache-version' : '1.0.1546905925037'
+                        });
+                    }, 15000);
+                //});
+            }
+        };
     })();
     
     </script>
     <!-- /OMIT-FOR-OFFLINE -->
-    <script src="js/manup.js"></script>
+    <script src="js/manup.js?v=1.0.1546905925037"></script>
+    <script>window.cn1LoadedFile('js/manup.js')</script>
     <!-- AFTER-BODY-INCLUDES -->
   </body>
 </html>

@@ -1161,6 +1161,7 @@ navigator.getUserMedia  = navigator.getUserMedia ||
   var measureText = CanvasRenderingContext2D.prototype.measureText;
   CanvasRenderingContext2D.prototype.measureText = function(textstring) {
       var metrics = measureText.call(this, textstring);
+      //console.log('font', this.font, metrics);
       if (typeof(metrics.height)=== 'undefined'){
           metrics.height = parseInt(/[0-9]+(?=pt|px)/.exec(this.font));
           
@@ -1172,6 +1173,7 @@ navigator.getUserMedia  = navigator.getUserMedia ||
       if (metrics.descent === undefined) {
           metrics.descent = metrics.height - metrics.ascent;
       }
+      //console.log('font after', this.font, metrics);
       return metrics;
   }
  
