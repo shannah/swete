@@ -92,12 +92,14 @@
         $('table.swete-snapshots').each(function() {
             $('#snapshot-progress').show();
             $('button.refresh-all-snapshots').attr('disabled', true);
+            /*
             refreshRows(this, false, function() {
                 console.log("Finished refreshing rows");
                 $('#snapshot-progress').hide();
                 $('button.refresh-all-snapshots').removeAttr('disabled');
 
             });
+            */
         })
         // If the user clicks the refresh snapshot button it will
         // force a refresh of the full snapshot whether or not a page
@@ -105,8 +107,10 @@
         $('button.refresh-all-snapshots').click(function() {
             $('#snapshot-progress').show();
             $('table.swete-snapshots').each(function() {
+                $('button.refresh-all-snapshots').attr('disabled', true);
                 refreshRows(this, true, function() {
                     $('#snapshot-progress').hide();
+                    $('button.refresh-all-snapshots').removeAttr('disabled');
                     alert("Snapshot complete");
                 });
             });

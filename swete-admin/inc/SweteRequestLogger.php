@@ -188,12 +188,36 @@ class SweteRequestLogger {
 	public $liveTranslationMisses=0;
 	
 	/**
+	 * @type array
+	 */
+	public $missedStrings;
+	
+	/**
+	 * @type array
+	 */
+	public $allStrings;
+	
+	/**
+	 * @type array
+	 */
+	public $allTranslations;
+	
+	/**
 	 * @brief Returns the record for this particular log entry. 
 	 *
 	 * @returns Dataface_Record a record of the @e http_request_log table.
 	 */
 	public function getRecord(){
+	    if (!isset($this->record)) {
+	        $this->record = new Dataface_Record('http_request_log', array());
+	    }
 		return $this->record;
+	}
+	
+	private static function array_md5($array) {
+	    if (!$array) return md5('');
+	    asort($array);
+	    return md5(implode('', $array));
 	}
 	
 	/**
@@ -240,6 +264,49 @@ class SweteRequestLogger {
 		if ( PEAR::isError($res) ){
 			throw new Exception($res->getMessage(), $res->getCode());
 		}
+		if ($this->liveTranslationEnabled and strtolower($this->requestMethod) == 'get') {
+            $page = df_get_record('webpage_status', array('page_url' => '='.$this->proxyRequestUrl));
+            if (!$page) {
+                $page = new Dataface_Record('webpage_status', array());
+                $page->setValue('page_url', $this->proxyRequestUrl);
+            }
+            
+            $prevResponseBodyChecksum = $page->val('response_body_checksum');
+            $prevOutputContentChecksum = $page->val('output_content_checksum');
+            //$prevStringsChecksum = $page->val('strings_checksum');
+            $prevTranslationsChecksum = $page->val('translations_checksum');
+            
+            $page->setValues(array(
+                'last_checked' => $this->requestDate,
+                'num_translation_misses' => $this->liveTranslationMisses,
+                'response_status_code' => $this->responseStatusCode,
+                'response_content_type' => $this->responseContentType,
+                'website_id' => $this->websiteId,
+                'response_body_checksum' => md5($this->responseBody),
+                'output_content_checksum' => md5($this->outputContent),
+                'translations_checksum' => self::array_md5($this->allTranslations)
+                
+            ));
+            if ($prevTranslationsChecksum != $page->val('translations_checksum')) {
+                $page->setValue('last_translations_change', $this->requestDate);
+            }
+            if ($prevResponseBodyChecksum != $page->val('response_body_checksum')) {
+                $page->setValue('last_response_body_change', $this->requestDate);
+            }
+            if ($prevOutputContentChecksum != $page->val('output_content_checksum')) {
+                $page->setValue('last_output_content_change',  $this->requestDate);     
+            }
+            if ($this->missedStrings) {
+                $page->setValue('missed_strings', json_encode($this->missedStrings));
+            }
+            if ($this->allStrings) {
+                $page->setValue('strings', json_encode($this->allStrings));
+            }
+            if ($this->allTranslations) {
+                $page->setValue('translations', json_encode($this->allTranslations));
+            }
+            $page->save();
+        }
 		
 	}
 }

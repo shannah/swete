@@ -1161,6 +1161,7 @@ navigator.getUserMedia  = navigator.getUserMedia ||
   var measureText = CanvasRenderingContext2D.prototype.measureText;
   CanvasRenderingContext2D.prototype.measureText = function(textstring) {
       var metrics = measureText.call(this, textstring);
+      //console.log('font', this.font, metrics);
       if (typeof(metrics.height)=== 'undefined'){
           metrics.height = parseInt(/[0-9]+(?=pt|px)/.exec(this.font));
           
@@ -1172,6 +1173,7 @@ navigator.getUserMedia  = navigator.getUserMedia ||
       if (metrics.descent === undefined) {
           metrics.descent = metrics.height - metrics.ascent;
       }
+      //console.log('font after', this.font, metrics);
       return metrics;
   }
  
@@ -1384,4 +1386,310 @@ navigator.getUserMedia  = navigator.getUserMedia ||
        
     };
     
+})();
+
+
+/**
+ *  The Virtual Keyboard Detector
+ *  https://github.com/GillesVermeulen/virtualKeyboardDetector
+ */
+
+window.virtualKeyboardDetector = ( function( window, undefined ) {
+
+  var recentlyFocusedTimeoutDuration = 3000;
+  
+  var currentViewportWidth = previousViewportWidth = viewportWidthWithoutVirtualKeyboard = window.innerWidth;
+  var currentViewportHeight = previousViewportHeight = viewportHeightWithoutVirtualKeyboard = window.innerHeight;
+
+  var virtualKeyboardVisible = false;
+  var recentlyFocused = false;
+  var recentlyFocusedTimeout = null;
+  var validFocusableElements = [ 'INPUT', 'TEXTAREA' ];
+
+  var subscriptions = {};
+
+
+  /**
+   * Public functions
+   */
+
+  function init ( options ) {
+    if ( typeof options !== 'undefined' ) {
+      if ( typeof options.recentlyFocusedTimeoutDuration !== 'undefined' ) recentlyFocusedTimeoutDuration = options.recentlyFocusedTimeoutDuration;
+    }
+
+    resetViewportSizes();
+    initFocusListener();
+    initResizeListener();
+  }
+
+  function isVirtualKeyboardVisible () {
+    return virtualKeyboardVisible;
+  }
+
+  function getVirtualKeyboardSize () {
+    if ( !virtualKeyboardVisible ) return false;
+    
+    return {
+      width: currentViewportWidth,
+      height: viewportHeightWithoutVirtualKeyboard - currentViewportHeight
+    };
+  }
+
+  // Subscribe
+  function on ( eventName, fn ) {
+    if ( typeof subscriptions[eventName] === 'undefined' ) subscriptions[eventName] = [];
+
+    subscriptions[eventName].push(fn);
+  }
+
+  // Unsubscribe
+  function off ( eventName, fn ) {
+    if (typeof subscriptions[eventName] === 'undefined' ) return;
+
+    if (typeof fn === 'undefined') {
+      subscriptions[eventName] = [];
+    } else {
+      var i = subscriptions[eventName].length;
+      while ( i-- ) {
+        if ( subscriptions[eventName][i] == fn ) subscriptions[eventName].splice(i, 1);
+      }
+    }
+  }
+
+  // Publish
+  function trigger ( eventName, args ) {
+    for ( i in subscriptions[eventName] ) {
+      if ( typeof subscriptions[eventName][i] === 'function' ) subscriptions[eventName][i]( args );
+    }   
+  }
+
+
+  /**
+   * Private functions
+   */
+
+  // Reset all sizes. We presume the virtual keyboard is not visible at this stage.
+  // We call this function on initialisation, so make sure you initialise the virtualKeyBoardListener at a moment when the virtual keyboard is likely to be invisible.
+  function resetViewportSizes () {
+    currentViewportWidth = previousViewportWidth = viewportWidthWithoutVirtualKeyboard = window.innerWidth;
+    currentViewportHeight = previousViewportHeight = viewportHeightWithoutVirtualKeyboard = window.innerHeight;
+  }
+
+  // Initialise the listener that checks for focus events in the whole document. This way we can also handle dynamically added focusable elements.
+  function initFocusListener () {
+    document.addEventListener( 'focus', documentFocusHandler, true );
+  }
+
+  // Handle the document focus event. We check if the target was a valid focusable element.
+  function documentFocusHandler (e) {
+    if (typeof e.target !== 'undefined' && typeof e.target.nodeName !== 'undefined') {
+      if (validFocusableElements.indexOf(e.target.nodeName) != -1) elementFocusHandler(e);
+    }
+  }
+
+  // Handle the case when a valid focusable element is focused. We flag that a valid element was recently focused. This flag expires after recentlyFocusedTimeoutDuration.
+  function elementFocusHandler (e) {
+    if ( recentlyFocusedTimeout != null ) {
+      window.clearTimeout( recentlyFocusedTimeout );
+      recentlyFocusedTimeout = null;
+    }
+
+    recentlyFocused = true;
+
+    recentlyFocusedTimeout = window.setTimeout( expireRecentlyFocused, recentlyFocusedTimeoutDuration );
+  }
+
+  function expireRecentlyFocused () {
+    recentlyFocused = false;
+  }
+
+  function initResizeListener () {
+    window.addEventListener( 'resize', resizeHandler );
+  }
+
+  function resizeHandler () {
+    currentViewportWidth = window.innerWidth;
+    currentViewportHeight = window.innerHeight;
+
+    // If the virtual keyboard is tought to be visible, but the viewport height returns to the value before keyboard was visible, we presume the keyboard was hidden.
+    if ( virtualKeyboardVisible && currentViewportWidth == previousViewportWidth && currentViewportHeight >= viewportHeightWithoutVirtualKeyboard ) {
+      virtualKeyboardHiddenHandler();
+    }
+
+    // If the width of the viewport is changed, it's hard to tell wether virtual keyboard is still visible, so we make sure it's not.
+    if ( currentViewportWidth != previousViewportWidth ) {
+      if ( 'activeElement' in document )
+        document.activeElement.blur();
+      virtualKeyboardHiddenHandler();
+    }
+
+    // If recently focused and viewport height is smaller then previous height, we presume that the virtual keyboard has appeared.
+    if ( !virtualKeyboardVisible && recentlyFocused && currentViewportWidth == previousViewportWidth && currentViewportHeight < previousViewportHeight ) {
+      virtualKeyboardVisibleHandler();
+    }   
+
+    // If the keyboard is presumed not visible, we save the current measurements as values before keyboard was shown.
+    if ( virtualKeyboardVisible == false ) {
+      viewportWidthWithoutVirtualKeyboard = currentViewportWidth;
+      viewportHeightWithoutVirtualKeyboard = currentViewportHeight;
+    }
+
+    previousViewportWidth = currentViewportWidth;
+    previousViewportHeight = currentViewportHeight;
+  }
+
+  function virtualKeyboardVisibleHandler () {
+    virtualKeyboardVisible = true;
+
+    var eventData = {
+      virtualKeyboardVisible: virtualKeyboardVisible,
+      sizes: getSizesData()
+    };
+
+    trigger( 'virtualKeyboardVisible', eventData );
+  }
+
+  function virtualKeyboardHiddenHandler () {
+    virtualKeyboardVisible = false;
+
+    var eventData = {
+      virtualKeyboardVisible: virtualKeyboardVisible,
+      sizes: getSizesData()
+    };
+
+    trigger( 'virtualKeyboardHidden', eventData );
+  }
+
+  function getSizesData () {
+    return {
+      viewportWithoutVirtualKeyboard: {
+        width: viewportWidthWithoutVirtualKeyboard,
+        height: viewportHeightWithoutVirtualKeyboard
+      },
+      currentViewport: {
+        width: currentViewportWidth,
+        height: currentViewportHeight
+      },
+      virtualKeyboard: {
+        width: currentViewportWidth,
+        height: viewportHeightWithoutVirtualKeyboard - currentViewportHeight
+      }
+    };
+  }
+
+  // Make public functions available
+  return {
+    init: init,
+    isVirtualKeyboardVisible: isVirtualKeyboardVisible,
+    getVirtualKeyboardSize: getVirtualKeyboardSize,
+    on: on,
+    addEventListener: on,
+    subscribe: on,
+    off: off,
+    removeEventListener: off,
+    unsubscribe: off,
+    trigger: trigger,
+    publish: trigger,
+    dispatchEvent: trigger
+  };
+
+} )( window );
+
+
+(function() {
+    window.cn1GetImageOrientation = getOrientation;
+    window.cn1ResetImageOrientation = resetImageOrientation;
+    
+    function resetImageOrientation(srcBlob, srcOrientation, callback) {
+        var img = new Image();    
+
+        img.onload = function() {
+          var width = img.width,
+              height = img.height,
+              canvas = document.createElement('canvas'),
+              ctx = canvas.getContext("2d");
+
+          // set proper canvas dimensions before transform & export
+          if (4 < srcOrientation && srcOrientation < 9) {
+            canvas.width = height;
+            canvas.height = width;
+          } else {
+            canvas.width = width;
+            canvas.height = height;
+          }
+
+          // transform context before drawing image
+          switch (srcOrientation) {
+            case 2: ctx.transform(-1, 0, 0, 1, width, 0); break;
+            case 3: ctx.transform(-1, 0, 0, -1, width, height); break;
+            case 4: ctx.transform(1, 0, 0, -1, 0, height); break;
+            case 5: ctx.transform(0, 1, 1, 0, 0, 0); break;
+            case 6: ctx.transform(0, 1, -1, 0, height, 0); break;
+            case 7: ctx.transform(0, -1, -1, 0, height, width); break;
+            case 8: ctx.transform(0, -1, 1, 0, 0, width); break;
+            default: break;
+          }
+
+          // draw image
+          ctx.drawImage(img, 0, 0);
+
+          // export blob
+          
+          
+          callback(canvas);
+        };
+
+        img.src = URL.createObjectURL(srcBlob);
+      };
+    
+    
+    function getOrientation(file, callback) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+
+            var view = new DataView(e.target.result);
+            if (view.getUint16(0, false) != 0xFFD8)
+            {
+                return callback(-2);
+            }
+            var length = view.byteLength, offset = 2;
+            while (offset < length) 
+            {
+                if (view.getUint16(offset+2, false) <= 8) return callback(-1);
+                var marker = view.getUint16(offset, false);
+                offset += 2;
+                if (marker == 0xFFE1) 
+                {
+                    if (view.getUint32(offset += 2, false) != 0x45786966) 
+                    {
+                        return callback(-1);
+                    }
+
+                    var little = view.getUint16(offset += 6, false) == 0x4949;
+                    offset += view.getUint32(offset + 4, little);
+                    var tags = view.getUint16(offset, little);
+                    offset += 2;
+                    for (var i = 0; i < tags; i++)
+                    {
+                        if (view.getUint16(offset + (i * 12), little) == 0x0112)
+                        {
+                            return callback(view.getUint16(offset + (i * 12) + 8, little));
+                        }
+                    }
+                }
+                else if ((marker & 0xFF00) != 0xFF00)
+                {
+                    break;
+                }
+                else
+                { 
+                    offset += view.getUint16(offset, false);
+                }
+            }
+            return callback(-1);
+        };
+        reader.readAsArrayBuffer(file);
+    }
+
 })();

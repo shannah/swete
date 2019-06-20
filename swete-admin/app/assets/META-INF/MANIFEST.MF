@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Ant-Version: Apache Ant 1.10.4
-Created-By: 11-ea+23 (Oracle Corporation)
+Created-By: 11+28 (Oracle Corporation)
 Class-Path: lib/JavaSE.jar lib/CodenameOne.jar lib/cls/ lib/stubs/ lib
  /internal_tmp/
 X-COMMENT: Main-Class will be added automatically by build

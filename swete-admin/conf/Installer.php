@@ -1716,4 +1716,73 @@ END
 	    
 	    
 	}
+	
+	function update_4970() {
+	    $sql[] = "create table if not exists `webpage_status` (
+	        `webpage_status_id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	        `website_id` INT(11) NOT NULL,
+	        `page_url` varchar(255),
+	        `last_checked` datetime,
+	        `num_translation_misses` INT(11),
+	        `strings` longtext,
+	        `missed_strings` longtext,
+	        `response_status_code` INT(5)
+	    ) ENGINE=InnoDB";
+	   
+	    df_q($sql);
+	    
+	    
+	}
+	
+	function update_4974() {
+        $sql[] = "alter table webpage_status add column `response_body_checksum` varchar(40)";
+        $sql[] = "alter table webpage_status add column `output_content_checksum` varchar(40)";
+        $sql[] = "alter table webpage_status add column `last_response_body_change` datetime";
+        $sql[] = "alter table webpage_status add column `last_output_content_change` datetime";
+        try {
+                df_q($sql);
+                df_clear_views();
+                df_clear_cache();
+        } catch (Exception $ex) {}
+    }
+    
+    function update_4978() {
+        $sql[] = "alter table webpage_status add column `translations` longtext";
+        $sql[] = "alter table webpage_status add column `translations_checksum` varchar(40)";
+        $sql[] = "alter table webpage_status add column `last_translations_change` datetime";
+
+        try {
+                df_q($sql);
+                df_clear_views();
+                df_clear_cache();
+        } catch (Exception $ex) {}
+    }
+    
+    function update_4982() {
+	    $sql[] = "create table if not exists `webpage_snapshots` (
+	        `webpage_snapshot_id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	        `snapshot_id` INT(11) NOT NULL,
+	        `page_url` varchar(255),
+	        `translations` longtext,
+	        `translations_checksum` varchar(40),
+	        `last_translations_change` datetime
+	    ) ENGINE=InnoDB";
+	   
+	    df_q($sql);
+	    
+	    
+	}
+	
+	function update_4990() {
+		$sql[] = "create table if not exists `global_blocks` (
+			`website_id` INT(11) NOT NULL,
+			`block_id` varchar(255) NOT NULL,
+			`page_url` text,
+			PRIMARY KEY(`website_id`, `block_id`)
+			
+		) ENGINE=InnoDB";
+		df_q($sql);
+	}
+	
+	
 }

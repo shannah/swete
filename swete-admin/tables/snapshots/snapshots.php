@@ -35,6 +35,55 @@ class tables_snapshots {
       $rec->setValue('pagelist', implode("\n", $lines));
     }
 
+    private function getAndCreateSnapshotPath(Dataface_Record $snapshot) {
+        $snapshotId = $snapshot->val('snapshot_id');
+        $siteSnapshotsPath = 'snapshots/'.$snapshot->val('website_id');
+        if (!file_exists($siteSnapshotsPath)) {
+            if (!@mkdir($siteSnapshotsPath)) {
+                throw new Exception("Failed to create directory ".$siteSnapshotsPath);
+            }
+        }
+        $snapshotPath = $siteSnapshotsPath.'/'.$snapshotId;
+        if (!file_exists($snapshotPath)) {
+            if (!@mkdir($snapshotPath)) {
+                throw new Exception("Failed to create directory ".$snapshotPath);
+            }
+        }
+        return $snapshotPath;
+    }
+    
+    private static function removeDirectory($path) {
+        $files = glob($path . '/*');
+        foreach ($files as $file) {
+            is_dir($file) ? self::removeDirectory($file) : unlink($file);
+        }
+        rmdir($path);
+        return;
+    }
+    
+    function afterDelete(Dataface_Record $rec) {
+        $snapshotsDir = $this->getAndCreateSnapshotPath($rec);
+        if (is_dir($snapshotsDir)) self::removeDirectory($snapshotsDir);
+    }
+
+    private static function xcopy($source, $dest, $permissions = 0755)
+    {
+       foreach ($iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($source, \RecursiveDirectoryIterator::SKIP_DOTS), \RecursiveIteratorIterator::SELF_FIRST) as $item)
+        {
+            if ($item->isDir())
+                mkdir($dest.DIRECTORY_SEPARATOR.$iterator->getSubPathName());
+            else
+                copy($item, $dest.DIRECTORY_SEPARATOR.$iterator->getSubPathName());
+        }
+    }
+    
+    function afterCopy(Dataface_Record $src, Dataface_Record $dest) {
+        self::xcopy(
+            $this->getAndCreateSnapshotPath($src),
+            $this->getAndCreateSnapshotPath($dest)
+        );
+    }
+
     function pagelist__default() {
         $app = Dataface_Application::getInstance();
         $record = $app->getRecord();

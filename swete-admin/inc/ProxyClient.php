@@ -83,6 +83,8 @@ class ProxyClient {
     const TRANSLATION_MODE_TRANSLATE = 2;
     const TRANSLATION_MODE_NOTRANSLATE = 3;
 
+    public $blockId = null;
+
 	/**
 	 * @type string
 	 *
@@ -607,6 +609,36 @@ class ProxyClient {
 		//echo "Status : $status";print_r($status);exit;
 		$this->status = $status;
 		curl_close( $ch );
+		
+		if (isset($this->blockId)) {
+		    $pos = -1;
+		    $found = false;
+		    while (($pos = strpos($contents, '<swete-block')) !== false) {
+		        $contents = substr($contents, $pos);
+		        $endTagPos = strpos($contents, '>');
+		        if (!$endTagPos) {
+		            $contents = '';
+		            break;
+		        }
+		        $tagStr = substr($contents, 0, $endPos);
+		        if (strpos($tagStr, 'id="'.htmlspecialchars($this->blockId).'"') !== false) {
+		            $endTagPos = strpos($contents, '</swete-block>');
+		            if (!$endTagPos) {
+		                $contents = '';
+		                break;
+		            }
+		            $contents = '<!doctype html><html><body>'.substr($contents, 0, $endTagPos + strlen('</swete-block>')).'</body></html>';
+		            $found = true;
+		            break;
+		            
+		        }
+		    }
+		    if (!$found) {
+		        $contents = '';
+		        $status = 404;
+		    }
+		}
+		
 
 		if ( !$this->headers ){
 			// Split header text into an array.

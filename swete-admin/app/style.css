@@ -77,8 +77,7 @@ body::-webkit-scrollbar { width: 0 !important }
     position: fixed;
     top: 50%;
     left: 50%;
-    margin-left: -100px;
-    margin-top: -150px;
+    transform:translate(-50%, -50%);
     text-align:center;
     font-family: sans-serif;
     color: #666;
@@ -86,9 +85,45 @@ body::-webkit-scrollbar { width: 0 !important }
 }
 
 #cn1-splash img.icon {
-    width: 256px;
+    width: 2in;
+    max-width: 100%;
+    margin: auto;
     display: block;
 }
+
+#cn1-splash .progress-bar {
+    width: 100%;
+    border: 1px solid #666;
+    background-color: white;
+    height: 5mm;
+    margin: 1mm;
+    position: relative;
+    padding:0;
+    background-image: none;
+    background-color:white;
+    box-shadow: 0 1px 5px #000 inset, 0 1px 0 #444; 
+    border-radius: 2.5mm;
+    overflow:hidden;
+
+}
+
+#cn1-splash .progress-bar .progress-bar-internal {
+    position:absolute;
+    top:0;
+    left:0;
+    height: 100%;
+    width:0;
+    background-image: linear-gradient(#0072ff,#00c6ff);
+    border-radius: 2.5mm;
+}
+
+#cn1-splash img.progress {
+    max-width: 50%;
+    max-height: 5mm;
+    width:auto;
+    height:auto;
+}
+
 
 div.cn1-image-capture-dialog {
     position: fixed;
@@ -101,7 +136,7 @@ div.cn1-image-capture-dialog {
     
 }
 
-div.cn1-image-capture-dialog video, div.cn1-image-capture-dialog.state-accept-snapshot canvas {
+div.cn1-image-capture-dialog video, div.cn1-image-capture-dialog.state-accept-snapshot > canvas {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -112,7 +147,7 @@ div.cn1-image-capture-dialog video, div.cn1-image-capture-dialog.state-accept-sn
     
 }
 @media(max-width: 480px) {
-    div.cn1-image-capture-dialog video, div.cn1-image-capture-dialog.state-accept-snapshot canvas {
+    div.cn1-image-capture-dialog video, div.cn1-image-capture-dialog.state-accept-snapshot > canvas {
         
         margin-left: -240px;
         margin-top: -240px;
@@ -121,7 +156,7 @@ div.cn1-image-capture-dialog video, div.cn1-image-capture-dialog.state-accept-sn
 }
 
 @media(max-width: 640px) {
-    div.cn1-image-capture-dialog video, div.cn1-image-capture-dialog.state-accept-snapshot canvas {
+    div.cn1-image-capture-dialog video, div.cn1-image-capture-dialog.state-accept-snapshot > canvas {
         
         margin-left: -320px;
         margin-top: -320px;
@@ -181,173 +216,6 @@ div.cn1-image-capture-dialog.state-accept-snapshot .use-btn {
 
 div.cn1-image-capture-dialog.state-accept-snapshot .dontuse-btn {
     display: inline;
-}
-
-@font-face {
-    font-family: native-MainThin;
-    src: local("HelveticaNeueUltraLightCondensed"), 
-        local("HelveticaNeue-Ultra-Light-Condensed"),
-        local("HelveticaNeue-Ultra-Light"), 
-        local("Helvetica Neue Ultra Light"), 
-        local("HelveticaNeue"), 
-        local("Helvetica Neue"), 
-        local('TeXGyreHerosCnRegular'), 
-        local("Arial Narrow"), 
-        local("Arial"), 
-        local("sans-serif"); 
-    font-weight:100; 
-    font-stretch:condensed;
-}
-
-@font-face {
-    font-family: native-MainLight;
-    src: local("HelveticaNeueLightCondensed"), 
-        local("HelveticaNeue-Light-Condensed"), 
-        local("Helvetica Neue Light Condensed"), 
-        local("HelveticaNeueLight"), 
-        local("HelveticaNeue-Light"), 
-        local("Helvetica Neue Light"), 
-        local("HelveticaNeue"), 
-        local("Helvetica Neue"), 
-        local('TeXGyreHerosCnRegular'), 
-        local("Helvetica"), 
-        local("Tahoma"), 
-        local("Geneva"), 
-        local("Arial Narrow"), 
-        local("Arial"), 
-        local("sans-serif"); 
-    font-weight:300; 
-    font-stretch:condensed;
-}
-
-@font-face {
-    font-family: native-MainRegular;
-    src: local("HelveticaNeueMedium"), 
-        local("HelveticaNeue-Medium"), 
-        local("Helvetica Neue Medium"), 
-        local("HelveticaNeue"), 
-        local("Helvetica Neue"), 
-        local('TeXGyreHerosRegular'), 
-        local("Helvetica"), 
-        local("Tahoma"), 
-        local("Geneva"), 
-        local("Arial"), 
-        local("sans-serif"); 
-    font-weight:500; 
-    font-stretch:normal;
-}
-
-@font-face {
-    font-family: native-MainBold;
-    src: local("HelveticaNeueBold"), 
-        local("HelveticaNeue-Bold"), 
-        local("Helvetica Neue Bold"), 
-        local("HelveticaNeue")
-        local("Helvetica Neue"), 
-        local('TeXGyreHerosBold'), 
-        local("Helvetica"), 
-        local("Tahoma"), 
-        local("Geneva"), 
-        local("Arial"), 
-        local("sans-serif"); 
-    font-weight:600; 
-    font-stretch:normal;
-}
-
-@font-face {
-    font-family: native-MainBlack;
-    src: local("HelveticaNeueBlackCondensed"), 
-        local("HelveticaNeue-Black-Condensed"), 
-        local("Helvetica Neue Black Condensed"), 
-        local("HelveticaNeueBlack"), 
-        local("HelveticaNeue-Black"), 
-        local("Helvetica Neue Black"), 
-        local("HelveticaNeue"), 
-        local("Helvetica Neue"), 
-        local('TeXGyreHerosCnBold'), 
-        local("Arial Narrow"), 
-        local("Arial"), 
-        local("sans-serif"); 
-    font-weight:800; 
-    font-stretch:condensed;
-}
-
-
-@font-face {
-    font-family: native-ItalicThin;
-    src: local("HelveticaNeueUltraLightCondensed"), 
-         local("HelveticaNeue-Ultra-Light-Condensed"), 
-         local("Helvetica Neue Ultra Light Condensed"), 
-         local("HelveticaNeueUltraLight"), 
-         local("HelveticaNeue-Ultra-Light"), 
-         local("Helvetica Neue Ultra Light"), 
-         local("HelveticaNeue"), 
-         local("Helvetica Neue"), 
-         local('TeXGyreHerosCnRegular'), 
-         local("Arial Narrow"), 
-         local("Arial"), 
-         local("sans-serif"); 
-    font-weight:100; 
-    font-stretch:condensed;
-    font-style: italic;
-}
-
-@font-face {
-    font-family: native-ItalicLight;
-    src: local("HelveticaNeueLightCondensed"), 
-        local("HelveticaNeue-Light-Condensed"), 
-        local("Helvetica Neue Light Condensed"), 
-        local("HelveticaNeueLight"), 
-        local("HelveticaNeue-Light"), 
-        local("Helvetica Neue Light"), 
-        local("HelveticaNeue"), 
-        local("Helvetica Neue"), 
-        local('TeXGyreHerosCnRegular'), 
-        local("Helvetica"), 
-        local("Tahoma"), 
-        local("Geneva"), 
-        local("Arial Narrow"), 
-        local("Arial"), 
-        local("sans-serif"); 
-    font-weight:300; 
-    font-stretch:condensed;
-    font-style: italic;
-}
-
-@font-face {
-    font-family: native-ItalicRegular;
-    src: local("HelveticaNeueMedium"), 
-        local("HelveticaNeue-Medium"), 
-        local("Helvetica Neue Medium"), 
-        local("HelveticaNeue"), 
-        local("Helvetica Neue"), 
-        local('TeXGyreHerosRegular'), 
-        local("Helvetica"), 
-        local("Tahoma"), 
-        local("Geneva"), 
-        local("Arial"), 
-        local("sans-serif"); 
-    font-weight:500; 
-    font-stretch:normal;
-    font-style: italic;
-}
-
-@font-face {
-    font-family: native-ItalicBold;
-    src: local("HelveticaNeueBold"), 
-        local("HelveticaNeue-Bold"), 
-        local("Helvetica Neue Bold"), 
-        local("HelveticaNeue")
-        local("Helvetica Neue"), 
-        local('TeXGyreHerosBold'), 
-        local("Helvetica"), 
-        local("Tahoma"), 
-        local("Geneva"), 
-        local("Arial"), 
-        local("sans-serif"); 
-    font-weight:600; 
-    font-stretch:normal;
-    font-style: italic;
 }
 
 

@@ -1,6 +1,6 @@
 CACHE MANIFEST
 # This is a comment.
-# Cache manifest version 1.0.1542638628806
+# Cache manifest version 1.0.1549491643792
 # If you change the version number in this comment,
 # the cache manifest is no longer byte-for-byte
 # identical.
@@ -8,51 +8,54 @@ CACHE MANIFEST
 
 CACHE:
 .
-favicon.png
+favicon.png?v=1.0.1549491643792
+icon.png?v=1.0.1549491643792
 index.html
 manifest.appcache
-manifest.json
+manifest.json?v=1.0.1549491643792
 progress.gif
-style.css
-icon.png
-js/bootstrap.min.js
-js/fontmetrics.js
-js/jquery.min.js
-js/manup.js
-js/push.js
-js/upup.min.js
-css/bootstrap-theme.min.css
-css/bootstrap.min.css
-css/font-awesome.min.css
+style.css?v=1.0.1549491643792
+icon.png?v=1.0.1549491643792
+js/bootstrap.min.js?v=1.0.1549491643792
+js/fontmetrics.js?v=1.0.1549491643792
+js/jquery.min.js?v=1.0.1549491643792
+js/manup.js?v=1.0.1549491643792
+js/push.js?v=1.0.1549491643792
+js/upup.min.js?v=1.0.1549491643792
+css/bootstrap-theme.min.css?v=1.0.1549491643792
+css/bootstrap.min.css?v=1.0.1549491643792
+css/font-awesome.min.css?v=1.0.1549491643792
 sw.js
-teavm/classes.js
+teavm/classes.js?v=1.0.1549491643792
 
 
-assets/theme.res
-assets/cn1-version-numbers
-assets/material-design-font.ttf
-assets/StringsPage.html
-assets/Welcome.html
-assets/CN1Resource.res
-assets/iOS7Theme.res
-includes/com_codename1_htmlform_HTMLFormNative.js
-includes/com_codename1_htmlform_BrowserWindowNative.js
-includes/com_codename1_onsen_Updater.js
-icons/tiny.png
-icons/square.png
-favicon.png
-icons/square144.png
-icons/widelogo.310x150.png
-icons/apple-touch-icon-72x72-precomposed.png
-icons/apple-touch-icon-57x57-precomposed.png
-icons/apple-touch-icon-76x76-precomposed.png
-icons/apple-touch-icon-60x60-precomposed.png
-icons/apple-touch-icon-120x120-precomposed.png
-icons/apple-touch-icon-152x152-precomposed.png
-icons/apple-touch-icon-114x114-precomposed.png
-icons/icon-512x512.png
-icons/nice-highres.png
-icons/niceicon.png
+assets/theme.res?v=1.0.1549491643792
+assets/cn1-version-numbers?v=1.0.1549491643792
+assets/material-design-font.ttf?v=1.0.1549491643792
+assets/StringsPage.html?v=1.0.1549491643792
+assets/Welcome.html?v=1.0.1549491643792
+assets/CN1Resource.res?v=1.0.1549491643792
+assets/iOS7Theme.res?v=1.0.1549491643792
+assets/android_holo_light.res?v=1.0.1549491643792
+includes/com_codename1_htmlform_HTMLFormNative.js?v=1.0.1549491643792
+includes/com_codename1_htmlform_BrowserWindowNative.js?v=1.0.1549491643792
+includes/com_codename1_onsen_Updater.js?v=1.0.1549491643792
+_icons/tiny.png
+_icons/square.png
+favicon.png?v=1.0.1549491643792
+icon.png?v=1.0.1549491643792
+_icons/square144.png
+_icons/widelogo.310x150.png
+_icons/apple-touch-icon-72x72-precomposed.png
+_icons/apple-touch-icon-57x57-precomposed.png
+_icons/apple-touch-icon-76x76-precomposed.png
+_icons/apple-touch-icon-60x60-precomposed.png
+_icons/apple-touch-icon-120x120-precomposed.png
+_icons/apple-touch-icon-152x152-precomposed.png
+_icons/apple-touch-icon-114x114-precomposed.png
+_icons/icon-512x512.png
+_icons/nice-highres.png
+_icons/niceicon.png
 
 NETWORK:
 *

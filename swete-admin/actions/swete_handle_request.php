@@ -75,6 +75,9 @@ class actions_swete_handle_request{
 		}
 
 		$server = new ProxyServer;
+		if (@$sweteDirectives['swete:block']) {
+		    $server->blockId = $sweteDirectives['swete:block'];
+		}
 		if ( defined('SWETE_USE_HTML5_PARSER') and SWETE_USE_HTML5_PARSER ){
 		    $server->useHtml5Parser = true;
 		}

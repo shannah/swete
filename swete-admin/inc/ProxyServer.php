@@ -40,6 +40,7 @@ class ProxyServer {
 
     public $useHtml5Parser = false;
     public $useHtml5Serializer = false;
+    public $blockId = null;
 
     /**
      * @brief Input HTML content to be translated
@@ -234,6 +235,30 @@ class ProxyServer {
 			error_log('[SWeTE Profiling][pid='.getmypid().']['.microtime().'] '.$msg);
 		}
 	}
+	
+	private static function redirectBlock($siteId, $url) {
+
+		if (preg_match('#'.preg_quote('/swete-block?id=', '#').'(.*)$#', $url, $matches)) {
+			$blockId = urldecode($matches[1]);
+			$blockRecord = df_get_record('global_blocks', array(
+				'website_id' => '=' . $siteId,
+				'block_id' => '=' .$blockId
+			));
+			if (!$blockRecord) {
+				header('HTTP/1.0 404 Not found');
+				header('X-SWeTE-Handler: ProxyServer/Block Redirect/'.__LINE__);
+				header('Connection: close');
+				output('Block not found');
+				while ( @ob_end_flush());
+				flush();
+				exit;
+				
+			}
+			
+			header('Location: '.$blockRecord->val('page_url'));
+			return;
+		}
+	}
 
 	/**
 	 * @brief Handles an HTTP request.  Processes the inputs and returns the
@@ -243,8 +268,12 @@ class ProxyServer {
 		$this->mark("handleRequest: ".$this->URL);
 		$url = $this->URL;
 
+		
 
 		$siteId = $this->site->getRecord()->val('website_id');
+		
+		self::redirectBlock($siteId, $url);
+		
 		if ( file_exists('sites/'.basename($siteId).'/Delegate.php') ){
 			require_once 'sites/'.basename($siteId).'/Delegate.php';
 			$clazz = 'sites_'.intval($siteId).'_Delegate';
@@ -537,13 +566,45 @@ class ProxyServer {
 		$logger->outputContent = $client->content;
 
 		$logger->outputResponseHeaders = serialize(headers_list());
-		$logger->save();
+		
 
 		$this->mark('Loading the translation miss log');
-		$tlogEntry = new Dataface_Record('translation_miss_log', array());
+		
     //error_log("Request url is ".$this->URL);
+        if ($this->logTranslationMisses and intval($client->status['http_code']) >= 300 and intval($client->status['http_code']) < 400) {
+            // Make sure that we log redirects in the webpages status table
+            // because otherwise they won't be logged at all
+            // and we'll just be confused as to why the statuses never show up
+            // when we do a scan
+            $webpageStatus = df_get_record('webpage_status', array('website_id' => '='.$siteId, 'page_url' => '='.$this->URL));
+            if (!$webpageStatus) {
+                $webpageStatus = new Dataface_Record('webpage_status', array());
+                $webpageStatus->setValues(array(
+                    'page_url' => $this->URL,
+                    'website_id' => $siteId
+                ));
+            }
+            $webpageStatus->setValues(array(
+                'last_checked' => date('Y-m-d H:i:s'),
+                'response_status_code' => $client->status['http_code']
+            ));
+            $webpageStatus->save();
+        }
+    
 		if ( $this->logTranslationMisses and @$stats['log'] and $delegate->isOnWhiteList($this->URL)){
+		    $tlogEntry = new Dataface_Record('translation_miss_log', array());
+		    $logger->missedStrings = array();
+		    $logger->allStrings = array();
+		    
 			$this->mark('ITERATING TRANSLATION MISSES START ('.count($stats['log']).')');
+			
+			$blacklist = array();
+			$res = df_q("select string_id from swete_strings_blacklist");
+			while ($row = xf_db_fetch_row($res)) {
+			    $blacklist[$row[0]] = 1;
+			}
+			
+			
 			foreach ($stats['log'] as $str){
 
 				$tlogEntry = new Dataface_Record('translation_miss_log', array());
@@ -556,7 +617,14 @@ class ProxyServer {
 				$strRec = XFTranslationMemory::addString($estr, $this->site->getSourceLanguage());
 
 				$hstr = md5($estr);
-
+				
+				if (isset($blacklist[$strRec->val('string_id')])) {
+				    // If this string is on the blacklist
+				    // then we don't log it as a translation miss
+				    continue;
+				}
+				
+                $logger->missedStrings[] = $hstr;
 				$tlogEntry->setValues(array(
 					'http_request_log_id' => $logger->getRecord()->val('http_request_log_id'),
 					'string' => $str,
@@ -583,8 +651,41 @@ class ProxyServer {
 
 
 			}
+			if ($proxyWriter->lastStrings) {
+			    foreach ($proxyWriter->lastStrings as $str) {
+			        $nstr = TMTools::normalize($str);
+                    $trimStripped = trim(strip_tags($nstr));
+                    if ( !$trimStripped ) continue;
+                    if ( preg_match('/^[0-9 \.,%\$#@\(\)\!\?\'":\+=\-\/><]*$/', $trimStripped))  continue;
+                        // If the string is just a number or non-word we just skip it.
+                    $estr = TMTools::normalize(TMTools::encode($nstr, $junk));
+                    $hstr = md5($estr);
+                    $logger->allStrings[] = $hstr;
+			    }
+			}
+			if ($proxyWriter->lastTranslations and count($proxyWriter->lastTranslations) > 0) {
+			    foreach ($proxyWriter->lastTranslations as $str=>$tr) {
+			        // Last translations strings and translations should both be encoded
+			        // already.
+			        if (!$tr) continue;
+			        $nstr = TMTools::normalize($str);
+                    $trimStripped = trim(strip_tags($nstr));
+                    if ( !$trimStripped ) continue;
+                    if ( preg_match('/^[0-9 \.,%\$#@\(\)\!\?\'":\+=\-\/><]*$/', $trimStripped))  continue;
+                        // If the string is just a number or non-word we just skip it.
+                    $estr = $nstr;//TMTools::normalize(TMTools::encode($nstr, $junk));
+                    $hstr = md5($estr);
+                    
+                    $ntr = TMTools::normalize($tr);
+                    $htr = md5($ntr);
+                    $logger->allTranslations[] = $hstr.':'.$htr;
+			    }
+			}
 			$this->mark('ITERATING TRANSLATION MISSES END');
 		}
+		
+		$logger->save();
+		
 		return;
 
 
@@ -608,10 +709,10 @@ class ProxyServer {
 	 * @returns ProxyClient The proxy client that has loaded the source page
 	 */
 	public function getSourcePage(){
-
 		require_once 'inc/ProxyClient.php';
 
 		$client = new ProxyClient;
+		$client->blockId = $this->blockId;
 		$forwardedFor = @$client->REQUEST_HEADERS['X-Forwarded-For'];
 		if ( !$forwardedFor ) $forwardedFor = $_SERVER['REMOTE_ADDR'];
 		else $forwardedFor .= ', '.$_SERVER['REMOTE_ADDR'];
@@ -627,12 +728,14 @@ class ProxyServer {
 		$client->GET = $this->GET;
 		$client->POST = $this->POST;
 		$client->COOKIE = $this->COOKIE;
+		
 		//echo "Preprocess: [".$this->URL.']';
 		$proxyWriter = $this->site->getProxyWriter();
 
 		$client->URL = $this->site->getProxyWriter()->unproxifyUrl($this->URL);
 		$logger = $this->logger;
 		if ( !isset($client->SERVER['REQUEST_METHOD']) ){
+			echo "No request method found";
 			print_r($client->SERVER);
 			exit;
 		}

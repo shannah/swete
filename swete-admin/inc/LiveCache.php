@@ -49,6 +49,13 @@ class LiveCache {
      * @type LiveCache
      */
     private static $currentPage = null;
+    
+    /**
+     * A flag to indicate that this live cache should never be persisted to the 
+     * file system.  If save() is called, and this flag is true, then save() 
+     * does nothing.
+     */
+    public $isTransient = false;
 
     /**
      * @brief Optional logger object to handle logging.
@@ -260,7 +267,18 @@ class LiveCache {
                 }
                 $url .= '?'.implode('&', $qstrout);
             }
-
+            if (@$sweteDirectives['swete:block']) {
+                // When including the swete:block parameter,
+                // we are telling SWeTE to generate a custom subset of the provided url
+                // only containing the specified block content.
+                // We don't want to use the live cache for pages like this.
+                $obj = new LiveCache;
+                $obj->proxifiedUrl = self::df_absolute_url($url);
+                $obj->skipLiveCache = true;
+                $obj->isTransient = true;
+                self::$currentPage = $obj;
+                return self::$currentPage;
+            }
             $url = self::df_absolute_url($url);
 
             self::$currentPage = self::load($url);
@@ -327,6 +345,9 @@ class LiveCache {
      * @returns void
      */
     public function save(){
+        if ($this->isTransient) {
+            return;
+        }
         $this->created = time();
         $path = $this->getCachePathForProxifiedUrl($this->proxifiedUrl);
         file_put_contents($path, serialize($this));
@@ -555,6 +576,9 @@ class LiveCache {
      *
      */
     public function flush(){
+        if ($this->isTransient) {
+            return;
+        }
         $reqHeaders = apache_request_headers();
         foreach ($reqHeaders as $k=>$v) $reqHeaders[strtolower($k)] = strtolower($v);
         $oldestCreated = null;
@@ -727,7 +751,7 @@ class LiveCache {
 
                     header($h, false);
                 }
-                header('Content-Length: '.strlen($client->content));
+                header('Content-Length: '.strlen($this->client->content));
                 header('Connection: close');
                 header('X-SWeTE-Handler: LiveCache Unprocessed-content/'.__LINE__);
                 echo $this->client->content;
