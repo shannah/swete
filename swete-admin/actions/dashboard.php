@@ -22,7 +22,7 @@ class actions_dashboard {
 		$app = Dataface_Application::getInstance();
 
 		// Get sites summary
-		import('Dataface/ResultReader.php');
+		import(XFROOT.'Dataface/ResultReader.php');
 		/*
 		$reader = new Dataface_ResultReader("select
 			ws.source_language,
