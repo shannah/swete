@@ -56,6 +56,7 @@ class ProxyWriter
 
     public $snapshotPage;
     public $snapshotId = -1;
+    
 
     /**
      * @brief The locale for parsing dates.  E.g. en_CA
@@ -140,6 +141,7 @@ class ProxyWriter
      */
     public $lastStrings = null;
     public $lastTranslations = null;
+    private $lastTranslateHtmlInput = null;
 
     public function __construct()
     {
@@ -715,8 +717,11 @@ class ProxyWriter
     {
         $doc = $root->ownerDocument ? $root->ownerDocument : $root;
         $xpath = new DOMXPath($doc);
-        $matches = $xpath->query(".//*[@id='" . $id . "']", $root);
+        //echo "looking for id ".$id;
+        //echo $doc->saveXML();
+        $matches = $xpath->query(".//*[@id=\"" . $id . "\"]", $root);
         foreach ($matches as $match) {
+            //echo "Found ".print_r($match, true);
             return $match;
         }
         return null;
@@ -844,11 +849,11 @@ class ProxyWriter
     private function injectGlobalBlocksIntoSnapshot(DOMDocument $snapDoc, $snapshotId) 
     {
 		$xpathS = new DOMXPath($snapDoc);
-		$blocks = $xpathS->query(".//swete-block[@id]", $srcNode);
+		$blocks = $xpathS->query(".//swete-block[@id]", $snapDoc);
 		foreach ($blocks as $block) {
 			$blockId = $block->getAttribute('id');
-			$blockPageUrl = 'swete-blocks?id='.urlencode($blockId);
-			$snapPath = $this->snapshotsPath . DIRECTORY_SEPARATOR . intval($snapshotId) . directory_separator . sha1($blockPageUrl);
+			$blockPageUrl = 'swete-block?id='.urlencode($blockId);
+			$snapPath = $this->snapshotsPath . DIRECTORY_SEPARATOR . intval($snapshotId) . DIRECTORY_SEPARATOR . sha1($blockPageUrl);
 			if (file_exists($snapPath)) {
 				$blockSnapDoc = $this->loadSnapshotDoc($snapPath);
 				if (isset($blockSnapDoc)) {
@@ -971,6 +976,15 @@ class ProxyWriter
                 $found = true;
                 break;
             }
+            if (!$found) {
+                $blocks = $xpath->query("//swete-block[@id]");
+                foreach ($blocks as $sec) {
+                    $found = true;
+                    break;
+                }
+            }
+            
+            $blocksInjected = false;
             if ($found) {
                 // Now check to see if
 
@@ -986,14 +1000,22 @@ class ProxyWriter
                                 $snapDoc = $this->loadSnapshotDoc($snapshotPath);
                                 if (isset($snapDoc)) {
 									$this->injectGlobalBlocksIntoSnapshot($snapDoc, $currSnapshot);
+									$blocksInjected = true;
                                     $this->injectStaticSnapshot($doc, $snapDoc);
                                 }
                             }
 
                         }
+                        if (!$blocksInjected) {
+                            // The page didn't have a snapshot,
+                            // but some of the page's blocks might have snapshots.
+                            $this->injectGlobalBlocksIntoSnapshot($doc, $currSnapshot);
+                            $blocksInjected = true;
+                        }
                     }
                 }
             }
+            
 
         }
 
@@ -1016,17 +1038,50 @@ class ProxyWriter
         return $out;
     }
 
+    private $lastTranslationsExcludeBlocks = null;
+    private $lastTranslationStats = null;
+    public function lastTranslationFoundBlocks() {
+        return $this->lastTranslateHtmlInput and strpos($this->lastTranslateHtmlInput, '<swete-block') !== false;
+    }
+
+    /**
+     * Gets array(string->translation) of all of the translations on this page
+     * but excludes content of <swete-block> tags.  If the last translation was
+     * run without excluding blocks, then it will run the translation again on the
+     * last string input that was used to translateHtml().
+     * @returns array(string->translation)
+     */
+    public function getLastTranslationsExcludeBlocks() {
+        if (!isset($this->lastTranslationsExcludeBlocks)) {
+            if (!isset($this->lastTranslateHtmlInput)) {
+                throw new Exception("Cannot get last translation excluding blocks until after translateHtml() has been called once");
+            }
+            error_log("retranslating html input excluding blocks");
+            $this->translateHtml($this->lastTranslateHtmlInput, $this->lastTranslationStats, true, true);
+        }
+        return $this->lastTranslationsExcludeBlocks;
+    }
+
     /**
      * @brief Translates HTML using the specified translation memory and settings.
      *
      * @param string $html The HTML to translate.
-     * @param array &$out An out parameter that passes out the following info:
+     * @param array &$stats An out parameter that passes out the following info:
      *        - misses : The number of strings that did not find a match in the TM.
      *         - matches : The number of strings that found a match in the TM.
+     * @param boolean $logMisses Whether to log missed translations.
+     * @param boolean $excludeBlocks  Whether to strip <swete-block> tags out for the translation.
+     *   This is useful for calculating translations that are on this page only - excluding blocks
+     *   because blocks are handled independently.
+     *
      * @return string The translated HTML.
      */
-    public function translateHtml($html, &$stats = null, $logMisses = false)
+    public function translateHtml($html, &$stats = null, $logMisses = false, $excludeBlocks = false)
     {
+        $this->lastTranslateHtmlInput = $html; // so we can retranslate without blocks later
+        $this->lastTranslationStats =& $stats;
+        $this->lastTranslationsExcludeBlocks = null;
+        
         $mem = $this->translationMemory;
         $minStatus = $this->minStatus;
         $maxStatus = $this->maxStatus;
@@ -1043,6 +1098,7 @@ class ProxyWriter
         $translator->useHtml5Parser = $this->useHtml5Parser;
         $translator->sourceDateLocale = $this->sourceDateLocale;
         $translator->targetDateLocale = $this->targetDateLocale;
+        $translator->excludeBlocks = $excludeBlocks;
         $html2 = $translator->extractStrings($html);
         $strings = $translator->strings;
         if (isset($this->lastStrings)) {
@@ -1091,6 +1147,9 @@ class ProxyWriter
                 }
             }
 
+        }
+        if ($excludeBlocks) {
+            $this->lastTranslationsExcludeBlocks = $this->lastTranslations;
         }
 
         $stats = array(

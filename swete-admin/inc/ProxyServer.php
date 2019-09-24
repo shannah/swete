@@ -236,8 +236,19 @@ class ProxyServer {
 		}
 	}
 	
-	private static function redirectBlock($siteId, $url) {
-
+	/**
+	 * Extracts block ID from URL of form swete-block?id=..., and changes URL
+	 * to the full page URL for the block.
+	 * Side Effects:  Updates $this->URL and $this->blockId
+	 *
+	 * If the URL matches the given pattern, but the block is not listed in the 
+	 * global_blocks table, then this will stop execution and output a 404 HTTP response.
+	 *
+	 * @param int $siteId The website ID
+	 * @param string $url The URL to parse.
+	 * @return void
+	 */ 
+	private function redirectBlock($siteId, $url) {
 		if (preg_match('#'.preg_quote('/swete-block?id=', '#').'(.*)$#', $url, $matches)) {
 			$blockId = urldecode($matches[1]);
 			$blockRecord = df_get_record('global_blocks', array(
@@ -255,9 +266,13 @@ class ProxyServer {
 				
 			}
 			
-			header('Location: '.$blockRecord->val('page_url'));
-			return;
+			
+			$this->URL = $blockRecord->val('page_url');
+			//echo "URL: ".$this->URL;exit;
+			$this->URL = preg_replace('/[&\?]swete:block=[^&]+/', '', $this->URL);
+			$this->blockId = $blockId;
 		}
+		
 	}
 
 	/**
@@ -272,8 +287,9 @@ class ProxyServer {
 
 		$siteId = $this->site->getRecord()->val('website_id');
 		
-		self::redirectBlock($siteId, $url);
-		
+		$this->redirectBlock($siteId, $url);
+		$url = $this->URL;
+		//echo $url;exit;
 		if ( file_exists('sites/'.basename($siteId).'/Delegate.php') ){
 			require_once 'sites/'.basename($siteId).'/Delegate.php';
 			$clazz = 'sites_'.intval($siteId).'_Delegate';
@@ -589,9 +605,48 @@ class ProxyServer {
                 'response_status_code' => $client->status['http_code']
             ));
             $webpageStatus->save();
+            
+            
         }
+        $onWhitelist = $delegate->isOnWhiteList($this->URL);
+        if ($this->blockId) {
+            $proxyBase = $this->site->getProxyUrl();
+            if ($proxyBase{strlen($proxyBase)-1} !== '/') {
+                $proxyBase .= '/';
+            }
+            $blockUrl = $proxyBase . 'swete-block?id='.urlencode($this->blockId);
+            if (!$onWhitelist) {
+                $onWhitelist = $delegate->isOnWhiteList($blockUrl);
+            }
+            $logger->blockId = $this->blockId;
+            $logger->blockUrl = $blockUrl;
+            $webpageStatus = df_get_record('webpage_status', array('website_id' => '='.$siteId, 'page_url' => '='.$blockUrl));
+            if (!$webpageStatus) {
+                $webpageStatus = new Dataface_Record('webpage_status', array());
+                $webpageStatus->setValues(array(
+                    'page_url' => $blockUrl,
+                    'website_id' => $siteId
+                ));
+            }
+            $webpageStatus->setValues(array(
+                'last_checked' => date('Y-m-d H:i:s'),
+                'response_status_code' => $client->status['http_code']
+            ));
+            $webpageStatus->save();
+        }
+        
     
-		if ( $this->logTranslationMisses and @$stats['log'] and $delegate->isOnWhiteList($this->URL)){
+		if ( $this->logTranslationMisses and @$stats['log'] and $onWhitelist){
+		    if (!$this->blockId and $proxyWriter->lastTranslations and count($proxyWriter->lastTranslations) > 0 and $proxyWriter->lastTranslationFoundBlocks()) {
+			    error_log("Found blocks.... retranslating without blocks");
+			    // For the purposes of logging, we only want to track strings
+			    // that are NOT contained in a block because blocks are managed independently.
+			    //error_log("Before: ".print_r($stats, true));
+			    $proxyWriter->getLastTranslationsExcludeBlocks();
+			    $logger->liveTranslationHits = $stats['matches'];
+				$logger->liveTranslationMisses = $stats['misses'];
+			    //error_log("After: ".print_r($stats, true));
+			}
 		    $tlogEntry = new Dataface_Record('translation_miss_log', array());
 		    $logger->missedStrings = array();
 		    $logger->allStrings = array();
@@ -651,6 +706,7 @@ class ProxyServer {
 
 
 			}
+			
 			if ($proxyWriter->lastStrings) {
 			    foreach ($proxyWriter->lastStrings as $str) {
 			        $nstr = TMTools::normalize($str);
@@ -680,6 +736,7 @@ class ProxyServer {
                     $htr = md5($ntr);
                     $logger->allTranslations[] = $hstr.':'.$htr;
 			    }
+			    
 			}
 			$this->mark('ITERATING TRANSLATION MISSES END');
 		}

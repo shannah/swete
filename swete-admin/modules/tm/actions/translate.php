@@ -148,7 +148,7 @@ class actions_translate {
 				$row['data'][$f]['fielddef'] = $record->table()->getField($f);
 				$row['data'][$f][$source] = $record->strval($f);
 				//echo $f;exit;
-				if ( $tr and isset($tr->{$f}) ){
+				if ( @$tr and isset($tr->{$f}) ){
 					$row['data'][$f][$dest] = $tm->findTranslationByString($row['data'][$f][$source]);
 				}
 			}

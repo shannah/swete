@@ -620,7 +620,7 @@ class ProxyClient {
 		            $contents = '';
 		            break;
 		        }
-		        $tagStr = substr($contents, 0, $endPos);
+		        $tagStr = substr($contents, 0, $endTagPos);
 		        if (strpos($tagStr, 'id="'.htmlspecialchars($this->blockId).'"') !== false) {
 		            $endTagPos = strpos($contents, '</swete-block>');
 		            if (!$endTagPos) {

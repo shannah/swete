@@ -107,7 +107,7 @@ if ( @$_GET['-action'] == 'swete_handle_request' ){
 	if ( defined('SWETE_USE_CONSERVATIVE_CACHING') and SWETE_USE_CONSERVATIVE_CACHING === 0 ){
 	    $liveCache->useConservativeCaching = false;
 	}
-	if ( intval(@$_SERVER['REDIRECT_NOSERVERCACHE']) === 1){
+	if ( intval(@$_SERVER['REDIRECT_NOSERVERCACHE'])) {
 	    $liveCache->noServerCache = true;
 	}
 	if ( defined('SWETE_DEFAULT_CACHE_TTL') ){

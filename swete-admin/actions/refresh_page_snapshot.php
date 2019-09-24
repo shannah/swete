@@ -48,7 +48,13 @@ class actions_refresh_page_snapshot {
         }
     }
 
-
+    private static function addQueryString($url, $qstr) {
+        if (strpos($url, '?') === false) {
+            return $url . '?' . $qstr;
+        } else {
+            return $url . '&' . $qstr;
+        }
+    }
 	
 
     public function handleImpl() {
@@ -92,8 +98,10 @@ class actions_refresh_page_snapshot {
         }
         $followLocation = false;
         $isBlockPage = false;
-        if (strpos($page, 'swete-blocks?id=') === 0) {
-        	$blockId = urldecode(substr($page, strlen('swete-blocks?id='));
+        if (strpos($page, '/swete-block?id=') !== false) {
+        	$isBlockPage = true;
+        	/*
+        	$blockId = urldecode(substr($page, strlen('swete-block?id=')));
         	$blockRecord = df_get_record('global_blocks', array(
         		'website_id' => '='. $snapshot->val('website_id'),
         		'block_id' => '='.$blockId
@@ -101,9 +109,29 @@ class actions_refresh_page_snapshot {
         	if (!$blockRecord) {
         		throw new Exception("Block with id ".$blockId." not found", 404);
         	}
+        	$origPage = $page;
         	$page = $blockRecord->val('page_url');
+        	if (strpos($page, $proxyBase) === 0) {
+                $page = substr($page, strlen($proxyBase));
+            }
+            if ($page == '') {
+                $page = '/';
+            }
+        	if (strpos($page, 'http://') === 0 or strpos($page, 'https://')) {
+                // We want the page URL to get either a full URL in the proxy site,
+                // or just the path.
+                throw new Exception("Illegal page URL passed to refresh");
+            }
         	$isBlockPage = true;
-        }
+        	$toAppend = $page;
+            if ($toAppend{0} == '/') {
+                $toAppend = substr($toAppend, 1);
+            }
+            $proxyUrl = $proxyBase . $toAppend;
+        	$page = $origPage;
+        	*/
+        	
+        } 
         if (strpos($page, $proxyBase) === 0) {
             $page = substr($page, strlen($proxyBase));
         }
@@ -115,7 +143,7 @@ class actions_refresh_page_snapshot {
             // or just the path.
             throw new Exception("Illegal page URL passed to refresh");
         }
-        
+    
         if (strpos($page, $proxyBase) === 0) {
             $proxyUrl = $page;
 
@@ -126,6 +154,8 @@ class actions_refresh_page_snapshot {
             }
             $proxyUrl = $proxyBase . $toAppend;
         }
+        
+        
         
         $this->page = $page;
         $pageId = sha1($page);
@@ -203,13 +233,13 @@ class actions_refresh_page_snapshot {
 					$db = new xf\db\Database(df_db());
 					foreach ($blocks as $block) {
 						$bid = $block->getAttribute('id');
-						$blockUrl = 'swete-blocks?id='.urlencode($bid);
+						$blockUrl = 'swete-block?id='.urlencode($bid);
 						if (!preg_match('/^'.preg_quote($blockUrl, '/').'$/m', $pagelist)) {
-							$pagelist = trim($pagelist) . "\n#" . $blockUrl;
+							$pagelist = trim($pagelist) . "\n" . $blockUrl;
 							$blocksAdded = true;
 						}
 						// Update the page URL for the block
-						$expandedBlockUrl = $this->addQueryString($proxyUrl, 'swete:block='.urlencode($bid);
+						$expandedBlockUrl = self::addQueryString($proxyUrl, 'swete:block='.urlencode($bid));
 						$db->query('replace into global_blocks (website_id, block_id, page_url) values (:website_id, :block_id, :page_url)', array(
 							'website_id' => $snapshot->val('website_id'),
 							'block_id' => $bid,

@@ -22,6 +22,7 @@ include_once 'inc/SweteTools.php';
 
 class conf_ApplicationDelegate {
 
+    private $lastLoadedWebpageStatus;
 	private $changedTranslationMemories = array();
 
 	function block__after_global_footer(){
@@ -78,12 +79,48 @@ class conf_ApplicationDelegate {
 		
 	}
 	
+	function getStringIDForWebpage($webpageStatus, $untranslatedOnly = false) {
+	    $rec = $webpageStatus;
+	    $strings = $untranslatedOnly ? $rec->val('missed_strings') : $rec->val('strings');
+        if (!$strings) {
+            $strings = array();
+        } else {
+            $strings = json_decode($strings, true);
+        }  
+        //echo count($strings);exit;
+        if (count($strings) > 0) {
+            $stringIds = array();
+            $res = df_q("select `string_id` from xf_tm_strings where `hash` in ('".implode("','", $strings)."')");
+            while ($row = xf_db_fetch_assoc($res)) {
+                $stringIds[] = intval($row['string_id']);
+            }
+            $strings = $stringIds;
+        }
+        return '='.implode(' OR ', $strings);
+	}
+	
+	function getLastLoadedWebpageStatus() {
+	    return $this->lastLoadedWebpageStatus;
+	}
+	
 	function beforeHandleRequest(){
                 
 		$app = Dataface_Application::getInstance();
 		$app->addHeadContent('<link rel="stylesheet" type="text/css" href="'.htmlspecialchars(DATAFACE_SITE_URL.'/css/swete/global.css').'"/>');
-		
 		$query =& $app->getQuery();
+		
+		if (@$query['-table'] == 'swete_strings' and @$query['webpage_status_id'] and !@$query['string_id']) {
+		    $webpageStatus = df_get_record('webpage_status', array('webpage_status_id' => '=' . $query['webpage_status_id']));
+
+		    if ($webpageStatus) {
+		        $this->lastLoadedWebpageStatus = $webpageStatus;
+		        $query['website_id'] = '='.$webpageStatus->val('website_id');
+		        $query['string_id'] = $this->getStringIDForWebpage($webpageStatus, false);
+		    } else {
+		        $query['string_id'] = '=';
+		    }
+		    
+		}
                 
 		$res = df_q("select language_code, language_label from languages");
 		$langs = array();

@@ -267,7 +267,7 @@ class LiveCache {
                 }
                 $url .= '?'.implode('&', $qstrout);
             }
-            if (@$sweteDirectives['swete:block']) {
+            if (@$sweteDirectives['swete:block'] or strpos($url, '/swete-block?') !== false) {
                 // When including the swete:block parameter,
                 // we are telling SWeTE to generate a custom subset of the provided url
                 // only containing the specified block content.

@@ -44,6 +44,9 @@
  */
 class SweteRequestLogger {
 
+    public $blockId = null;
+    public $blockUrl = null;
+
 	/**
 	 * @type boolean
 	 */
@@ -306,6 +309,18 @@ class SweteRequestLogger {
                 $page->setValue('translations', json_encode($this->allTranslations));
             }
             $page->save();
+            if (isset($this->blockId) and isset($this->blockUrl)) {
+                $blockPage = df_get_record('webpage_status', array('page_url' => '='.$this->blockUrl));
+                if (!$blockPage) {
+                    $blockPage = new Dataface_Record('webpage_status', array());
+                    $blockPage->setValue('page_url', $this->blockUrl);
+                }
+                $statusId = $blockPage->val('webpage_status_id');
+                $blockPage->setValues($page->vals());
+                $blockPage->setValue('webpage_status_id', $statusId);
+                $blockPage->setValue('page_url', $this->blockUrl);
+                $blockPage->save();
+            }
         }
 		
 	}

@@ -32,6 +32,24 @@ class WebLite_HTML_Translator_v2 {
     public $targetDateLocale = null;
     public $useHtml5Parser = false;
     
+    // Optional flag set to strip all swete-block tags
+    // out before extracting text.  This is useful
+    // when all we want to do is calculate the translation checksum
+    // since we don't want to the checksum to include translations occurring
+    // inside blocks.
+    public $excludeBlocks = false;
+    
+    // This flag will be set if blocks are found when trying to exclude blocks.
+    private $foundBlocks = false;
+    private $foundBlockIds = array();
+    public function foundBlocks() {
+        return $this->foundBlocks;
+    }
+    public function foundBlockIds() {
+        return $this->foundBlockIds;
+    }
+    
+    
 	
 	public static $atts = array(
 		'a' => array('title'),
@@ -109,8 +127,18 @@ class WebLite_HTML_Translator_v2 {
 	}
 	
 	
-	public function __construct(){
-		$this->setTranslationMemory(new Default_Translation_Memory());
+	public function __construct(WebLite_HTML_Translator_v2 $src = null){
+	    if (isset($src)) {
+	        $this->dateFormatters = $src->dateFormatters;
+	        $this->sourceDateLocale = $src->sourceDateLocale;
+	        $this->targetDateLocale = $src->targetDateLocale;
+	        $this->useHtml5Parser = $src->useHtml5Parser;
+	        $this->excludeBlocks = $src->excludeBlocks;
+	        $this->translationMemory = $src->translationMemory;
+	    } else {
+	        $this->setTranslationMemory(new Default_Translation_Memory());
+	    }
+		
 	}
 	
 		
@@ -141,7 +169,6 @@ class WebLite_HTML_Translator_v2 {
                 
 	        }
 	    }
-		//$dom = str_get_html($html);
 		if ( !isset($dom) ){
             $dom = new DOMDocument();
             $dom->registerNodeClass('DOMElement', 'JSLikeHTMLElement');
@@ -152,16 +179,22 @@ class WebLite_HTML_Translator_v2 {
                     $dom->removeChild($item); // remove hack
             $dom->encoding = 'UTF-8'; // insert proper
         }
-		//print_r($dom);
 		$strings = array();
 		$this->strings =& $strings;
 		$stringsIndex = array();
-		
-		
 		$xpath = new DOMXPath($dom);
+		
+		if ($this->excludeBlocks) {
+		    $blocks = $xpath->query('//swete-block[@id]');
+		    foreach ($blocks as $block) {
+		        $this->foundBlocks = true;
+		        $this->foundBlockIds[] = $block->getAttribute('id');
+		        error_log("Removing block ".$block->getAttribute('id'));
+		        $block->parentNode->removeChild($block);
+		    }
+		}
+		
 		$this->translateDates($xpath);
-		//$text = $xpath->query('//text()[normalize-space() and not(ancestor::script | ancestor::style)]');
-		//$translatables = $dom->find('[translate]');
 		$translateAttrs = $xpath->query('//*[@data-swete-translate-attrs or @alt or @title]');
 		$otherAtts = array('title','alt');
 		foreach ( $translateAttrs as $el ){
@@ -180,8 +213,9 @@ class WebLite_HTML_Translator_v2 {
 				$attVal = $el->getAttribute($attName);
 				if ( $attVal and trim($attVal) ){
 					$index = count($strings);
-					$strings[] = trim(_n($attVal));
-			        $stringsIndex[trim(_n($attVal))] = $index;
+					$trimmedAttVal = trim(_n($attVal));
+					$strings[] = $trimmedAttVal;
+			        $stringsIndex[$trimmedAttVal] = $index;
 			        $el->setAttribute($attName, '{{$'.$index.'$}}');
 			        $index++;
 				}
@@ -195,8 +229,6 @@ class WebLite_HTML_Translator_v2 {
 		
 			$index = count($strings);
 			
-			//$strings[] = trim(_n($tr->innertext));
-			//$strings[] = trim(_n($tr->innerHTML));
 			$trStr = trim(_n($tr->innerHTML));
 			if ( $tr->hasAttribute('data-swete-delimiters') ){
 			    
@@ -222,8 +254,9 @@ class WebLite_HTML_Translator_v2 {
 			                // It is a delimiter
 			                $innerHTML[] = $tok;
 			            } else {
-			                $strings[] = trim(_n($tok));
-			                $stringsIndex[trim(_n($tok))] = $index;
+			                $trimmedTok = trim(_n($tok));
+			                $strings[] = $trimmedTok;
+			                $stringsIndex[$trimmedTok] = $index;
 			                $innerHTML[] = '{{$'.$index.'$}}';
 			                $index++;
 			                if ( $tok{strlen($tok)-1} === ' ' ){
@@ -239,8 +272,9 @@ class WebLite_HTML_Translator_v2 {
 			} 
 			
 			if ( $trStr ){
-			    $strings[] = trim(_n($trStr));
-			    $stringsIndex[trim(_n($trStr))] = $index;
+			    $trimmedStr = trim(_n($trStr));
+			    $strings[] = $trimmedStr;
+			    $stringsIndex[$trimmedStr] = $index;
 			    $tr->innerHTML = '{{$'.$index.'$}}';
 			    $index++;
 			}
@@ -249,18 +283,12 @@ class WebLite_HTML_Translator_v2 {
 			foreach ($gchildren as $gchild) $gchild->isCovered = 1;
 		}
 		
-		
-		//$untranslatables = $dom->find('[notranslate]');
 		$untranslatables = $xpath->query('//*[@notranslate]');
 		foreach ($untranslatables as $tr){
-			//error_log('Found untranslatable: '.$tr->outertext);
-			
-			//$gchildren = $tr->find('text');
 			$gchildren = $xpath->query('./text()', $tr);
-			//error_log(count($gchildren).' found');
-			//foreach ($gchildren as $gchild) $gchild->isCovered = 1;
 			foreach ($gchildren as $gchild) $gchild->isCovered = 1;
 		}
+		
 		
 		
 		$textX = $xpath->query('//text()[not(ancestor::script | ancestor::style | ancestor::*[@notranslate] | ancestor::*[@translate])]');
@@ -268,7 +296,6 @@ class WebLite_HTML_Translator_v2 {
 		foreach ($textX as $x){
 			$text[] = $x;
 		}
-		//echo "Found ".$text->length;
 		foreach ($text as $tx){
 			if ( !($tx instanceof DOMNode) ) continue;
 			if ( !isset($tx->parentNode) ) continue;
@@ -285,26 +312,18 @@ class WebLite_HTML_Translator_v2 {
 			if ( $tx->parentNode->hasAttribute('data-swete-translate') and $tx->parentNode->getAttribute('data-swete-translate') === '0' ){
 			    continue;
 			}
-			//if ( !trim($tx->innertext) ) continue;
 			if ( !trim($tx->nodeValue) ) continue;
-			//if ( in_array($tx->parent->tag , array('comment','script','style','code') )) continue;
 			if ( in_array(strtolower($tx->parentNode->tagName) , array('comment','script','style','code') )) continue;
 			if ( $this->isCovered($tx) ) {
-				//echo "This one's covered!!!";
 				continue;
 			}
-			//echo "[".$tx->nodeValue."]";
-			//continue;
 			$group = array();
 			$start = $tx;
-			//if ( $tx->parent->children ){
 			if ( !isset($tx->parentNode) ) {
-				//error_log("skipping ".$tx->nodeValue);
 				continue;
 			}
 			if ( $tx->parentNode->childNodes->length > 0 ){
 				$pos = -1;
-				//foreach ( $tx->parent->nodes as $idx=>$child ){
 				foreach ( $tx->parentNode->childNodes as $idx=>$child ){
 					if ( $child === $tx ){
 						$pos = $idx;
@@ -313,17 +332,14 @@ class WebLite_HTML_Translator_v2 {
 				}
 				$mypos = $pos;
 				for ( $i=$pos; $i>=0; $i--){
-					//$node = $tx->parent->nodes[$i];
 					$node = $tx->parentNode->childNodes->item($i);
-					//if ( $node->tag != 'text' and !in_array($node->tag, self::$inlineTags) ){
 					if ( $node->nodeType != XML_TEXT_NODE and /*$node->nodeType != XML_ENTITY_NODE and*/
-						!in_array(strtolower(@$node->tagName), self::$inlineTags) and
-						!($node instanceof DOMElement and $node->hasAttribute('data-swete-inline'))
-						 ){
+                            !in_array(strtolower(@$node->tagName), self::$inlineTags) and
+                            !($node instanceof DOMElement and $node->hasAttribute('data-swete-inline'))
+                             ){
 						break;
 					}
 					
-					//if ( $node->notranslate ){
 					if ( $node instanceof DOMElement and  $node->hasAttribute('notranslate') ){
 						break;
 					}
@@ -333,22 +349,17 @@ class WebLite_HTML_Translator_v2 {
 					}
 					$pos = $i;
 				}
-				//if ( $mypos == $pos or $this->isFirstText($tx->parent, $mypos, $pos)){
 				if ( $mypos == $pos or $this->isFirstText($tx->parentNode, $mypos, $pos)){	
 					$startIdx = $pos;
-					//for ( $i=$startIdx; $i<count($tx->parent->nodes); $i++ ){
 					for ( $i=$startIdx; $i<$tx->parentNode->childNodes->length; $i++ ){
-						//$node = $tx->parent->nodes[$i];
 						$node = $tx->parentNode->childNodes->item($i);
 						if ( !$node ) break;
-						//if ( $node->tag != 'text' and !in_array($node->tag, self::$inlineTags) ){
 						if ( $node->nodeType != XML_TEXT_NODE and /*$node->nodeType != XML_ENTITY_NODE and*/
 							!in_array(strtolower(@$node->tagName), self::$inlineTags) and
 							!($node instanceof DOMElement and $node->hasAttribute('data-swete-inline'))
 							 ){
 							break;
 						}
-						//if ( $node->notranslate ){
 						if ( $node instanceof DOMElement and $node->hasAttribute('notranslate') ){
 							break;
 						}
@@ -356,15 +367,6 @@ class WebLite_HTML_Translator_v2 {
 						if ( $node instanceof DOMElement and $node->hasAttribute('data-swete-block') ){
 							break;
 						}
-						
-						//if ( $node->tag != 'text' ){
-						//	if ( preg_match('/^<'.$node->tag.'[^>]*>/', $node->outertext, $matches) ){
-						//		
-						//		$node->outertext = preg_replace('/^<'.$node->tag.'([^>]*)>/', '<'.$node->tag.' id="{{R'.count($this->replacements).'R}}">', $node->outertext);
-						//		$this->replacements[] = $matches[0];
-						//	}
-						//	
-						//}
 						$group[] = $node;
 					}
 				}
@@ -374,7 +376,6 @@ class WebLite_HTML_Translator_v2 {
 			
 			$combinedText = array();
 			foreach ($group as $item){
-				//$combinedText[] = trim($item->outertext);
 				// REquires PHP 5.3.6 or higher.. passing element to saveHtml()
 				
 				$combinedText[] = preg_replace_callback('#<(\w+)([^>]*)\s*/>#s', create_function('$m', '
@@ -384,27 +385,18 @@ class WebLite_HTML_Translator_v2 {
 					$dom->saveXml($item)
 				);
 			}
-			//var_dump($combinedText);
-			
 			$combinedText = implode('', $combinedText);
 			$leadingWhiteSpace = '';
 			$trailingWhiteSpace = '';
 			if ( preg_match('#^[\p{Z}\s]+#u', $combinedText, $m1 ) ){
 			    $leadingWhiteSpace = $m1[0];
 			}
-			//echo 'Checking for trailing space: ['.$combinedText.']'."\n";
 			if ( preg_match('#[\p{Z}\s]+$#u', $combinedText, $m1 ) ){
-			    //echo "Trailing white space found in '$combinedText'\n";
 			    $trailingWhiteSpace = $m1[0];
-			} else {
-			    //echo "No trailing whitespace found.".ord($combinedText{strlen($combinedText)-1});
-			    
 			}
 			$combinedText = _n($this->replaceStrings($combinedText));
 			if ( !trim(str_ireplace('&nbsp;','', $combinedText)) ){
-			
-				continue;
-			
+			    continue;
 			}
 			
 			if ( isset($stringsIndex[$combinedText]) ){
@@ -415,20 +407,12 @@ class WebLite_HTML_Translator_v2 {
 				$stringsIndex[$combinedText] = $index;
 			}
 			foreach ($group as $gnode){
-				
-				//$gchildren = $gnode->find('text');
 				$gchildren = @$xpath->query('./text()', $gnode);
 				if ( !$gchildren ) continue;
 				foreach ($gchildren as $gchild) $gchild->isCovered = 1;
-				
 			}
 			
-			//$group[0]->outertext = '{{$'.$index.'$}}';
-			//$group[0]->nodeValue = '{{$'.$index.'$}}';
-			
 			for ( $i=1; $i<count($group); $i++){
-				//$group[$i]->outertext = '';
-				//if ( !@$group[$i] ) continue;
 				if ( @$group[$i]->parentNode )
 					$group[$i]->parentNode->removeChild($group[$i]);
 				
@@ -436,23 +420,15 @@ class WebLite_HTML_Translator_v2 {
 			if ( !@$group[0] ) continue;
 			if ( !@$group[0]->parentNode ) continue;
 			$textNodeContent = $leadingWhiteSpace.'{{$'.$index.'$}}'.$trailingWhiteSpace;
-			//echo 'Content:['.$textNodeContent.']'."\n";
 			$group[0]->parentNode->replaceChild($dom->createTextNode($textNodeContent), $group[0]);
-			
-		
-			
+
 		}
 		
 		
 		// Now we need to translate the keywords and the description
-		//foreach ($dom->find('meta') as $el){
 		foreach ($xpath->query('//meta[@name="keywords" or @name="description"]') as $el){
-			
-			//$content = _n($el->content);
 			if ( !$el->hasAttribute('content') ) continue;
 			$content = _n($el->getAttribute('content'));
-			//if ( $content and in_array(strtolower(strval($el->name)), array('keywords','description')) ){
-			
 			if ( isset($stringsIndex[$content]) ){
 				$index = $stringsIndex[$content];
 			} else {
@@ -460,9 +436,7 @@ class WebLite_HTML_Translator_v2 {
 				$strings[] = $content;
 				$stringsIndex[$content] = $index;
 			}
-			//$el->content = '{{$'.$index.'$}}';
 			$el->setAttribute('content', '{{$'.$index.'$}}');
-			//}
 		}
 		
 		foreach ($xpath->query('//*[@placeholder or @title or @data-swete-translate-atts]') as $el){
@@ -478,9 +452,6 @@ class WebLite_HTML_Translator_v2 {
 			        continue;
 			    }
 			    $content = _n($el->getAttribute($att));
-			    
-			
-			
                 if ( isset($stringsIndex[$content]) ){
                     $index = $stringsIndex[$content];
                 } else {
@@ -494,23 +465,13 @@ class WebLite_HTML_Translator_v2 {
 		
 	
 		$this->strings = array_map(array($this,'cleanString'), $this->strings);
-		//return $dom->save();
 		return $dom->saveHtml();
-		
-	
+
 	}
 	
 	
-	//WebLite.Translator.prototype.isCovered = function(node){
 	function isCovered($node){
 		return ( isset($node->isCovered) and $node->isCovered == 1 );
-		//$p = $node->parent();
-		//while ($p){
-		//	if ( preg_match('/^\{\{\$\d+\$\}\}$/', $p->innertext) ) return true;
-		//	$p = $p->parent();
-		//}
-		//return false;
-		
 	}
 	
 	public function cleanString($str){

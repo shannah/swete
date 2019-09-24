@@ -5,6 +5,7 @@
  * @author shannah
  */
 require_once 'modules/tm/lib/TMTools.php';
+import('xf/db/Database.php');
 class tables_swete_strings {
     
     function getPermissions($record){
@@ -56,6 +57,70 @@ class tables_swete_strings {
             $app->addHeadContent('<style type="text/css">#total-words-found {float:right;width: 200px;}</style>');
             echo '<div id="total-words-found">Total Words: '.$row[0].'</div>';
             Dataface_JavascriptTool::getInstance()->import('swete/actions/batch_google_translate.js');
+            $this->pages_select();
+    }
+    
+    function find_common_prefix($array = array()) {
+        $pl = 0; // common prefix length
+        $n = count($array);
+        if ($n === 0) {
+            return '';
+        }
+        $l = strlen($array[0][1]);
+        while ($pl < $l) {
+            $c = $array[0][1][$pl];
+            for ($i=1; $i<$n; $i++) {
+                if ($array[$i][1][$pl] !== $c) break 2;
+            }
+            $pl++;
+        }
+        $prefix = substr($array[0][1], 0, $pl);
+        return $prefix;
+    }
+    
+    function pages_select() {
+        
+        $app = Dataface_Application::getInstance();
+        $query = $app->getQuery();
+
+        $siteId = @$query['website_id'];
+        if (!$siteId) {
+            $webpageStatus = $app->getDelegate()->getLastLoadedWebpageStatus();
+            if ($webpageStatus) {
+                $siteId = $webpageStatus->val('website_id');
+            }
+        }
+        if (!$siteId) {
+            return;
+        }
+        if ($siteId{0} == '=') {
+            $siteId = substr($siteId, 1);
+        }
+        $db = new xf\db\Database(df_db());
+        $res = $db->query('select webpage_status_id, page_url from webpage_status where website_id=:site_id order by page_url', array(
+            'site_id' => $siteId
+        ));
+        $rows = array();
+        while ($row = xf_db_fetch_row($res)) {
+            if (strpos($row[1], ':') !== false) {
+                $row[1] = substr($row[1], strpos($row[1], ':')+1);
+            }
+            $rows[] = $row;
+        }
+        $prefix = $this->find_common_prefix($rows);
+
+        $prefixLen = strlen($prefix);
+        if ($prefixLen > 0) {
+            foreach ($rows as $k=>$row) {
+                $row[1] = substr($row[1], $prefixLen);
+                $rows[$k] = $row;
+            }
+        }
+        echo '<select>'."\n";
+        foreach ($rows as $row) {
+            echo '<option value="'.htmlspecialchars($row[0]).'">'.htmlspecialchars($row[1]).'</option>'."\n";
+        }
+        echo '</select>';
     }
 
 
