@@ -1,5 +1,5 @@
 RewriteEngine On
-RewriteRule .* - [E=USE_HTML5_SERIALIZER:1]
+#RewriteRule .* - [E=USE_HTML5_SERIALIZER:1]
 RewriteRule ^$ index.php
 RewriteRule ^swete-admin/ - [L,NC]
 RewriteRule . swete-admin/index.php?-action=swete_handle_request [L]

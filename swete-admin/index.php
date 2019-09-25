@@ -131,8 +131,8 @@ if ( @$_GET['-action'] == 'swete_handle_request' ){
 	$_REQUEST = $_GET;
 }
 //ini_set('memory_limit', '256M');
-require_once 'include/functions.inc.php';
-require_once 'xataface/public-api.php';
+require_once dirname(__FILE__).'/include/functions.inc.php';
+require_once dirname(__FILE__).'/xataface/public-api.php';
 $conf = array();
 if ( isset($liveCache) ){
 	if ( is_resource($liveCache->db) or is_object($liveCache->db) ){

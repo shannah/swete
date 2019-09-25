@@ -56,7 +56,6 @@ class ProxyWriter
 
     public $snapshotPage;
     public $snapshotId = -1;
-    
 
     /**
      * @brief The locale for parsing dates.  E.g. en_CA

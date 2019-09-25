@@ -3,3 +3,4 @@
 	name="database name here"
 	user="database username here"
 	password="password"
+	driver="mysqli"

@@ -284,13 +284,11 @@ class conf_Installer {
 		$sql[] = "
 
 		CREATE TABLE IF NOT EXISTS `users` (
-		  `user_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
 		  `username` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
 		  `role_id` int(11) unsigned DEFAULT NULL,
 		  `password` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
 		  `email` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-		  PRIMARY KEY (`user_id`),
-		  UNIQUE KEY `job_id_2` (`username`),
+		  PRIMARY KEY (`username`),
 		  KEY `username` (`username`)
 		) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=130 ;
 		";
@@ -298,9 +296,9 @@ class conf_Installer {
 
 		$sql[] = "
 
-		INSERT INTO `users` (`user_id`, `username`, `role_id`, `password`, `email`) VALUES
-		(128, 'test_user', 3, 'foo', 'test_user@example.com'),
-		(129, 'test_user2', 1, 'foo', 'test_user2@example.com');
+		INSERT INTO `users` (`username`, `role_id`, `password`, `email`) VALUES
+		('test_user', 3, 'foo', 'test_user@example.com'),
+		('test_user2', 1, 'foo', 'test_user2@example.com');
 		";
 
 		$sql[] = "
@@ -956,16 +954,7 @@ class conf_Installer {
 
     }
 
-    function update_3461(){
 
-    	$sql[] = "ALTER TABLE  `users` DROP  `user_id`";
-    	$sql[] = "ALTER TABLE  `users` ADD PRIMARY KEY (  `username` )";
-    	try {
-    		df_q($sql);
-    	} catch (Exception $ex){}
-    	df_clear_views();
-
-    }
 
     function update_3565(){
 

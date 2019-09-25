@@ -47,8 +47,10 @@ class actions_translate {
         }
         
 	function handle2($params){
+
 		import('modules/tm/lib/XFTranslationMemory.php');
 		$app =& Dataface_Application::getInstance();
+		$app->loadUILibrary("semantic-ui");
 		$query = $app->getQuery();
 		$table = Dataface_Table::loadTable($query['-table']);
 		$source = $app->_conf['lang'];
@@ -135,7 +137,7 @@ class actions_translate {
 			$tfields = $tlangs[$dest];
 			
 			
-			//$tr = $this->getTranslationRow($record, $dest);
+			$tr = $this->getTranslationRow($record, $dest);
 			//print_r($tr); echo $dest;exit;
 		
 			$row['data'] = array();

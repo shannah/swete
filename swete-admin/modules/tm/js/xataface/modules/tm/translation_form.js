@@ -200,6 +200,7 @@
 		this.recordID = $(tr).parents('.xf-record-translation').first().attr('data-xf-record-id');
 		this.showButtonBar = true;
 		if ( $(tr).attr('data-xf-hide-button-bar') ) this.showButtonBar = false;
+		var self = this;
 		
 		this.textarea = $('<textarea></textarea')
 			.val($('td.xf-field-translation-src', tr).text())
@@ -220,7 +221,45 @@
 	TranslationFormField.prototype.getFormElement = TranslationFormField_getFormElement;
 	TranslationFormField.prototype.save = TranslationFormField_save;
 	TranslationFormField.prototype.evaluateChanged = TranslationFormField_evaluateChanged;
-	
+	TranslationFormField.prototype.findFuzzyMatches = TranslationFormField_findFuzzyMatches;
+
+	function TranslationFormField_findFuzzyMatches(str, target, textarea) {
+		var self = this;
+		var field = this;
+		var string = str;
+		console.log("Loading matches...");
+		console.log(target.get(0));
+		$(target).load(DATAFACE_SITE_HREF, {
+			'-table' : '_tmp_xf_tm_fuzzy_matches',
+			'-needle' : string,
+			'-translation_memory_id' : self.translationMemory.id,
+			'-action' : 'tm_fuzzy_matches'
+
+		}, function() {
+			$('.checkbox', target).checkbox({
+				onChecked: function() {
+					console.log(textarea);
+					$(textarea).val($('input[data-translation]', $(this).parent()).attr('data-translation'));
+					$(textarea).trigger('change');
+					//$(textarea).caretTo(3);
+					setTimeout(function(){$(textarea).focus();}, 500);
+					//console.log(self.textarea);
+					var cbSelf = this;
+					console.log('cbSelf='+cbSelf);
+					console.log('checked');
+					$('.checkbox', target).each(function(index, cb) {
+						console.log(cb);
+						if (!$.contains(cb, cbSelf)) {
+							$(cb).checkbox('set unchecked');
+						}
+						
+						
+					});
+				}
+			});
+		});
+	}
+
 	/**
 	 * @function
 	 * @name evaluateChanged
@@ -295,6 +334,7 @@
 				.get(0);
 			var fields = this.stringForm.getFormFields();
 			$.each(fields, function(){
+				var fld = this;
 				$(self.formElement).append(
 					$('<div></div>')
 						.text($(this).attr('data-orig-value'))
@@ -305,7 +345,22 @@
 						.append(this)
 						.get(0)
 				);
-				
+				$(self.formElement).append(
+					$('<div class="ui accordion"><div class="title"><i class="icon dropdown"></i>Translation Memory</div><div class="content field">Contents</div></div>')
+						.accordion({
+							onOpening: function(){
+								
+								self.findFuzzyMatches($(fld).attr('data-orig-value'), this, fld);
+							}
+						})
+						.get(0)
+				)
+				$(this).on('keydown', function(e) {
+					if (e.shiftKey && e.keyCode == 32) {
+						e.preventDefault();
+						self.findFuzzyMatches();
+					}
+				});
 				$(this).change(function(){
 					var res = self.translationMemory.addTranslation(
 						$(this).attr('data-orig-value'),

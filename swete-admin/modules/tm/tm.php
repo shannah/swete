@@ -69,7 +69,8 @@ class modules_tm {
 			$base.'workflow_step_panels',
 			$base.'workflow_step_panel_actions',
 			$base.'workflow_step_panel_members',
-			$base.'workflow_strings'
+			$base.'workflow_strings',
+			'_tmp_'.$base.'fuzzy_matches'
 			
 		
 		);

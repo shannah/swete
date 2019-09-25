@@ -12,7 +12,7 @@ class actions_dashboard_site_stats {
             throw new Exception("No permission to perform action");
         }
         
-        import('Dataface/ResultReader.php');
+        import(XFROOT.'Dataface/ResultReader.php');
 		
 		$reader = new Dataface_ResultReader("select
 			ws.source_language,

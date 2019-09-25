@@ -21,7 +21,41 @@
  */
 class modules_tm_installer {
 	
-	
+	static function supportsInnodbFulltext() {
+        $version = mysqli_get_server_info(df_db());
+        if (stripos($version, 'mariadb') !== false) {
+            $parts = explode('-', $version);
+            $mariadbPos = -1;
+            $len = count($parts);
+            for ($i=0; $i<$len; $i++) {
+                if (stripos($parts[$i], 'mariadb') !== false) {
+                    $mariadbPos = $i;
+                    break;
+                }
+            }
+            if (version_compare($parts[$i-1], '10.0.5') >= 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            $parts = explode('-', $version);
+            $mariadbPos = -1;
+            $len = count($parts);
+            for ($i=0; $i<$len; $i++) {
+                if (stripos($parts[$i], 'mysql') !== false) {
+                    $mariadbPos = $i;
+                    break;
+                }
+            }
+            if (version_compare($parts[$i-1], '5.6.0') >= 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+    
 	
 	
 	public function update_1(){
@@ -453,12 +487,22 @@ class modules_tm_installer {
 	
 	}
 	
-        public function update_11(){
+    public function update_11(){
 	    $sql[] = "ALTER TABLE `xf_tm_translation_memories` ADD COLUMN `translation_memory_uuid` CHAR(36) NULL  AFTER `translation_memory_id`, ADD UNIQUE INDEX `translation_memory_uuid_UNIQUE` (`translation_memory_uuid` ASC)";
 	    $sql[] = "update xf_tm_translation_memories set translation_memory_uuid=UUID()";
 	    df_q($sql);
 	    df_clear_views();
 	    
+	}
+
+	public function update_13() {
+	    if (self::supportsInnodbFulltext()) {
+	        $sql[] = "ALTER TABLE `xf_tm_strings` ADD FULLTEXT(`normalized_value`)";
+	    } else {
+    	    $sql[] = "CREATE TABLE `xf_tm_strings_fulltext` (string_id INT(11) PRIMARY KEY, normalized_value TEXT, FULLTEXT(normalized_value)) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
+    	}
+    	df_q($sql);
+		df_clear_views();
 	}
         
 	public static function query($sql){

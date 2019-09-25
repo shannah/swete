@@ -81,18 +81,18 @@ table.xf-translation-table tr.active td.xf-field-translation-label div.xf-label-
 
 
 
-table.xf-translation-table tr {
+table.xf-translation-table > tbody > tr {
 	margin: 10px;
 }
 
-table.xf-translation-table tr.xf-active-translation-field td {
+table.xf-translation-table > tbody > tr.xf-active-translation-field > td {
 	border: 3px solid #bbccff;
 	padding: 1em;
 }
 
 
 
-table.xf-translation-table tr.xf-active-translation-field td .xf-button-bar {
+table.xf-translation-table > tbody > tr.xf-active-translation-field td .xf-button-bar {
 	margin: -1em -1em 0 -1em;
 }
 
@@ -163,4 +163,13 @@ tr.xf-active-translation-field.xf-field-translated .xf-field-status-labels span.
 
 .xf-translation-form-wrapper.xf-translation-form-hide-status-labels table.xf-translation-table .xf-field-status-labels {
 	display: none;
+}
+
+.xf-tm-fuzzy-translation-translator {
+	font-size: 50%;
+	color: #ccc;
+}
+
+.xf-translation-form-field-form > div > textarea {
+	min-height: 2em;
 }

@@ -35,6 +35,7 @@ class tables_snapshots {
       $rec->setValue('pagelist', implode("\n", $lines));
     }
 
+
     private function getAndCreateSnapshotPath(Dataface_Record $snapshot) {
         $snapshotId = $snapshot->val('snapshot_id');
         $siteSnapshotsPath = 'snapshots/'.$snapshot->val('website_id');
@@ -83,6 +84,7 @@ class tables_snapshots {
             $this->getAndCreateSnapshotPath($dest)
         );
     }
+
 
     function pagelist__default() {
         $app = Dataface_Application::getInstance();

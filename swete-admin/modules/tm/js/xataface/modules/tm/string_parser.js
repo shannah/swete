@@ -154,7 +154,13 @@
 	function buildField(o){
 		//alert(o.text);
 		var fld = $('<textarea></textarea>')
+			.on('keydown', function(e) {
+				if (e.shiftKey) {
+					//console.log('shift key');
+				}
+			})
 			.change(function(){
+				
 				o.strippedText = $(this).val();
 			})
 			.val(o.strippedText)
@@ -288,14 +294,7 @@
 	
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	function unstripHtml(str, htmlTags){
 		return stripHtml(str, htmlTags, true);
 	}

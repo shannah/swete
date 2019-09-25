@@ -1,0 +1,30 @@
+<div class="xf-tm-matches">
+    {if $matches|@count > 0}
+    <table class="xf-tm-matches-table ui celled table">
+        <thead>
+            <tr><th>Source</th><th></th><th>Translation</th></tr>
+        </thead>
+        <tbody>
+        {foreach from=$matches item=match}     
+            <tr>
+                <td class="collapsing">
+                    <div class="ui fitted toggle checkbox">
+                        <input type="checkbox" data-translation="{$match->strval('normalized_translation_value')|escape}">
+                        <label></label>
+                    </div>
+                </td>
+                <td data-label="Source">{$match->val('source_diff')}</td>
+                <td data-label="Score">{$match->htmlValue('similar_text_score')}%</td>
+                <td data-label="Translation">
+                    <div class="xf-tm-fuzzy-translation">{$match->htmlValue('normalized_translation_value')}</div>
+                    <div class="xf-tm-fuzzy-translation-translator">Translated by {$match->htmlValue('created_by')}, {$match->htmlValue('nice_modified_date')}</div>
+                </td>
+            </tr>
+        {/foreach}
+        </tbody>
+    </table>
+    {else}
+        <p>No matches</p>
+    {/if}
+    
+</div>

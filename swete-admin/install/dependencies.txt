@@ -1,0 +1,3 @@
+https://github.com/shannah/xataface-module-ckeditor/archive/ff502607ee28bced42bcdbc0cba3474b404b6369.zip modules/ckeditor
+https://github.com/shannah/xataface-module-excel/archive/c5cf7c8b2cef55ca1b70fa886fe043f8d9451701.zip modules/excel
+https://github.com/shannah/xataface-module-uitk/archive/799fe5731f987576e08162ede1d3b00e9b402f38.zip modules/uitk
