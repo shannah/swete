@@ -10,5 +10,15 @@ if [ ! -d "../swete-admin/xataface" ]; then
     mv xataface-master xataface
     cd ../bin
 fi
-
+if [ ! -d "../swete-admin/app" ]; then
+    cd ../swete-admin
+    echo "Downloading SweteApp..."
+    curl -Ls https://github.com/shannah/swete-app/raw/master/SweteApp.zip > app.zip
+    echo "Extracting SweteApp..."
+    mkdir app
+	mv app.zip app/app.zip
+	cd app
+	unzip -qq app.zip
+    cd ../../bin
+fi
 
