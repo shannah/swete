@@ -62,7 +62,13 @@ mkdir($stringImports);
 
 $app = $dest . DIRECTORY_SEPARATOR . 'app';
 unlink($app);
-symlink($www . DIRECTORY_SEPARATOR . 'swete-admin', $app);
+$cwd = realpath(getcwd());
+chdir($dest);
+if (!symlink('www'. DIRECTORY_SEPARATOR . 'swete-admin', 'app')) {
+	fwrite(STDERR, "Failed to create new symlink to app\n");
+	exit(1);
+}
+chdir($cwd);
 
 
 
