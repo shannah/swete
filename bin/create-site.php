@@ -28,7 +28,7 @@ if ($res !== 0) {
 	fwrite(STDERR, "Failed to remove temporary www directory after creating generic Xataface application.\n");
 	exit($res);
 }
-if (!link(realpath($swete), $www)) {
+if (!symlink(realpath($swete), $www)) {
 	fwrite(STDERR, "Failed to create link from swete to www directory");
 	exit(1);
 }
@@ -50,7 +50,7 @@ if (!copy(
 $snapshots = $siteData . DIRECTORY_SEPARATOR . 'snapshots';
 mkdir($snapshots);
 if (!copy(
-	$sweteAdmin .DIRECTORY_SEPARATOR . 'snapshots' . DIRECTORY_SEPARATOR . '.htaccess',
+	$sweteAdmin .DIRECTORY_SEPARATOR . 'livecache' . DIRECTORY_SEPARATOR . '.htaccess',
 	$snapshots . DIRECTORY_SEPARATOR . '.htaccess'
 )) {
 	fwrite(STDERR, "Failed to setup snapshots directory.\n");
@@ -62,7 +62,7 @@ mkdir($stringImports);
 
 $app = $dest . DIRECTORY_SEPARATOR . 'app';
 unlink($app);
-link($www . DIRECTORY_SEPARATOR . 'swete-admin', $app);
+symlink($www . DIRECTORY_SEPARATOR . 'swete-admin', $app);
 
 
 
