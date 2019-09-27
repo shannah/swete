@@ -32,12 +32,16 @@ if (!symlink(realpath($swete), $www)) {
 	fwrite(STDERR, "Failed to create link from swete to www directory");
 	exit(1);
 }
-$etc = $dest . DIRECTORY_SEPARATOR . 'etc';
-$newConfDb = $etc . DIRECTORY_SEPARATOR . 'conf.db.ini.php';
-file_put_contents($newConfDb, $confDbContents);
+
 
 $siteData = $dest . DIRECTORY_SEPARATOR . 'site-data';
 mkdir($siteData);
+
+$newConfDb = $siteData . DIRECTORY_SEPARATOR . 'conf.ini';
+file_put_contents($newConfDb, $confDbContents);
+
+
+
 $liveCache = $siteData . DIRECTORY_SEPARATOR . 'livecache';
 mkdir($liveCache);
 if (!copy(
@@ -69,6 +73,14 @@ if (!symlink('www'. DIRECTORY_SEPARATOR . 'swete-admin', 'app')) {
 	exit(1);
 }
 chdir($cwd);
+
+$cliConfig = <<<END
+XATAFACE_CONFIG_PATHS=../site-data
+END
+;
+file_put_contents($dest . DIRECTORY_SEPARATOR . 'etc' . DIRECTORY_SEPARATOR . 'cli-conf.ini', $cliConfig);
+
+
 
 
 
