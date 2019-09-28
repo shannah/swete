@@ -14,6 +14,12 @@ require_once 'modules/tm/lib/XFTranslationMemory.php';
 require_once 'inc/CSVStringImporter.php';
 class tables_string_imports {
     
+	public function init(Dataface_Table $table) {
+		$fileField =& $table->_fields['file'];
+		$fileField['savepath'] = SWETE_DATA_ROOT . DIRECTORY_SEPARATOR . 'livecache' . DIRECTORY_SEPARATOR . 'string_imports';
+		
+	}
+	
     /**
      * Handles the insertion of a new imported record.  This should parse the 
      * input file and place the strings appropriately into the translation_miss_log

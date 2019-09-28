@@ -38,7 +38,7 @@ class tables_snapshots {
 
     private function getAndCreateSnapshotPath(Dataface_Record $snapshot) {
         $snapshotId = $snapshot->val('snapshot_id');
-        $siteSnapshotsPath = 'snapshots/'.$snapshot->val('website_id');
+        $siteSnapshotsPath = SWETE_DATA_ROOT . DIRECTORY_SEPARATOR .'snapshots/'.$snapshot->val('website_id');
         if (!file_exists($siteSnapshotsPath)) {
             if (!@mkdir($siteSnapshotsPath)) {
                 throw new Exception("Failed to create directory ".$siteSnapshotsPath);
@@ -90,7 +90,7 @@ class tables_snapshots {
         $app = Dataface_Application::getInstance();
         $record = $app->getRecord();
         if ($record and $record->table()->tablename == 'websites') {
-            $whitelist = 'sites/'.basename($record->val('website_id')).'/whitelist.txt';
+            $whitelist = SWETE_DATA_ROOT . DIRECTORY_SEPARATOR .'sites/'.basename($record->val('website_id')).'/whitelist.txt';
             if (is_readable($whitelist)) {
                 return file_get_contents($whitelist);
             }
@@ -133,11 +133,12 @@ class tables_snapshots {
             return '<div class="portalMessage">Cannot find website associated with this snapshot</div>';
         }
 
-        if (!file_exists('snapshots')) {
+
+        if (!file_exists(SWETE_DATA_ROOT . DIRECTORY_SEPARATOR . 'snapshots')) {
             return '<div class="portalMessage">Cannot activate this snapshot because the snapshots directory doesn\'t exist.  Please create a snapshots directory and ensure that it is writable by the web server.</div>';
 
         }
-        if (!is_writable('snapshots')) {
+        if (!is_writable(SWETE_DATA_ROOT . DIRECTORY_SEPARATOR .'snapshots')) {
             return '<div class="portalMessage">Cannot activate this snapshot because the snapshots directory isn\'t writable by the web server.</div>';
         }
 
@@ -162,7 +163,7 @@ class tables_snapshots {
 
     function _section__pages_content(Dataface_Record $record) {
 
-        $snapshotsPath = 'snapshots';
+        $snapshotsPath = SWETE_DATA_ROOT . DIRECTORY_SEPARATOR .'snapshots';
         if (!file_exists($snapshotsPath)) {
             return '<div class="portalMessage">'.htmlspecialchars('Snapshots inactive.  Please create a snapshots directory inside the swete-admin directory such that it is writable by the webserver process.').'</div>';
 

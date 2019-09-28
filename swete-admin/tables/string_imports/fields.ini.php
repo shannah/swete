@@ -2,7 +2,11 @@
 ; this is an INI file
 [file]
     Type=container
-    savepath=livecache/string_imports
+	; savepath is now specified inside init() method of string_imports.php
+	; because it is pointing to the parent directory of swete-admin, and
+	; swete-admin might be a symlink, so we need it to be the parent directory
+	; of the symlink.
+    ;savepath=livecache/string_imports
     secure=1
 
 [file_format]

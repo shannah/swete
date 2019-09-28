@@ -28,6 +28,7 @@
  * Copyright (c) 2012 Web Lite Translation Corp.  All rights reserved.
  *
  */
+define("SWETE_LIVECACHE_DIR", SWETE_DATA_ROOT . DIRECTORY_SEPARATOR .'livecache');
 class LiveCache {
 
     public $DEBUG = false;
@@ -35,7 +36,8 @@ class LiveCache {
     /**
      * @brief The directory where cache files are stored.
      */
-    public static $cacheDir = './livecache';
+	
+    public static $cacheDir = SWETE_LIVECACHE_DIR;
 
     public $useHtml5Parser = false;
 
@@ -664,8 +666,8 @@ class LiveCache {
             self::getTranslationMemoryModificationTime($this->translationMemoryId) < $this->created
         )
         {
-        	if ( file_exists('sites/'.basename($this->siteId).'/Delegate.php') ){
-        		require_once 'sites/'.basename($this->siteId).'/Delegate.php';
+        	if ( file_exists(SWETE_DATA_ROOT . DIRECTORY_SEPARATOR .'sites/'.basename($this->siteId).'/Delegate.php') ){
+        		require_once SWETE_DATA_ROOT . DIRECTORY_SEPARATOR .'sites/'.basename($this->siteId).'/Delegate.php';
         		$clazz = 'sites_'.intval($this->siteId).'_Delegate';
         		if ( class_exists($clazz) and method_exists($clazz, 'init') ){
         			call_user_func(array($clazz, 'init'));
@@ -775,7 +777,7 @@ class LiveCache {
             if ( isset($this->translationParserVersion) ){
                 $proxy->translationParserVersion = intval($this->translationParserVersion);
             }
-            $proxy->snapshotsPath = 'snapshots'.DIRECTORY_SEPARATOR.$this->siteId;
+            $proxy->snapshotsPath = SWETE_DATA_ROOT . DIRECTORY_SEPARATOR .'snapshots'.DIRECTORY_SEPARATOR.$this->siteId;
 
             $proxy->useHtml5Parser = $this->useHtml5Parser;
             $proxy->useHtml5Serializer = $this->useHtml5Serializer;

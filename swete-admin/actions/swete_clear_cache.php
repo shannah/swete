@@ -1,7 +1,7 @@
 <?php
 class actions_swete_clear_cache {
     function handle($params) {
-        $liveCache = DATAFACE_SITE_PATH . DIRECTORY_SEPARATOR . "livecache";
+        $liveCache = SWETE_DATA_ROOT . DIRECTORY_SEPARATOR . "livecache";
         //echo $liveCache;exit;
         if (!SweteTools::isAdmin()) {
             die("Only admins allowed to perform this action.");

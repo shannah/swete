@@ -1318,7 +1318,7 @@ class conf_Installer {
 
     function update_4638(){
         // Create a directory to store the uploads
-        mkdir('livecache/string_imports');
+        mkdir(SWETE_DATA_ROOT . DIRECTORY_SEPARATOR . 'livecache/string_imports');
 
         // Create the string_imports table for handling the importing of
         // CSV files, etc...
@@ -1771,6 +1771,23 @@ END
 			
 		) ENGINE=InnoDB";
 		df_q($sql);
+	}
+	
+	function update_4992() {
+		if (file_exists('livecache') and !file_exists(SWETE_DATA_ROOT . DIRECTORY_SEPARATOR . 'livecache')) {
+			die("livecache directory needs to be moved to the swete-data directory.  Please run the bin/update.php CLI script\n");
+		}
+		
+		if (file_exists('livecache/string_imports') and !file_exists(SWETE_DATA_ROOT . DIRECTORY_SEPARATOR . 'livecache/string_imports')) {
+			die("livecache/string_imports directory needs to be moved to the swete-data directory.  Please run the bin/update.php CLI script\n");
+		}
+		
+		if (file_exists('sites') and !file_exists(SWETE_DATA_ROOT . DIRECTORY_SEPARATOR . 'sites')) {
+			die("sites directory needs to be moved to the swete-data directory.  Please run the bin/update.php CLI script\n");
+		}
+		
+		
+		
 	}
 	
 	

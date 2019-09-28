@@ -147,7 +147,7 @@ class tables_websites {
   function afterSave(Dataface_Record $record) {
       if (isset($record->pouch['current_snapshot_id'])) {
           $snapshotId = intval($record->pouch['current_snapshot_id']);
-          $snapshotsDir = 'snapshots';
+          $snapshotsDir = SWETE_DATA_ROOT . DIRECTORY_SEPARATOR . 'snapshots';
           if (!file_exists($snapshotsDir)) {
               throw new Exception("Failed to save current snapshot because the snapshots directory doesn't exist");
           }

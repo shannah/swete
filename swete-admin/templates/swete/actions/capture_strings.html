@@ -16,7 +16,7 @@
             <p>Use this form to crawl site and capture the current strings. This requires that you have provided a white list of URLs to crawl in sites/{$websiteID|escape}/whitelist.txt</p>
             
             <button class="start">Start Capture Now</button>
-            <p><a href="sites/{$websiteID|escape}/whitelist.txt">View Whitelist</a></p>
+            <p><a href="index.php?-action=swete_whitelist&site_id={$websiteID|escape}">View Whitelist</a></p>
         </div>
         <div id="job-starting" style="display:none">
             <h3>Capture Job Starting</h3>

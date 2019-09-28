@@ -128,7 +128,7 @@ class actions_swete_capture_strings {
     }  
     
     function get_urls(SweteSite $site) {
-        $whiteListPath = 'sites/'.basename($site->getRecord()->val('website_id')).'/whitelist.txt';
+        $whiteListPath = SWETE_DATA_ROOT . DIRECTORY_SEPARATOR .'sites/'.basename($site->getRecord()->val('website_id')).'/whitelist.txt';
         $urls = $this->loadUrlsFromFile($site, $whiteListPath);
         return $urls;
     } 

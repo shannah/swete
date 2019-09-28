@@ -28,13 +28,24 @@ if ($res !== 0) {
 	fwrite(STDERR, "Failed to remove temporary www directory after creating generic Xataface application.\n");
 	exit($res);
 }
-if (!symlink(realpath($swete), $www)) {
-	fwrite(STDERR, "Failed to create link from swete to www directory");
+passthru("cp -r ".escapeshellarg(realpath($swete))." ".escapeshellarg($www), $res);
+if ($res !== 0) {
+	fwrite("Failed to copy swete into target directory\n");
+	exit($res);
+}
+passthru("rm -rf ".escapeshellarg($www . DIRECTORY_SEPARATOR . 'swete-admin'), $res);
+if ($res !== 0) {
+	fwrite("Install failed.  There was a problem deleting the swete-admin directory.\n");
+	exit($res);
+}
+
+if (!symlink(realpath($swete . DIRECTORY_SEPARATOR . 'swete-admin'), $www .DIRECTORY_SEPARATOR . 'swete-admin')) {
+	fwrite(STDERR, "Failed to create link from swete to swete-admin directory");
 	exit(1);
 }
 
 
-$siteData = $dest . DIRECTORY_SEPARATOR . 'site-data';
+$siteData = $www . DIRECTORY_SEPARATOR . 'swete-data';
 mkdir($siteData);
 
 $newConfDb = $siteData . DIRECTORY_SEPARATOR . 'conf.ini';
@@ -75,7 +86,7 @@ if (!symlink('www'. DIRECTORY_SEPARATOR . 'swete-admin', 'app')) {
 chdir($cwd);
 
 $cliConfig = <<<END
-XATAFACE_CONFIG_PATHS=../site-data
+XATAFACE_CONFIG_PATHS=../www/swete-data
 END
 ;
 file_put_contents($dest . DIRECTORY_SEPARATOR . 'etc' . DIRECTORY_SEPARATOR . 'cli-conf.ini', $cliConfig);

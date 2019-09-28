@@ -277,7 +277,7 @@ class SweteSite {
 			$proxy->setProxyLanguage($this->getDestinationLanguage());
 			$proxy->sourceDateLocale = $this->_rec->val('source_date_locale');
 			$proxy->targetDateLocale = $this->_rec->val('target_date_locale');
-			$proxy->snapshotsPath = 'snapshots'.DIRECTORY_SEPARATOR.$this->getRecord()->val('website_id');
+			$proxy->snapshotsPath = SWETE_DATA_ROOT . DIRECTORY_SEPARATOR . 'snapshots'.DIRECTORY_SEPARATOR.$this->getRecord()->val('website_id');
 			
 			$this->_proxyWriter = $proxy;
 

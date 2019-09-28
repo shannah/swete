@@ -92,6 +92,17 @@ if (!function_exists('apache_request_headers')) {
         }
     ');
 }
+$conf = array();
+$siteDataDir = dirname(dirname($_SERVER['SCRIPT_FILENAME'])) . DIRECTORY_SEPARATOR . 'swete-data';
+$siteConfigFile = $siteDataDir . DIRECTORY_SEPARATOR . 'conf.ini';
+
+$loadSiteConfigFile = false;
+if (is_readable($siteConfigFile)) {
+	define('SWETE_DATA_ROOT', $siteDataDir);
+	$conf = array_merge(parse_ini_file($siteConfigFile, true), $conf);
+} else {
+	define('SWETE_DATA_ROOT', dirname(__FILE__));
+}
 require_once 'inc/LiveCache.php';
 if ( @$_GET['-action'] == 'swete_handle_request' ){
 	define('XATAFACE_NO_SESSION',1);
@@ -133,21 +144,10 @@ if ( @$_GET['-action'] == 'swete_handle_request' ){
 //ini_set('memory_limit', '256M');
 require_once dirname(__FILE__).'/include/functions.inc.php';
 require_once dirname(__FILE__).'/xataface/public-api.php';
-$conf = array();
-$siteDataDir = dirname(dirname(dirname($_SERVER['SCRIPT_FILENAME']))) . DIRECTORY_SEPARATOR . 'site-data';
-$siteConfigFile = $siteDataDir . DIRECTORY_SEPARATOR . 'conf.ini';
-$loadSiteConfigFile = false;
-if (is_readable($siteConfigFile)) {
-	define('SWETE_DATA_ROOT', $siteDataDir);
-	$loadSiteConfigFile = true;
-} else {
-	define('SWETE_DATA_ROOT', dirname(__FILE__));
-}
+
 if ( isset($liveCache) ){
 	if ( is_resource($liveCache->db) or is_object($liveCache->db) ){
 		$conf['db'] = $liveCache->db;
 	}
-} else if ($loadSiteConfigFile) {
-	$conf = array_merge(parse_ini_file($siteConfigFile, true), $conf);
-} 
+}
 df_init(__FILE__, 'xataface', $conf)->display();
