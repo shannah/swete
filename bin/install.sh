@@ -9,8 +9,9 @@ if [ ! -d "$SWETE_ROOT" ]; then
 	sh setup.sh
 fi
 if [[ ":$PATH:" == *":$SWETE_BIN:"* ]]; then
-	echo "export PATH=$SWETE_BIN:$PATH" >> $HOME/.bash_profile
+	echo "$SWETE_BIN is already in your PATH"
 else
-  echo "Your path is missing ~/bin, you might want to add it."
+	echo "Adding $SWETE_BIN to your path in $HOME/.bash_profile"
+  	echo "export PATH=$SWETE_BIN:$PATH" >> $HOME/.bash_profile
 fi
 
