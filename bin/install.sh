@@ -8,7 +8,7 @@ if [ ! -d "$SWETE_ROOT" ]; then
 		git clone https://github.com/shannah/swete .swete
 	else
 		echo "git was not found.  Using curl to download swete from github master"
-		curl https://github.com/shannah/swete/archive/master.zip > .swete-master.zip
+		curl -fsSL https://github.com/shannah/swete/archive/master.zip > .swete-master.zip
 		unzip .swete-master.zip
 		rm .swete-master.zip
 		mv .swete-master .swete
