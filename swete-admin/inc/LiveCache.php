@@ -760,7 +760,7 @@ class LiveCache {
                 header('Content-Length: '.strlen($this->client->content));
                 header('Connection: close');
                 header('X-SWeTE-Handler: LiveCache Unprocessed-content/'.__LINE__);
-                echo $this->client->content;
+                echo $delegate->onBeforePassthru($this->client->contentType, $this->client->content);
                 flush();
 
                 exit;

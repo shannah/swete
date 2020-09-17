@@ -422,7 +422,7 @@ class ProxyServer {
 			$this->header('Connection: close');
 			$this->header('X-SWeTE-Handler: ProxyServer Unprocessed/Non-HTML/Non-CSS/'.__LINE__);
 			//if ( !$cacheControlSet ) $this->header('Cache-Control: max-age=3600, public');
-			$this->output( $client->content );
+			$this->output( $delegate->onBeforePassthru($client->contentType, $client->content) );
 			if ( !$this->buffer ){
 				while ( @ob_end_flush());
 				flush();

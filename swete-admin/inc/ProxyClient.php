@@ -770,6 +770,16 @@ class ProxyClientPreprocessor implements ProxyClientDelegate {
 			$obj->preprocessHeaders($headers);
 		}
 	}
+    
+    public function onBeforePassthru($contentType, $content) {
+		$obj = $this->delegate();
+		if ( isset($obj) and method_exists($obj, 'onBeforePassthru') ){
+			return $obj->onBeforePassthru($contentType, $content);
+		} else {
+			return $content;
+		}
+	}
+    
 
 	public function isOnWhiteList($url) {
 	    $urlParts = parse_url($url);
