@@ -4,7 +4,7 @@ SWeTE (Simple Website Translation Engine) is an open source translation proxy wr
 
 * [SWeTE Homepage](http://swete.weblite.ca)
 * [Introductory Tutorial](docs/phparch_article/page.markdown) - (An article originally published in PHP Architect)
-* [Users Guide (PDF)](docs/swete-manual.pdf?raw=true)
+* [Users Guide](https://shannah.github.com/swete)
 
 ## License
 
@@ -16,9 +16,6 @@ GPLv2
 * MySQL 5+
 * Apache 1.3+ with mod_rewrite installed
 
-## Download
-
-[Latest release](https://github.com/shannah/swete/releases/latest)
 
 ## Credits
 
