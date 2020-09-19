@@ -61,132 +61,26 @@ SWeTE Server includes a built-in reverse proxy that allows you to easily host yo
 
 == Installation
 
-SWeTE server is a typical LAMP (Linux-Apache-PHP-MySQL) application. If you already have a server that meets the requirements (link:#requirements[Requirements]), you can just proceed with the following installation instructions. If you need help to set up a compatible server, see xxx.
+The preferred installation method is using git to check out the repository, and then run the setup.sh script found in the bin directory.
 
-=== Downloading the Application
-
-Before you can install SWeTE, you need to download the application. The two most common distribution methods are:
-
-* The ZIP/Tarball downloadable archive.
-* The Subversion source-code repository. This is handy for keeping up-to-date with patches and security updates.
-
-==== Method 1: Downloading the ZIP/Tarball Distribution
-
-The most common format for obtaining SWeTE server is the ZIP and Tarball distributions. You can download the entire application as either a ZIP file or a Tar.gz file, then extract the contents somewhere on your webserver.
-
-You can download the latest version from http://swete.weblite.ca/download. If you decide to download the ZIP distribution, you will end up with a file named `+swete-server-x.y.z.zip+` (where x.y.z are the version number). If you download the Tar.Gzip distribution, the file will be called `+swete-server-x.y.z.tar.gz+`.
-
-Once you have downloaded this file, you will need to extract it and copy it to your web server (the order of these steps may be different depending on what kind of access you have on your web server). Upon completion you should have a `+swete-server+` directory located somewhere on your server in a web-accessible directory. For the remainder of these instructions, we'll assume that you have installed it at `+/var/www/swete-server+`.
-
-==== Method 2: Checking out from Subversion Repository
-
-Web Lite Solutions also hosts subversion repositories for each version-branch of SWeTE. The benefit of installing SWeTE form the subversion repository is that it allows you to, more easily, stay up-to-date with bug fixes and patches. There is a repository branch for each major release of SWeTE. These branches will only include backward compatible bug-fixes so you can be sure that updating to the latest version of your chosen branch will not cause your application to break.
-
-You can view the available branches at http://weblite.ca/svn/swete-swerver/branches. If you want to stay up-to-date with the latest in development you might also want to check out the source directly from the trunk. The following are some example URLs to the various repositories:
-
-* http://weblite.ca/svn/swete-swerver/trunk/ - The trunk and location of the bleeding edge of SWeTE development.
-* http://weblite.ca/svn/swete-swerver/branches/0.1.x - The 0.1.x branch. This contains a snapshot of the 0.1 release of SWeTE and will be maintained to include critical bug fixes in the future.
-
-===== Requirements for Working with Subversion Repository
-
-When working off of the subversion repository, you need to have a few tools installed on your web server. This is because the source code, as it is in the repository, is incomplete, and must be "built" to include some other necessary components like Xataface and various modules. The SWeTE root directory contains a build.xml file, which is an ANT build script. This script contains all of the instructions necessary to update all of the components in SWeTE to a consistent version. Therefore, in order to build SWeTE from source, you will need at least the following tools installed on your web server.
-
-* Subversion. http://subversion.tigris.org/
-* ANT. http://ant.apache.org/
-* Your web server will need to have provide SSH access so that you can run the svn and ant applications from the command-line.
-
-===== Checking Out The Source Initially
-
-[arabic]
-. SSH into your web server and navigate to the parent directory of where you would like to install SWeTE. E.g. if you want SWeTE to be installed at /var/www/swete-server, you would navigate to the /var/www directory:
-+
-....
-$ cd /var/www
-....
-. Check out the branch from the SVN repository. You will need to decide which branch you want to check out. If you are working with a production application you should check out the latest stable branch. If you are wanted to work with the latest developments, then you can check out the trunk. The following example shows us checking out the 0.2.x branch:
-+
-....
-$ svn co http://weblite.ca/svn/swete-swerver/branches/0.2.x swete-server
-....
-+
-What this command says is that we're checking out the repository located at http://weblite.ca/svn/swete-swerver/branches/0.2.x, into a new directory named `+swete-server+` inside the current directory. After hitting enter, you should see a long list of files being downloaded:
-+
-....
-A    swete-server/testdb.sql
-A    swete-server/.htaccess
-A    swete-server/README.txt
-A    swete-server/swete-admin
-A    swete-server/swete-admin/include
-A    swete-server/swete-admin/include/functions.inc.php
-A    swete-server/swete-admin/livecache
-A    swete-server/swete-admin/livecache/.htaccess
-A    swete-server/swete-admin/conf
-A    swete-server/swete-admin/conf/Installer.php
-A    swete-server/swete-admin/conf/ApplicationDelegate.php
-A    swete-server/swete-admin/conf/tables
-A    swete-server/swete-admin/conf/tables/xf_tm_translation_memories
-A    swete-server/swete-admin/conf/tables/xf_tm_translation_memories/xf_tm_translation_memories.php
-A    swete-server/swete-admin/changes.txt
-A    swete-server/swete-admin/doc.prepare.php
-A    swete-server/swete-admin/css
-A    swete-server/swete-admin/css/swete
-
-etc ...
-....
-+
-If you don't see a stream of file paths like this, you should check to make sure that you don't have a typo in your command. One (possibly) confusing thing is that in the repository path it is "`+swete-swerver+`" and not "`+swete-server+`". This was a typo that was introduced early on in development, and it has just been retained through the versions.
-. Navigate to the swete-server directory that was just created, and run the ant build script. This will install all of the dependencies.
-+
-....
-$ cd swete-server
-$ ant
-....
-+
-This should result in a stream of feedback to the console as all of the dependent projects are checked out.
-
-===== Updating Source Code
-
-Once the source code has been installed, you should periodically rerun the ant build script to ensure that you obtain all of the latest bug fixes and patches. You can update the source at any time by:
-
-[arabic]
-. Navigate to the `+swete-server+` directory.
-+
-....
-$ cd /var/www/swete-server
-....
-. Run the ant script:
-+
-....
-$ ant
-....
-+
-This will update the `+swete-server+` source and all of its dependencies to the latest consistent version within your current branch.
+[source,bash]
+----
+git clone https://github.com/shannah/swete
+cd swete/bin
+sh setup.sh
+----
 
 === Configuring SWeTE for the First Time
 
 Once you have downloaded the source code for SWeTE, you will need to set up the database, and edit some of the configuration files in SWeTE to customize it for your environment.
 
-==== Setting up the Cache Directories
-
-SWeTE includes two cache directories, both of which need to be made writable by the web server. These directories are:
-
-* `+/var/www/swete-server/templates_c+` . This holds the compiled Smarty templates for the application.
-* `+/var/www/swete-server/livecache+` . This stores the cached web content for the proxy.
-
-You need to make sure that both of these directories exist, and that they are writable by the web server. You can make them writable using the chmod command:
-
-....
-$ chmod 1777 templates_c livecache
-....
-
 ==== Setting up the Database
 
 SWeTE uses a MySQL database to store all of its settings and translations. Before firing up SWeTE, you need to:
 
-[arabic]
 . Create a database for SWeTE on your MySQL server.
 . Create a MySQL user for SWeTE to connect to your new database.
-. Rename the `+swete-admin/conf.db.ini.sample+` file to be `+swete-admin/conf.db.ini+`, and modify it with the connection settings for your database.
+. Rename the `+swete-admin/conf.db.ini.php.sample+` file to be `+swete-admin/conf.db.ini.php+`, and modify it with the connection settings for your database.
 
 ===== Creating the Database
 

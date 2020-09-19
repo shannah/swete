@@ -496,6 +496,7 @@ image:images/ch02.date_locale_fields.png[image]
 
 At this point, SWeTE should properly convert dates that have been marked with the `+data-date-format+` and `+data-date-format-target+` attributes.
 
+[#automatic-date-wrapping]
 ==== Automatic Date Wrapping
 
 Wrapping dates explicitly in your source HTML may be cumbersome, or not even possible if you don't have access to change the source HTML. A better way to handle dates is to implement text filters to automatically wrap all dates in the appropriate tags prior to translation.

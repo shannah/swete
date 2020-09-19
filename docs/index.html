@@ -460,7 +460,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#_installation">Installation</a>
 <ul class="sectlevel2">
-<li><a href="#_downloading_the_application">Downloading the Application</a></li>
 <li><a href="#_configuring_swete_for_the_first_time">Configuring SWeTE for the First Time</a></li>
 </ul>
 </li>
@@ -683,196 +682,19 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="_installation">Installation</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>SWeTE server is a typical LAMP (Linux-Apache-PHP-MySQL) application. If you already have a server that meets the requirements (<a href="#requirements">Requirements</a>), you can just proceed with the following installation instructions. If you need help to set up a compatible server, see xxx.</p>
+<p>The preferred installation method is using git to check out the repository, and then run the setup.sh script found in the bin directory.</p>
 </div>
-<div class="sect2">
-<h3 id="_downloading_the_application">Downloading the Application</h3>
-<div class="paragraph">
-<p>Before you can install SWeTE, you need to download the application. The two most common distribution methods are:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>The ZIP/Tarball downloadable archive.</p>
-</li>
-<li>
-<p>The Subversion source-code repository. This is handy for keeping up-to-date with patches and security updates.</p>
-</li>
-</ul>
-</div>
-<div class="sect3">
-<h4 id="_method_1_downloading_the_ziptarball_distribution">Method 1: Downloading the ZIP/Tarball Distribution</h4>
-<div class="paragraph">
-<p>The most common format for obtaining SWeTE server is the ZIP and Tarball distributions. You can download the entire application as either a ZIP file or a Tar.gz file, then extract the contents somewhere on your webserver.</p>
-</div>
-<div class="paragraph">
-<p>You can download the latest version from <a href="http://swete.weblite.ca/download" class="bare">http://swete.weblite.ca/download</a>. If you decide to download the ZIP distribution, you will end up with a file named <code>swete-server-x.y.z.zip</code> (where x.y.z are the version number). If you download the Tar.Gzip distribution, the file will be called <code>swete-server-x.y.z.tar.gz</code>.</p>
-</div>
-<div class="paragraph">
-<p>Once you have downloaded this file, you will need to extract it and copy it to your web server (the order of these steps may be different depending on what kind of access you have on your web server). Upon completion you should have a <code>swete-server</code> directory located somewhere on your server in a web-accessible directory. For the remainder of these instructions, we&#8217;ll assume that you have installed it at <code>/var/www/swete-server</code>.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_method_2_checking_out_from_subversion_repository">Method 2: Checking out from Subversion Repository</h4>
-<div class="paragraph">
-<p>Web Lite Solutions also hosts subversion repositories for each version-branch of SWeTE. The benefit of installing SWeTE form the subversion repository is that it allows you to, more easily, stay up-to-date with bug fixes and patches. There is a repository branch for each major release of SWeTE. These branches will only include backward compatible bug-fixes so you can be sure that updating to the latest version of your chosen branch will not cause your application to break.</p>
-</div>
-<div class="paragraph">
-<p>You can view the available branches at <a href="http://weblite.ca/svn/swete-swerver/branches" class="bare">http://weblite.ca/svn/swete-swerver/branches</a>. If you want to stay up-to-date with the latest in development you might also want to check out the source directly from the trunk. The following are some example URLs to the various repositories:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="http://weblite.ca/svn/swete-swerver/trunk/" class="bare">http://weblite.ca/svn/swete-swerver/trunk/</a> - The trunk and location of the bleeding edge of SWeTE development.</p>
-</li>
-<li>
-<p><a href="http://weblite.ca/svn/swete-swerver/branches/0.1.x" class="bare">http://weblite.ca/svn/swete-swerver/branches/0.1.x</a> - The 0.1.x branch. This contains a snapshot of the 0.1 release of SWeTE and will be maintained to include critical bug fixes in the future.</p>
-</li>
-</ul>
-</div>
-<div class="sect4">
-<h5 id="_requirements_for_working_with_subversion_repository">Requirements for Working with Subversion Repository</h5>
-<div class="paragraph">
-<p>When working off of the subversion repository, you need to have a few tools installed on your web server. This is because the source code, as it is in the repository, is incomplete, and must be "built" to include some other necessary components like Xataface and various modules. The SWeTE root directory contains a build.xml file, which is an ANT build script. This script contains all of the instructions necessary to update all of the components in SWeTE to a consistent version. Therefore, in order to build SWeTE from source, you will need at least the following tools installed on your web server.</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Subversion. <a href="http://subversion.tigris.org/" class="bare">http://subversion.tigris.org/</a></p>
-</li>
-<li>
-<p>ANT. <a href="http://ant.apache.org/" class="bare">http://ant.apache.org/</a></p>
-</li>
-<li>
-<p>Your web server will need to have provide SSH access so that you can run the svn and ant applications from the command-line.</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect4">
-<h5 id="_checking_out_the_source_initially">Checking Out The Source Initially</h5>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>SSH into your web server and navigate to the parent directory of where you would like to install SWeTE. E.g. if you want SWeTE to be installed at /var/www/swete-server, you would navigate to the /var/www directory:</p>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>$ cd /var/www</pre>
-</div>
-</div>
-</li>
-<li>
-<p>Check out the branch from the SVN repository. You will need to decide which branch you want to check out. If you are working with a production application you should check out the latest stable branch. If you are wanted to work with the latest developments, then you can check out the trunk. The following example shows us checking out the 0.2.x branch:</p>
-<div class="literalblock">
-<div class="content">
-<pre>$ svn co http://weblite.ca/svn/swete-swerver/branches/0.2.x swete-server</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>What this command says is that we&#8217;re checking out the repository located at <a href="http://weblite.ca/svn/swete-swerver/branches/0.2.x" class="bare">http://weblite.ca/svn/swete-swerver/branches/0.2.x</a>, into a new directory named <code>swete-server</code> inside the current directory. After hitting enter, you should see a long list of files being downloaded:</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>A    swete-server/testdb.sql
-A    swete-server/.htaccess
-A    swete-server/README.txt
-A    swete-server/swete-admin
-A    swete-server/swete-admin/include
-A    swete-server/swete-admin/include/functions.inc.php
-A    swete-server/swete-admin/livecache
-A    swete-server/swete-admin/livecache/.htaccess
-A    swete-server/swete-admin/conf
-A    swete-server/swete-admin/conf/Installer.php
-A    swete-server/swete-admin/conf/ApplicationDelegate.php
-A    swete-server/swete-admin/conf/tables
-A    swete-server/swete-admin/conf/tables/xf_tm_translation_memories
-A    swete-server/swete-admin/conf/tables/xf_tm_translation_memories/xf_tm_translation_memories.php
-A    swete-server/swete-admin/changes.txt
-A    swete-server/swete-admin/doc.prepare.php
-A    swete-server/swete-admin/css
-A    swete-server/swete-admin/css/swete
-
-etc ...</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>If you don&#8217;t see a stream of file paths like this, you should check to make sure that you don&#8217;t have a typo in your command. One (possibly) confusing thing is that in the repository path it is &#8220;swete-swerver&#8221; and not &#8220;swete-server&#8221;. This was a typo that was introduced early on in development, and it has just been retained through the versions.</p>
-</div>
-</li>
-<li>
-<p>Navigate to the swete-server directory that was just created, and run the ant build script. This will install all of the dependencies.</p>
-<div class="literalblock">
-<div class="content">
-<pre>$ cd swete-server
-$ ant</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>This should result in a stream of feedback to the console as all of the dependent projects are checked out.</p>
-</div>
-</li>
-</ol>
-</div>
-</div>
-<div class="sect4">
-<h5 id="_updating_source_code">Updating Source Code</h5>
-<div class="paragraph">
-<p>Once the source code has been installed, you should periodically rerun the ant build script to ensure that you obtain all of the latest bug fixes and patches. You can update the source at any time by:</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Navigate to the <code>swete-server</code> directory.</p>
-<div class="literalblock">
-<div class="content">
-<pre>$ cd /var/www/swete-server</pre>
-</div>
-</div>
-</li>
-<li>
-<p>Run the ant script:</p>
-<div class="literalblock">
-<div class="content">
-<pre>$ ant</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>This will update the <code>swete-server</code> source and all of its dependencies to the latest consistent version within your current branch.</p>
-</div>
-</li>
-</ol>
-</div>
-</div>
+<pre class="highlight"><code class="language-bash" data-lang="bash">git clone https://github.com/shannah/swete
+cd swete/bin
+sh setup.sh</code></pre>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_configuring_swete_for_the_first_time">Configuring SWeTE for the First Time</h3>
 <div class="paragraph">
 <p>Once you have downloaded the source code for SWeTE, you will need to set up the database, and edit some of the configuration files in SWeTE to customize it for your environment.</p>
-</div>
-<div class="sect3">
-<h4 id="_setting_up_the_cache_directories">Setting up the Cache Directories</h4>
-<div class="paragraph">
-<p>SWeTE includes two cache directories, both of which need to be made writable by the web server. These directories are:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><code>/var/www/swete-server/templates_c</code> . This holds the compiled Smarty templates for the application.</p>
-</li>
-<li>
-<p><code>/var/www/swete-server/livecache</code> . This stores the cached web content for the proxy.</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>You need to make sure that both of these directories exist, and that they are writable by the web server. You can make them writable using the chmod command:</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>$ chmod 1777 templates_c livecache</pre>
-</div>
-</div>
 </div>
 <div class="sect3">
 <h4 id="_setting_up_the_database">Setting up the Database</h4>
@@ -888,7 +710,7 @@ $ ant</pre>
 <p>Create a MySQL user for SWeTE to connect to your new database.</p>
 </li>
 <li>
-<p>Rename the <code>swete-admin/conf.db.ini.sample</code> file to be <code>swete-admin/conf.db.ini</code>, and modify it with the connection settings for your database.</p>
+<p>Rename the <code>swete-admin/conf.db.ini.php.sample</code> file to be <code>swete-admin/conf.db.ini.php</code>, and modify it with the connection settings for your database.</p>
 </li>
 </ol>
 </div>
@@ -2095,7 +1917,7 @@ $ ant</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_automatic_date_wrapping">Automatic Date Wrapping</h4>
+<h4 id="automatic-date-wrapping">Automatic Date Wrapping</h4>
 <div class="paragraph">
 <p>Wrapping dates explicitly in your source HTML may be cumbersome, or not even possible if you don&#8217;t have access to change the source HTML. A better way to handle dates is to implement text filters to automatically wrap all dates in the appropriate tags prior to translation.</p>
 </div>
@@ -2512,7 +2334,7 @@ data-swete-translate="0"&gt;</code> tags so that you only need to translate the 
 <li>
 <p><em>Text Filters</em>. SWeTE allows you to add text filters which are regular expressions for replacing certain patterns. All sites come with a set of default filters (e.g. for wrapping numeric values in <code>&lt;span data-swete-translate="0"&gt;</code> and dates), but you can create your own filters as well to modify almost anything. You should try not to create too many text filters because each text node in a document is compared to every filter once per request. I.e. For each new filter, SWeTE may need to perform hundreds of regular expression comparisons per request. Performance hit: Moderate.</p>
 <div class="paragraph">
-<p>See <a href="#automatic-date-wrapping">???</a> for more information about text filters.</p>
+<p>See <a href="#automatic-date-wrapping">Automatic Date Wrapping</a> for more information about text filters.</p>
 </div>
 </li>
 <li>
@@ -2542,6 +2364,9 @@ data-swete-translate="0"&gt;</code> tags so that you only need to translate the 
 <li>
 <p><code>preprocessHeaders(array &amp;$headers) : void</code> . A method that allows you to process/modify the headers that have been retrieved from the source site. It takes a reference to an array of HTTP headers (strings) which can then be modified.</p>
 </li>
+<li>
+<p><code>+onBeforePassthru(string $contentType, string $content : string</code>. A method that will allow you to process page content that is otherwise not processed by SWeTE.  This includes XML files, text files, images, etc&#8230;&#8203;</p>
+</li>
 </ol>
 </div>
 <div class="paragraph">
@@ -2558,15 +2383,19 @@ data-swete-translate="0"&gt;</code> tags so that you only need to translate the 
 <div class="paragraph">
 <p>Where <code>&lt;site_id&gt;</code> is the Site ID of your the web site profile in SWeTE.</p>
 </div>
-<div class="quoteblock">
-<blockquote>
-<div class="paragraph">
-<p><strong>Tip</strong></p>
-</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Tip</div>
+</td>
+<td class="content">
 <div class="paragraph">
 <p>You can find the Site ID for a site by clicking on the "Sites" tab in the top menu. The Site ID will be located in the column labelled "Website ID" in the list of sites in your system.</p>
 </div>
-</blockquote>
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>E.g. If your website has site ID 428, then your Delegate class would be named <code>sites_428_Delegate</code> and would be located at:</p>
@@ -2577,19 +2406,19 @@ data-swete-translate="0"&gt;</code> tags so that you only need to translate the 
 <div class="paragraph">
 <p>A minimal delegate class without any methods defined would look like:</p>
 </div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>&lt;?php
+<pre class="highlight"><code class="language-php" data-lang="php">&lt;?php
 class sites_428_Delegate {
-}</pre>
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>but a more complete Delegate class, with preprocessing methods implemented might look something like:</p>
 </div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>&lt;?php
+<pre class="highlight"><code class="language-php" data-lang="php">&lt;?php
 class sites_429_Delegate {
 
     /**
@@ -2691,7 +2520,59 @@ class sites_429_Delegate {
         }
 
     }
-}</pre>
+
+    /**
+     * Processes content on pages that are not processed by SWeTE.  We use
+     * this to modify the robots.txt file and sitemap here.
+     */
+    public function onBeforePassthru($contentType, $content) {
+        // Process the robots.txt file to point to the correct sitemap
+		if ($contentType == 'text/plain' and basename($_SERVER['REQUEST_URI']) == 'robots.txt') {
+			$content = str_replace('https://www.example.com/', 'https://www.example.es/', $content);
+		}
+
+		if (basename($_SERVER['REQUEST_URI']) == 'xml-sitemap') {
+			$base = 'https://www.example.com';
+			$trbase = 'https://www.example.es';
+			foreach ($this-&gt;getWhitelist() as $path) {
+				$content = str_replace('&lt;loc&gt;'.$base.$path.'&lt;/loc&gt;', '&lt;loc&gt;'.$trbase.$path.'&lt;/loc&gt;', $content);
+			}
+
+		}
+		return $content;
+	}
+
+	// A utility method to get all of the paths from the site whitelist
+	// In this case the site is using a whitelist to explicitly decide which
+	// pages should be translated.
+	private function getWhitelist() {
+
+		$s = DIRECTORY_SEPARATOR;
+		$base = defined('DATAFACE_SITE_PATH') ? DATAFACE_SITE_PATH:'.';
+		$path = dirname(__FILE__).$s.'whitelist.txt';
+		$out = [];
+		if (file_exists($path)) {
+		    $lines = file($path);
+		    foreach ($lines as $line) {
+                $lineParts = preg_split('/\s+/', $line);
+                if (count($lineParts) &gt; 0) {
+                    $line = $lineParts[0];
+                } else {
+                    continue;
+                }
+                if (substr($line, 0, 5) === 'http:' or substr($line, 0, 6) === 'https:') {
+                    $lineParts = parse_url($line);
+                    $line = $lineParts['path'];
+                }
+                $out[] = $line;
+		    }
+		    return $out;
+		} else {
+		    return $out;
+		}
+
+	}
+}</code></pre>
 </div>
 </div>
 </div>

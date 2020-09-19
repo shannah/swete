@@ -15,7 +15,7 @@ There are three ways to modify input content to make it more amenable to SWeTE's
 . _Make changes to the source site_. From a performance and maintenance perspective this is the best option as it doesn't require any changes to SWeTE itself. An example of this type of change is if you wanted a section to be marked as "do not translate", you can just add a `+notranslate="1"+` parameter to the tag in the source content. Performance hit: ZERO.
 . _Text Filters_. SWeTE allows you to add text filters which are regular expressions for replacing certain patterns. All sites come with a set of default filters (e.g. for wrapping numeric values in `+<span data-swete-translate="0">+` and dates), but you can create your own filters as well to modify almost anything. You should try not to create too many text filters because each text node in a document is compared to every filter once per request. I.e. For each new filter, SWeTE may need to perform hundreds of regular expression comparisons per request. Performance hit: Moderate.
 +
-See link:#automatic-date-wrapping[???] for more information about text filters.
+See <<automatic-date-wrapping>> for more information about text filters.
 . _PHP Event Handlers_. SWeTE allows you to define a delegate class for each site where you can implement functions that will be called at various stages of the request-response cycle.
 
 This chapter focuses on the last option: PHP Event Handlers.
@@ -28,6 +28,7 @@ SWeTE allows you to define a delegate class corresponding to each site in the SW
 . `+fixHtml(string $html) : string+` . A method that takes the string content of a webpage as it has been received from the source site, and is expected to return string content that has been modified (or not modified) and ready to pass to the DOM parser.
 . `+preprocess(DOMDocument $document) : void+`. A method that takes the DOMDocument as parsed from the source web page content and is expected to use the PHP DOM methods to make changes to the document as required for your site's purposes.
 . `+preprocessHeaders(array &$headers) : void+` . A method that allows you to process/modify the headers that have been retrieved from the source site. It takes a reference to an array of HTTP headers (strings) which can then be modified.
+. `+onBeforePassthru(string $contentType, string $content : string`. A method that will allow you to process page content that is otherwise not processed by SWeTE.  This includes XML files, text files, images, etc...
 
 Using these three hooks, you should be able to arbitrarily modify the input content to suit your purposes.
 
@@ -39,11 +40,11 @@ swete-admin/sites/`+<site_id>+`/Delegate.php
 
 Where `+<site_id>+` is the Site ID of your the web site profile in SWeTE.
 
-____
-*Tip*
-
+[TIP]
+====
 You can find the Site ID for a site by clicking on the "Sites" tab in the top menu. The Site ID will be located in the column labelled "Website ID" in the list of sites in your system.
-____
+====
+
 
 E.g. If your website has site ID 428, then your Delegate class would be named `+sites_428_Delegate+` and would be located at:
 
@@ -51,6 +52,7 @@ swete-admin/sites/428/Delegate.php
 
 A minimal delegate class without any methods defined would look like:
 
+[source,php]
 ....
 <?php
 class sites_428_Delegate {
@@ -59,6 +61,7 @@ class sites_428_Delegate {
 
 but a more complete Delegate class, with preprocessing methods implemented might look something like:
 
+[source,php]
 ....
 <?php
 class sites_429_Delegate {
@@ -162,6 +165,58 @@ class sites_429_Delegate {
         }
 
     }
+    
+    /**
+     * Processes content on pages that are not processed by SWeTE.  We use
+     * this to modify the robots.txt file and sitemap here.
+     */
+    public function onBeforePassthru($contentType, $content) {
+        // Process the robots.txt file to point to the correct sitemap
+		if ($contentType == 'text/plain' and basename($_SERVER['REQUEST_URI']) == 'robots.txt') {
+			$content = str_replace('https://www.example.com/', 'https://www.example.es/', $content);
+		}
+
+		if (basename($_SERVER['REQUEST_URI']) == 'xml-sitemap') {
+			$base = 'https://www.example.com';
+			$trbase = 'https://www.example.es';
+			foreach ($this->getWhitelist() as $path) {
+				$content = str_replace('<loc>'.$base.$path.'</loc>', '<loc>'.$trbase.$path.'</loc>', $content);
+			}
+
+		}
+		return $content;
+	}
+	
+	// A utility method to get all of the paths from the site whitelist
+	// In this case the site is using a whitelist to explicitly decide which 
+	// pages should be translated.
+	private function getWhitelist() {
+
+		$s = DIRECTORY_SEPARATOR;
+		$base = defined('DATAFACE_SITE_PATH') ? DATAFACE_SITE_PATH:'.';
+		$path = dirname(__FILE__).$s.'whitelist.txt';
+		$out = [];
+		if (file_exists($path)) {
+		    $lines = file($path);
+		    foreach ($lines as $line) {
+                $lineParts = preg_split('/\s+/', $line);
+                if (count($lineParts) > 0) {
+                    $line = $lineParts[0];
+                } else {
+                    continue;
+                }
+                if (substr($line, 0, 5) === 'http:' or substr($line, 0, 6) === 'https:') {
+                    $lineParts = parse_url($line);
+                    $line = $lineParts['path'];
+                }
+                $out[] = $line;
+		    }
+		    return $out;
+		} else {
+		    return $out;
+		}
+
+	}
 }
 ....
 
