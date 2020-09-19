@@ -210,6 +210,13 @@ class ProxyServer {
 	 * @brief A reference to the LiveCache object used for caching.
 	 */
 	public $liveCache = null;
+    
+    
+    /**
+     * @type boolean
+     * Whether to translate XML documents.
+     */
+    public $translateXml = false;
 
 	/**
 	 * @brief Initializes the server, sets a default request logger.
@@ -376,8 +383,8 @@ class ProxyServer {
 
 		//echo "We got the source page.";
 		//print_r($client->headers);
-
-		$isHtml = preg_match('/html|xml/', $client->contentType);
+        $isXml = preg_match('/xml/', $client->contentType);
+		$isHtml = preg_match('/html/', $client->contentType) or ($this->translateXml and $isXml);
 		$isJson = (preg_match('/json/', $client->contentType) or ($client->content and ($client->content{0}=='{' or $client->content{0}=='[') ));
 		$isCSS = preg_match('/css/', $client->contentType);
 
@@ -418,11 +425,12 @@ class ProxyServer {
 				}
 				$this->header($h);
 			}
+            $this->content = $delegate->onBeforePassthru($client->contentType, $client->content);
 			$this->header('Content-Length: '.strlen($client->content));
 			$this->header('Connection: close');
 			$this->header('X-SWeTE-Handler: ProxyServer Unprocessed/Non-HTML/Non-CSS/'.__LINE__);
 			//if ( !$cacheControlSet ) $this->header('Cache-Control: max-age=3600, public');
-			$this->output( $delegate->onBeforePassthru($client->contentType, $client->content) );
+			$this->output( $this->content );
 			if ( !$this->buffer ){
 				while ( @ob_end_flush());
 				flush();

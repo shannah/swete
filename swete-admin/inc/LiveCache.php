@@ -128,6 +128,7 @@ class LiveCache {
 
     public $client = null;
 
+    public $translateXml = false;
     public $noServerCache = false;
     public $siteId = null;
     public $live = false;
@@ -673,7 +674,8 @@ class LiveCache {
         			call_user_func(array($clazz, 'init'));
         		}
         	}
-            $isHtml = preg_match('/html|xml/', $this->client->contentType);
+            $isXml = preg_match('/xml/', $this->client->contentType);
+            $isHtml = preg_match('/html/', $this->client->contentType) or ($this->translateXml and $isXml);
             $isCSS = preg_match('/css/', $this->client->contentType);
             $isJson = (preg_match('/json/', $this->client->contentType) or $this->client->content{0}=='{' or $this->client->content{0}=='[');
 
@@ -757,10 +759,11 @@ class LiveCache {
 
                     header($h, false);
                 }
+                $this->client->content = $delegate->onBeforePassthru($this->client->contentType, $this->client->content);
                 header('Content-Length: '.strlen($this->client->content));
                 header('Connection: close');
                 header('X-SWeTE-Handler: LiveCache Unprocessed-content/'.__LINE__);
-                echo $delegate->onBeforePassthru($this->client->contentType, $this->client->content);
+                echo $this->client->content;
                 flush();
 
                 exit;
