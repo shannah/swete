@@ -1,0 +1,208 @@
+== Using the REST Translation API
+
+As of version 0.3, SWeTE now includes a REST (Representational State Transfer) web service API for translating strings. Using this API, you can pass HTML or plain text content to SWeTE over HTTP and retrieve translated versions of the content as output.
+
+== Enabling the REST API
+
+Before you can start using the REST API for a website, you'll need to create a secret web-service key for the site in the site profile. This key will be used by your REST clients as a sort of password to access the API.
+
+The steps are as follows:
+
+[arabic]
+. Log into your SWeTE instance's administration console (e.g. http://example.com/swete-admin/index.php).
+. From the "Dashboard", click on the "Tools" icon
++
+image:images/ch01.menu-icon.png[image]
++
+next to the site you want to activate, then select "Edit" from the contextual menu.
+. Click the "More Details" section header to see the advanced options on the edit form. This should reveal some additional fields including "Webservice secret key".
+. Enter a phrase into this field. It may contain letters, numbers, punctuation, or special characters, and it can be up to 255 characters in length.
++
+image:images/webservice-secret-key-field.png[image]
+. Click "Save"
+
+== Using the REST API
+
+Once you have activated the REST API for a site, you should be able to send HTTP requests to the service with strings that you wish to translate. The HTTP requests should be POST requests to a URL in the proxy site with the following POST parameters:
+
+.POST Parameters for REST API
+[cols=",",options="header",]
+|===
+|Key |Description
+|swete:input |The content that you wish to have translated. This may be an HTML page, an HTML fragment, or plain text.
+|swete:content-type |The type of the content provided in swete:input. Default is `+text/html+`, but if you pass plain text, then you should set this parameter to `+text/plain+`.
+|swete:salt |A seed unix time stamp (i.e. number of seconds since epoch). This should reflect the time that the request was initiated. If this timestamp is more than 1 hour different than the server's time, then the request will be denied.
+|swete:key |This should be a SHA1 hash of the concatenation of the swete:salt parameter and your web site's secret web service key. The format of this key should match the output of thehttp://php.net/manual/en/function.sha1.php[PHP's `+sha1()+` function]. I.e. It should be a 40-character hexadecimal string. Case is insensitive. An example SHA1 hash is: `+7faa2f0b39563dc66f1fd580b21c57dfac061ec9+`
+|===
+
+=== Output and Error Handling
+
+There are three possible outputs for the REST API:
+
+[arabic]
+. _The translated content._ If SWeTE's translation memory contains translations for the input string, then the output will simply be a translated version of the input string. It will not be contained in a data structure of any kind. It will just be a plain string.
+. _The original content_. If the translation memory doesn't contain any matching translations for the input content, then it is possible that the API will simply return the same content that was passed to it. It will not be contained in a data structure of any kind. It will just be a plain string.
+. _An error message_. If there are any errors (e.g. incorrect key, expired or invalid salt, etc..), then it will output the error message as a single string, preceded by the string `+[ERROR].+` I.e. All errors will be returned in the format:
++
+`+[ERROR] Error Message+`
++
+e.g.
++
+`+[ERROR] Incorrect Key+`
+
+=== Sample PHP Client
+
+Below is a sample PHP client that is set to use the REST API:
+
+....
+<?php
+/**
+ * @param string $content The content to be translated.
+ *
+ * @param string $url The URL of the SWeTE proxy site.  
+ *      Can be any URL in the proxy but will be treated 
+ *      as the Base HREF for the page content.
+ *
+ * @param string $password The webservice secret key.  
+ *      Should match the value of the webservice_secret_key 
+ *     field of the website in SWeTE.
+ *
+ * @returns string Translated version of $content.
+ */
+function translateContent($content, $url, $password, $contentType='text/html'){
+    // Salt should be current time (unix timestamp).
+    $salt = time();
+    
+    // Key should be sha1 hash of salt concatenated with password
+    $key = sha1($salt.$password);
+    
+    // POST parameters to pass to the web service
+    $data = array(
+        'swete:input' => $content,
+        'swete:salt' => $salt,
+        'swete:key' => $key,
+        'swete:content-type' => $contentType
+    );
+    
+    // use key 'http' even if you send the request to https://...
+    $options = array(
+        'http' => array(
+            'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+            'method'  => 'POST',
+            'content' => http_build_query($data),
+        )
+    );
+    $context  = stream_context_create($options);
+    $result = file_get_contents($url, false, $context);
+    return $result;
+}
+
+function translatePlainText($text, $url, $password){
+    return translateContent($text, $url, $password, 'text/plain');
+}
+
+function translateHtml($html, $url, $password){
+    return translateContent($html, $url, $password, 'text/html');
+}
+....
+
+This client is very simple. It creates a POST request and sends it to a SWeTE proxy site. Let's take a moment to go through this example so that it is clear what is happening.
+
+* It begins by getting the current time in seconds. This will be used for the `+swete:salt+` parameter, and for building the `+swete:key+` parameter.
++
+____
+*Warning*
+
+Make sure that your salt represents the number of *seconds* since epoch and not some other figure. Many languages provide "current time" functions that return milliseconds. If you provide a salt that is in milliseconds, the request will fail.
+____
+* Next it creates a key (to be used as the `+swete:key+` parameter) by concatenating the salt with the password.
++
+____
+*Note*
+
+In this example the `+$password+` parameter is expected to match the web service secret key value that was entered into the site profile in SWeTE.
+____
+* Next it creates the payload by placing all of the relevant parameters into an associative array.
+* When the actual HTTP request is made, it is a POST request. GET requests will be completely ignored.
+
+This example client is written in PHP, but you could write a client in any language (e.g. Python, Ruby, Java, C#, C, etc...) that allows you to make HTTP requests.
+
+==== Example usage of PHP Client
+
+The following snippet shows a couple of simple examples of using the PHP client that we created above. The first usage translates an HTML snippet. The second translates some plain text content:
+
+....
+$result = translateContent(
+<<<END
+    <h3>Hello World</h3>
+    <p>Hello, my name is <span data-swete-translate="0">Steve Hannah</span>.  
+       The <span data-swete-translate="1">Blue Jays</span> are my favourite team.
+    </p>
+END
+,
+    'http://example.com/demosite4/index.html',
+    'foobar'
+);
+
+echo "First Result:\n";
+echo $result;
+
+
+$result2 = translatePlainText(
+    'Hello World', 
+    'http://test.swetedemo.weblite.ca/demosite4/index.html', 
+    'foobar' 
+);
+
+
+echo "\r\n\r\nSecond Result:\n";
+echo $result2;
+
+// Try a request with an incorrect key.
+$errorResult = translatePlainText(
+    'Hello World', 
+    'http://test.swetedemo.weblite.ca/demosite4/index.html', 
+    'foobarxyz' 
+);
+
+
+echo "\r\n\r\nThird Result:\n";
+echo $errorResult;
+....
+
+The output of this snippet would be as follows:
+
+....
+First Result:
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" 
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+    <body class=" x-swete-translation-fr">
+        <h3>Bonjour Monde</h3>
+        <p>Bonjour, mon nom est 
+            <span data-swete-translate="0">Steve Hannah</span> . 
+            Les <span data-swete-translate="1">Blue Jays</span> 
+            sont mon equippe favorite.
+        </p>
+    </body>
+</html>
+
+
+Second Result:
+Bonjour Monde
+
+Third Result:
+[Error] Incorrect Key
+....
+
+____
+*Note*
+
+Some of the HTML formatting has been changed to fit the page better in print mode, but the document structure is accurate.
+____
+
+One important thing to notice here is that `+<!doctype>+` and `+<html>+` tags have been added to the HTML output, even though the input was just a snippet. Keep this in mind as you may need to parse out just the body of the response if you want to to match the content exactly.
+
+== How It Works
+
+REST requests are processed by SWeTE in exactly the same way that regular web requests are processed. The only difference is that the content to be translated is fetched from the POST parameters instead of making a background request to the equivalent page on the source site. This means that the content provided in a REST request goes through all of the same preprocessing steps that standard content goes through. It also means that string capturing works exactly the same way. I.e. if you have "log translation misses" enabled in the site configuration, then you perform a REST API request with some content that hasn't yet been translated, then the untranslated strings will be added to the translation miss log and appear under the "strings" tab to be translated.

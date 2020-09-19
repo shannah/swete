@@ -1,0 +1,19 @@
+= SWeTE Users Guide
+Steve Hannah
+:doctype: book
+:encoding: utf-8
+:lang: en
+:toc: left
+:docinfo: private
+
+
+
+include::introduction.adoc[]
+
+include::translation_parser.adoc[]
+
+include::rest_api.adoc[]
+
+include::preprocessing_content.adoc[]
+
+include::translation_management.adoc[]

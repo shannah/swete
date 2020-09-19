@@ -1,0 +1,184 @@
+== Preprocessing Content
+
+Generally, SWeTE will do a pretty good job of parsing and translating website content out of the box. Sometimes, however, you may feel the need to make changes to the page content to help make it easier to deal with. Some examples of such situations include:
+
+[arabic]
+. _Tagging content_. Some strings may include both static and dynamic parts. You may want to explicitly mark the dynamic parts using `+<span
+      data-swete-translate="0">+` tags so that you only need to translate the static string once, or add `+notranslate="1"
+      +`to some sections to prevent translation altogether.
+. _Fixing malformed HTML_. Many web sites include invalid HTML that SWeTE is having problems parsing. When you spot this type of problem, you may want to fix the HTML using standard pattern matching before the content is parsed by the SWeTE DOM parser.
+. _Modifying the headers_. In some cases you may want to add, remove, or modify headers before they are processed by SWeTE. `++`
+
+There are three ways to modify input content to make it more amenable to SWeTE's preferences:
+
+[arabic]
+. _Make changes to the source site_. From a performance and maintenance perspective this is the best option as it doesn't require any changes to SWeTE itself. An example of this type of change is if you wanted a section to be marked as "do not translate", you can just add a `+notranslate="1"+` parameter to the tag in the source content. Performance hit: ZERO.
+. _Text Filters_. SWeTE allows you to add text filters which are regular expressions for replacing certain patterns. All sites come with a set of default filters (e.g. for wrapping numeric values in `+<span data-swete-translate="0">+` and dates), but you can create your own filters as well to modify almost anything. You should try not to create too many text filters because each text node in a document is compared to every filter once per request. I.e. For each new filter, SWeTE may need to perform hundreds of regular expression comparisons per request. Performance hit: Moderate.
++
+See link:#automatic-date-wrapping[???] for more information about text filters.
+. _PHP Event Handlers_. SWeTE allows you to define a delegate class for each site where you can implement functions that will be called at various stages of the request-response cycle.
+
+This chapter focuses on the last option: PHP Event Handlers.
+
+== The Site Delegate Class
+
+SWeTE allows you to define a delegate class corresponding to each site in the SWeTE instance. This delegate class can contain the following methods:
+
+[arabic]
+. `+fixHtml(string $html) : string+` . A method that takes the string content of a webpage as it has been received from the source site, and is expected to return string content that has been modified (or not modified) and ready to pass to the DOM parser.
+. `+preprocess(DOMDocument $document) : void+`. A method that takes the DOMDocument as parsed from the source web page content and is expected to use the PHP DOM methods to make changes to the document as required for your site's purposes.
+. `+preprocessHeaders(array &$headers) : void+` . A method that allows you to process/modify the headers that have been retrieved from the source site. It takes a reference to an array of HTTP headers (strings) which can then be modified.
+
+Using these three hooks, you should be able to arbitrarily modify the input content to suit your purposes.
+
+=== Creating the Delegate Class
+
+SWeTE uses a file path convention for finding the delegate class for each site. It expects to find your site's delegate class named `+sites_<site_id>_Delegate+` at:
+
+swete-admin/sites/`+<site_id>+`/Delegate.php
+
+Where `+<site_id>+` is the Site ID of your the web site profile in SWeTE.
+
+____
+*Tip*
+
+You can find the Site ID for a site by clicking on the "Sites" tab in the top menu. The Site ID will be located in the column labelled "Website ID" in the list of sites in your system.
+____
+
+E.g. If your website has site ID 428, then your Delegate class would be named `+sites_428_Delegate+` and would be located at:
+
+swete-admin/sites/428/Delegate.php
+
+A minimal delegate class without any methods defined would look like:
+
+....
+<?php
+class sites_428_Delegate {
+}
+....
+
+but a more complete Delegate class, with preprocessing methods implemented might look something like:
+
+....
+<?php
+class sites_429_Delegate {
+
+    /**
+     * Called before page is processed.  Fixes HTML.
+     */
+    function fixHtml($html){
+        
+        $html = preg_replace(
+            '/Logged in as <b>([^<]*)<\/b>/', 
+            'Logged in as <span data-swete-translate="0" '.
+            'style="font-weight:bold">$1</span>',
+            $html
+        );
+        
+        return $html;
+    }
+    
+
+    /**
+     * Preprocesses HTTP headers before they are handled by SWeTE.
+     */
+    function preprocessHeaders(&$headers){
+        foreach ( $headers as $k=>$h ){
+            // WARNING:  This rule is ONLY FOR DEVELOPMENT MODE
+            // When we go live we should remove this rule and 
+            // make the proxy so that it will work properly with 
+            // HTTPS
+            $headers[$k] = preg_replace(
+                '#https://www.example.com.com#', 
+                'http://www.example.com', 
+                $h
+            );
+        }
+    }
+    
+
+    /**
+     * Preprocesses the DOM before it is run through SWeTE's 
+     * processor for translation and proxification.
+     */
+    function preprocess(DOMDocument $dom){
+        
+        // We don't need to translate building locations
+        $xpath = new DOMXPath($dom);
+        $buildLocations = $xpath->query(
+            "//select[@id='buildLocations']/option[@value!='']"
+        );
+        foreach ($buildLocations as $o){
+            $o->setAttribute('notranslate','1');
+        }
+        
+        
+        // We don't need to translate employee names that appear 
+        // in the employee dropdown
+        $employees = $xpath->query(
+            "//select[@id='employee']/option[@value!='']"
+        );
+        foreach ( $employees as $o ){
+            $o->setAttribute('notranslate','1');
+        }
+        
+        // The product list page includes a p-id div for each 
+        // product that is hidden. There is no need to translate this
+        $pids = $xpath->query("//div[@id='p-id']");
+        foreach ($pids as $pid){
+            $pid->setAttribute('notranslate', '1');
+        }
+        
+        // Order Review Page
+        
+        $shippingAddresses = $xpath->query(
+            "//td[@class='CheckoutReviewShipTo']"
+        );
+        foreach ( $shippingAddresses as $a ){
+            $a->setAttribute('notranslate', '1');
+        }
+        
+
+        $billToTable = $xpath->query("//table[@id='BillToTable']");
+        foreach ( $billToTable as $b){
+            $b->setAttribute('notranslate', '1');
+            $heading = $xpath->query('//h6', $b);
+            foreach ($heading as $h){
+                $h->setAttribute('translate', '1');
+            }
+        }
+        
+        
+        // Order Confirmation Page
+        
+        $shipTo = $xpath->query("//td[@id='customerinforight']");
+        foreach ( $shipTo as $s){
+            $s->setAttribute('notranslate', '1');
+            // still translate the heading
+            $bs = $xpath->query('//b', $s);
+            foreach ($bs as $b){
+            $b->setAttribute('translate', '1');
+            }
+        }
+
+    }
+}
+....
+
+=== Processing Order
+
+A typical SWeTE HTTP request is processed as follows:
+
+[arabic]
+. Client makes HTTP request for the proxy site (i.e. the SWeTE translated site).
+. SWeTE performs background HTTP request for associated content in the source site.
+. SWeTE preprocesses the content received from the source site:
+[arabic]
+.. SWeTE calls `+fixHtml()+` of the delegate class to fix any problematic HTML and provide an opportunity to perform pattern matching and replacement as desired.
+.. SWeTE parses the fixed HTML into a `+DOMDocument+` tree.
+.. SWeTE calls the delegate class' preprocess() method on the parsed `+DOMDocument+` to give it an opportunity to modify the document structure as desired.
+.. SWeTE performs the site's text filters on all of the text nodes (except style and script nodes) in the `+DOMDocument+`. (e.g. to wrap numbers and dates in the appropriate tags).
+. SWeTE proxifies and translates the content.
+. SWeTE calls the preprocessHeaders() method of the delegate class on the response headers that were received from the source site to give it an opportunity to make changes as desired.
+. SWeTE proxifies the response headers (e.g. to convert `+Location+` headers to point to the proxy site instead of the source site).
+. SWeTE outputs the final content back to the client.

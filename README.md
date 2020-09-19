@@ -1,4 +1,4 @@
-#SWeTE Server
+# SWeTE Server
 
 SWeTE (Simple Website Translation Engine) is an open source translation proxy written in PHP, using MySQL for its translation memory.
 
@@ -6,7 +6,7 @@ SWeTE (Simple Website Translation Engine) is an open source translation proxy wr
 * [Introductory Tutorial](docs/phparch_article/page.markdown) - (An article originally published in PHP Architect)
 * [Users Guide (PDF)](docs/swete-manual.pdf?raw=true)
 
-##License
+## License
 
 GPLv2
 
@@ -20,6 +20,6 @@ GPLv2
 
 [Latest release](https://github.com/shannah/swete/releases/latest)
 
-##Credits
+## Credits
 
 SWeTE Server is developed by [Web Lite Translation Corp.](http://translate.weblite.ca). 

@@ -1,0 +1,3434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.10">
+<meta name="author" content="Steve Hannah">
+<title>SWeTE Users Guide</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+<style>
+/* Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
+/* Uncomment @import statement to use as custom stylesheet */
+/*@import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700";*/
+article,aside,details,figcaption,figure,footer,header,hgroup,main,nav,section{display:block}
+audio,video{display:inline-block}
+audio:not([controls]){display:none;height:0}
+html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}
+a{background:none}
+a:focus{outline:thin dotted}
+a:active,a:hover{outline:0}
+h1{font-size:2em;margin:.67em 0}
+abbr[title]{border-bottom:1px dotted}
+b,strong{font-weight:bold}
+dfn{font-style:italic}
+hr{-moz-box-sizing:content-box;box-sizing:content-box;height:0}
+mark{background:#ff0;color:#000}
+code,kbd,pre,samp{font-family:monospace;font-size:1em}
+pre{white-space:pre-wrap}
+q{quotes:"\201C" "\201D" "\2018" "\2019"}
+small{font-size:80%}
+sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}
+sup{top:-.5em}
+sub{bottom:-.25em}
+img{border:0}
+svg:not(:root){overflow:hidden}
+figure{margin:0}
+fieldset{border:1px solid silver;margin:0 2px;padding:.35em .625em .75em}
+legend{border:0;padding:0}
+button,input,select,textarea{font-family:inherit;font-size:100%;margin:0}
+button,input{line-height:normal}
+button,select{text-transform:none}
+button,html input[type="button"],input[type="reset"],input[type="submit"]{-webkit-appearance:button;cursor:pointer}
+button[disabled],html input[disabled]{cursor:default}
+input[type="checkbox"],input[type="radio"]{box-sizing:border-box;padding:0}
+button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0}
+textarea{overflow:auto;vertical-align:top}
+table{border-collapse:collapse;border-spacing:0}
+*,*::before,*::after{-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box}
+html,body{font-size:100%}
+body{background:#fff;color:rgba(0,0,0,.8);padding:0;margin:0;font-family:"Noto Serif","DejaVu Serif",serif;font-weight:400;font-style:normal;line-height:1;position:relative;cursor:auto;tab-size:4;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased}
+a:hover{cursor:pointer}
+img,object,embed{max-width:100%;height:auto}
+object,embed{height:100%}
+img{-ms-interpolation-mode:bicubic}
+.left{float:left!important}
+.right{float:right!important}
+.text-left{text-align:left!important}
+.text-right{text-align:right!important}
+.text-center{text-align:center!important}
+.text-justify{text-align:justify!important}
+.hide{display:none}
+img,object,svg{display:inline-block;vertical-align:middle}
+textarea{height:auto;min-height:50px}
+select{width:100%}
+.center{margin-left:auto;margin-right:auto}
+.stretch{width:100%}
+.subheader,.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{line-height:1.45;color:#7a2518;font-weight:400;margin-top:0;margin-bottom:.25em}
+div,dl,dt,dd,ul,ol,li,h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6,pre,form,p,blockquote,th,td{margin:0;padding:0;direction:ltr}
+a{color:#2156a5;text-decoration:underline;line-height:inherit}
+a:hover,a:focus{color:#1d4b8f}
+a img{border:0}
+p{font-family:inherit;font-weight:400;font-size:1em;line-height:1.6;margin-bottom:1.25em;text-rendering:optimizeLegibility}
+p aside{font-size:.875em;line-height:1.35;font-style:italic}
+h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{font-family:"Open Sans","DejaVu Sans",sans-serif;font-weight:300;font-style:normal;color:#ba3925;text-rendering:optimizeLegibility;margin-top:1em;margin-bottom:.5em;line-height:1.0125em}
+h1 small,h2 small,h3 small,#toctitle small,.sidebarblock>.content>.title small,h4 small,h5 small,h6 small{font-size:60%;color:#e99b8f;line-height:0}
+h1{font-size:2.125em}
+h2{font-size:1.6875em}
+h3,#toctitle,.sidebarblock>.content>.title{font-size:1.375em}
+h4,h5{font-size:1.125em}
+h6{font-size:1em}
+hr{border:solid #dddddf;border-width:1px 0 0;clear:both;margin:1.25em 0 1.1875em;height:0}
+em,i{font-style:italic;line-height:inherit}
+strong,b{font-weight:bold;line-height:inherit}
+small{font-size:60%;line-height:inherit}
+code{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;font-weight:400;color:rgba(0,0,0,.9)}
+ul,ol,dl{font-size:1em;line-height:1.6;margin-bottom:1.25em;list-style-position:outside;font-family:inherit}
+ul,ol{margin-left:1.5em}
+ul li ul,ul li ol{margin-left:1.25em;margin-bottom:0;font-size:1em}
+ul.square li ul,ul.circle li ul,ul.disc li ul{list-style:inherit}
+ul.square{list-style-type:square}
+ul.circle{list-style-type:circle}
+ul.disc{list-style-type:disc}
+ol li ul,ol li ol{margin-left:1.25em;margin-bottom:0}
+dl dt{margin-bottom:.3125em;font-weight:bold}
+dl dd{margin-bottom:1.25em}
+abbr,acronym{text-transform:uppercase;font-size:90%;color:rgba(0,0,0,.8);border-bottom:1px dotted #ddd;cursor:help}
+abbr{text-transform:none}
+blockquote{margin:0 0 1.25em;padding:.5625em 1.25em 0 1.1875em;border-left:1px solid #ddd}
+blockquote cite{display:block;font-size:.9375em;color:rgba(0,0,0,.6)}
+blockquote cite::before{content:"\2014 \0020"}
+blockquote cite a,blockquote cite a:visited{color:rgba(0,0,0,.6)}
+blockquote,blockquote p{line-height:1.6;color:rgba(0,0,0,.85)}
+@media screen and (min-width:768px){h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2}
+h1{font-size:2.75em}
+h2{font-size:2.3125em}
+h3,#toctitle,.sidebarblock>.content>.title{font-size:1.6875em}
+h4{font-size:1.4375em}}
+table{background:#fff;margin-bottom:1.25em;border:solid 1px #dedede}
+table thead,table tfoot{background:#f7f8f7}
+table thead tr th,table thead tr td,table tfoot tr th,table tfoot tr td{padding:.5em .625em .625em;font-size:inherit;color:rgba(0,0,0,.8);text-align:left}
+table tr th,table tr td{padding:.5625em .625em;font-size:inherit;color:rgba(0,0,0,.8)}
+table tr.even,table tr.alt{background:#f8f8f7}
+table thead tr th,table tfoot tr th,table tbody tr td,table tr td,table tfoot tr td{display:table-cell;line-height:1.6}
+h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2;word-spacing:-.05em}
+h1 strong,h2 strong,h3 strong,#toctitle strong,.sidebarblock>.content>.title strong,h4 strong,h5 strong,h6 strong{font-weight:400}
+.clearfix::before,.clearfix::after,.float-group::before,.float-group::after{content:" ";display:table}
+.clearfix::after,.float-group::after{clear:both}
+:not(pre):not([class^=L])>code{font-size:.9375em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background:#f7f7f8;-webkit-border-radius:4px;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed;word-wrap:break-word}
+:not(pre)>code.nobreak{word-wrap:normal}
+:not(pre)>code.nowrap{white-space:nowrap}
+pre{color:rgba(0,0,0,.9);font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;line-height:1.45;text-rendering:optimizeSpeed}
+pre code,pre pre{color:inherit;font-size:inherit;line-height:inherit}
+pre>code{display:block}
+pre.nowrap,pre.nowrap pre{white-space:pre;word-wrap:normal}
+em em{font-style:normal}
+strong strong{font-weight:400}
+.keyseq{color:rgba(51,51,51,.8)}
+kbd{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;display:inline-block;color:rgba(0,0,0,.8);font-size:.65em;line-height:1.45;background:#f7f7f7;border:1px solid #ccc;-webkit-border-radius:3px;border-radius:3px;-webkit-box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em white inset;box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em #fff inset;margin:0 .15em;padding:.2em .5em;vertical-align:middle;position:relative;top:-.1em;white-space:nowrap}
+.keyseq kbd:first-child{margin-left:0}
+.keyseq kbd:last-child{margin-right:0}
+.menuseq,.menuref{color:#000}
+.menuseq b:not(.caret),.menuref{font-weight:inherit}
+.menuseq{word-spacing:-.02em}
+.menuseq b.caret{font-size:1.25em;line-height:.8}
+.menuseq i.caret{font-weight:bold;text-align:center;width:.45em}
+b.button::before,b.button::after{position:relative;top:-1px;font-weight:400}
+b.button::before{content:"[";padding:0 3px 0 2px}
+b.button::after{content:"]";padding:0 2px 0 3px}
+p a>code:hover{color:rgba(0,0,0,.9)}
+#header,#content,#footnotes,#footer{width:100%;margin-left:auto;margin-right:auto;margin-top:0;margin-bottom:0;max-width:62.5em;*zoom:1;position:relative;padding-left:.9375em;padding-right:.9375em}
+#header::before,#header::after,#content::before,#content::after,#footnotes::before,#footnotes::after,#footer::before,#footer::after{content:" ";display:table}
+#header::after,#content::after,#footnotes::after,#footer::after{clear:both}
+#content{margin-top:1.25em}
+#content::before{content:none}
+#header>h1:first-child{color:rgba(0,0,0,.85);margin-top:2.25rem;margin-bottom:0}
+#header>h1:first-child+#toc{margin-top:8px;border-top:1px solid #dddddf}
+#header>h1:only-child,body.toc2 #header>h1:nth-last-child(2){border-bottom:1px solid #dddddf;padding-bottom:8px}
+#header .details{border-bottom:1px solid #dddddf;line-height:1.45;padding-top:.25em;padding-bottom:.25em;padding-left:.25em;color:rgba(0,0,0,.6);display:-ms-flexbox;display:-webkit-flex;display:flex;-ms-flex-flow:row wrap;-webkit-flex-flow:row wrap;flex-flow:row wrap}
+#header .details span:first-child{margin-left:-.125em}
+#header .details span.email a{color:rgba(0,0,0,.85)}
+#header .details br{display:none}
+#header .details br+span::before{content:"\00a0\2013\00a0"}
+#header .details br+span.author::before{content:"\00a0\22c5\00a0";color:rgba(0,0,0,.85)}
+#header .details br+span#revremark::before{content:"\00a0|\00a0"}
+#header #revnumber{text-transform:capitalize}
+#header #revnumber::after{content:"\00a0"}
+#content>h1:first-child:not([class]){color:rgba(0,0,0,.85);border-bottom:1px solid #dddddf;padding-bottom:8px;margin-top:0;padding-top:1rem;margin-bottom:1.25rem}
+#toc{border-bottom:1px solid #e7e7e9;padding-bottom:.5em}
+#toc>ul{margin-left:.125em}
+#toc ul.sectlevel0>li>a{font-style:italic}
+#toc ul.sectlevel0 ul.sectlevel1{margin:.5em 0}
+#toc ul{font-family:"Open Sans","DejaVu Sans",sans-serif;list-style-type:none}
+#toc li{line-height:1.3334;margin-top:.3334em}
+#toc a{text-decoration:none}
+#toc a:active{text-decoration:underline}
+#toctitle{color:#7a2518;font-size:1.2em}
+@media screen and (min-width:768px){#toctitle{font-size:1.375em}
+body.toc2{padding-left:15em;padding-right:0}
+#toc.toc2{margin-top:0!important;background:#f8f8f7;position:fixed;width:15em;left:0;top:0;border-right:1px solid #e7e7e9;border-top-width:0!important;border-bottom-width:0!important;z-index:1000;padding:1.25em 1em;height:100%;overflow:auto}
+#toc.toc2 #toctitle{margin-top:0;margin-bottom:.8rem;font-size:1.2em}
+#toc.toc2>ul{font-size:.9em;margin-bottom:0}
+#toc.toc2 ul ul{margin-left:0;padding-left:1em}
+#toc.toc2 ul.sectlevel0 ul.sectlevel1{padding-left:0;margin-top:.5em;margin-bottom:.5em}
+body.toc2.toc-right{padding-left:0;padding-right:15em}
+body.toc2.toc-right #toc.toc2{border-right-width:0;border-left:1px solid #e7e7e9;left:auto;right:0}}
+@media screen and (min-width:1280px){body.toc2{padding-left:20em;padding-right:0}
+#toc.toc2{width:20em}
+#toc.toc2 #toctitle{font-size:1.375em}
+#toc.toc2>ul{font-size:.95em}
+#toc.toc2 ul ul{padding-left:1.25em}
+body.toc2.toc-right{padding-left:0;padding-right:20em}}
+#content #toc{border-style:solid;border-width:1px;border-color:#e0e0dc;margin-bottom:1.25em;padding:1.25em;background:#f8f8f7;-webkit-border-radius:4px;border-radius:4px}
+#content #toc>:first-child{margin-top:0}
+#content #toc>:last-child{margin-bottom:0}
+#footer{max-width:100%;background:rgba(0,0,0,.8);padding:1.25em}
+#footer-text{color:rgba(255,255,255,.8);line-height:1.44}
+#content{margin-bottom:.625em}
+.sect1{padding-bottom:.625em}
+@media screen and (min-width:768px){#content{margin-bottom:1.25em}
+.sect1{padding-bottom:1.25em}}
+.sect1:last-child{padding-bottom:0}
+.sect1+.sect1{border-top:1px solid #e7e7e9}
+#content h1>a.anchor,h2>a.anchor,h3>a.anchor,#toctitle>a.anchor,.sidebarblock>.content>.title>a.anchor,h4>a.anchor,h5>a.anchor,h6>a.anchor{position:absolute;z-index:1001;width:1.5ex;margin-left:-1.5ex;display:block;text-decoration:none!important;visibility:hidden;text-align:center;font-weight:400}
+#content h1>a.anchor::before,h2>a.anchor::before,h3>a.anchor::before,#toctitle>a.anchor::before,.sidebarblock>.content>.title>a.anchor::before,h4>a.anchor::before,h5>a.anchor::before,h6>a.anchor::before{content:"\00A7";font-size:.85em;display:block;padding-top:.1em}
+#content h1:hover>a.anchor,#content h1>a.anchor:hover,h2:hover>a.anchor,h2>a.anchor:hover,h3:hover>a.anchor,#toctitle:hover>a.anchor,.sidebarblock>.content>.title:hover>a.anchor,h3>a.anchor:hover,#toctitle>a.anchor:hover,.sidebarblock>.content>.title>a.anchor:hover,h4:hover>a.anchor,h4>a.anchor:hover,h5:hover>a.anchor,h5>a.anchor:hover,h6:hover>a.anchor,h6>a.anchor:hover{visibility:visible}
+#content h1>a.link,h2>a.link,h3>a.link,#toctitle>a.link,.sidebarblock>.content>.title>a.link,h4>a.link,h5>a.link,h6>a.link{color:#ba3925;text-decoration:none}
+#content h1>a.link:hover,h2>a.link:hover,h3>a.link:hover,#toctitle>a.link:hover,.sidebarblock>.content>.title>a.link:hover,h4>a.link:hover,h5>a.link:hover,h6>a.link:hover{color:#a53221}
+details,.audioblock,.imageblock,.literalblock,.listingblock,.stemblock,.videoblock{margin-bottom:1.25em}
+details>summary:first-of-type{cursor:pointer;display:list-item;outline:none;margin-bottom:.75em}
+.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{text-rendering:optimizeLegibility;text-align:left;font-family:"Noto Serif","DejaVu Serif",serif;font-size:1rem;font-style:italic}
+table.tableblock.fit-content>caption.title{white-space:nowrap;width:0}
+.paragraph.lead>p,#preamble>.sectionbody>[class="paragraph"]:first-of-type p{font-size:1.21875em;line-height:1.6;color:rgba(0,0,0,.85)}
+table.tableblock #preamble>.sectionbody>[class="paragraph"]:first-of-type p{font-size:inherit}
+.admonitionblock>table{border-collapse:separate;border:0;background:none;width:100%}
+.admonitionblock>table td.icon{text-align:center;width:80px}
+.admonitionblock>table td.icon img{max-width:none}
+.admonitionblock>table td.icon .title{font-weight:bold;font-family:"Open Sans","DejaVu Sans",sans-serif;text-transform:uppercase}
+.admonitionblock>table td.content{padding-left:1.125em;padding-right:1.25em;border-left:1px solid #dddddf;color:rgba(0,0,0,.6)}
+.admonitionblock>table td.content>:last-child>:last-child{margin-bottom:0}
+.exampleblock>.content{border-style:solid;border-width:1px;border-color:#e6e6e6;margin-bottom:1.25em;padding:1.25em;background:#fff;-webkit-border-radius:4px;border-radius:4px}
+.exampleblock>.content>:first-child{margin-top:0}
+.exampleblock>.content>:last-child{margin-bottom:0}
+.sidebarblock{border-style:solid;border-width:1px;border-color:#dbdbd6;margin-bottom:1.25em;padding:1.25em;background:#f3f3f2;-webkit-border-radius:4px;border-radius:4px}
+.sidebarblock>:first-child{margin-top:0}
+.sidebarblock>:last-child{margin-bottom:0}
+.sidebarblock>.content>.title{color:#7a2518;margin-top:0;text-align:center}
+.exampleblock>.content>:last-child>:last-child,.exampleblock>.content .olist>ol>li:last-child>:last-child,.exampleblock>.content .ulist>ul>li:last-child>:last-child,.exampleblock>.content .qlist>ol>li:last-child>:last-child,.sidebarblock>.content>:last-child>:last-child,.sidebarblock>.content .olist>ol>li:last-child>:last-child,.sidebarblock>.content .ulist>ul>li:last-child>:last-child,.sidebarblock>.content .qlist>ol>li:last-child>:last-child{margin-bottom:0}
+.literalblock pre,.listingblock>.content>pre{-webkit-border-radius:4px;border-radius:4px;word-wrap:break-word;overflow-x:auto;padding:1em;font-size:.8125em}
+@media screen and (min-width:768px){.literalblock pre,.listingblock>.content>pre{font-size:.90625em}}
+@media screen and (min-width:1280px){.literalblock pre,.listingblock>.content>pre{font-size:1em}}
+.literalblock pre,.listingblock>.content>pre:not(.highlight),.listingblock>.content>pre[class="highlight"],.listingblock>.content>pre[class^="highlight "]{background:#f7f7f8}
+.literalblock.output pre{color:#f7f7f8;background:rgba(0,0,0,.9)}
+.listingblock>.content{position:relative}
+.listingblock code[data-lang]::before{display:none;content:attr(data-lang);position:absolute;font-size:.75em;top:.425rem;right:.5rem;line-height:1;text-transform:uppercase;color:inherit;opacity:.5}
+.listingblock:hover code[data-lang]::before{display:block}
+.listingblock.terminal pre .command::before{content:attr(data-prompt);padding-right:.5em;color:inherit;opacity:.5}
+.listingblock.terminal pre .command:not([data-prompt])::before{content:"$"}
+.listingblock pre.highlightjs{padding:0}
+.listingblock pre.highlightjs>code{padding:1em;-webkit-border-radius:4px;border-radius:4px}
+.listingblock pre.prettyprint{border-width:0}
+.prettyprint{background:#f7f7f8}
+pre.prettyprint .linenums{line-height:1.45;margin-left:2em}
+pre.prettyprint li{background:none;list-style-type:inherit;padding-left:0}
+pre.prettyprint li code[data-lang]::before{opacity:1}
+pre.prettyprint li:not(:first-child) code[data-lang]::before{display:none}
+table.linenotable{border-collapse:separate;border:0;margin-bottom:0;background:none}
+table.linenotable td[class]{color:inherit;vertical-align:top;padding:0;line-height:inherit;white-space:normal}
+table.linenotable td.code{padding-left:.75em}
+table.linenotable td.linenos{border-right:1px solid currentColor;opacity:.35;padding-right:.5em}
+pre.pygments .lineno{border-right:1px solid currentColor;opacity:.35;display:inline-block;margin-right:.75em}
+pre.pygments .lineno::before{content:"";margin-right:-.125em}
+.quoteblock{margin:0 1em 1.25em 1.5em;display:table}
+.quoteblock:not(.excerpt)>.title{margin-left:-1.5em;margin-bottom:.75em}
+.quoteblock blockquote,.quoteblock p{color:rgba(0,0,0,.85);font-size:1.15rem;line-height:1.75;word-spacing:.1em;letter-spacing:0;font-style:italic;text-align:justify}
+.quoteblock blockquote{margin:0;padding:0;border:0}
+.quoteblock blockquote::before{content:"\201c";float:left;font-size:2.75em;font-weight:bold;line-height:.6em;margin-left:-.6em;color:#7a2518;text-shadow:0 1px 2px rgba(0,0,0,.1)}
+.quoteblock blockquote>.paragraph:last-child p{margin-bottom:0}
+.quoteblock .attribution{margin-top:.75em;margin-right:.5ex;text-align:right}
+.verseblock{margin:0 1em 1.25em}
+.verseblock pre{font-family:"Open Sans","DejaVu Sans",sans;font-size:1.15rem;color:rgba(0,0,0,.85);font-weight:300;text-rendering:optimizeLegibility}
+.verseblock pre strong{font-weight:400}
+.verseblock .attribution{margin-top:1.25rem;margin-left:.5ex}
+.quoteblock .attribution,.verseblock .attribution{font-size:.9375em;line-height:1.45;font-style:italic}
+.quoteblock .attribution br,.verseblock .attribution br{display:none}
+.quoteblock .attribution cite,.verseblock .attribution cite{display:block;letter-spacing:-.025em;color:rgba(0,0,0,.6)}
+.quoteblock.abstract blockquote::before,.quoteblock.excerpt blockquote::before,.quoteblock .quoteblock blockquote::before{display:none}
+.quoteblock.abstract blockquote,.quoteblock.abstract p,.quoteblock.excerpt blockquote,.quoteblock.excerpt p,.quoteblock .quoteblock blockquote,.quoteblock .quoteblock p{line-height:1.6;word-spacing:0}
+.quoteblock.abstract{margin:0 1em 1.25em;display:block}
+.quoteblock.abstract>.title{margin:0 0 .375em;font-size:1.15em;text-align:center}
+.quoteblock.excerpt>blockquote,.quoteblock .quoteblock{padding:0 0 .25em 1em;border-left:.25em solid #dddddf}
+.quoteblock.excerpt,.quoteblock .quoteblock{margin-left:0}
+.quoteblock.excerpt blockquote,.quoteblock.excerpt p,.quoteblock .quoteblock blockquote,.quoteblock .quoteblock p{color:inherit;font-size:1.0625rem}
+.quoteblock.excerpt .attribution,.quoteblock .quoteblock .attribution{color:inherit;text-align:left;margin-right:0}
+table.tableblock{max-width:100%;border-collapse:separate}
+p.tableblock:last-child{margin-bottom:0}
+td.tableblock>.content>:last-child{margin-bottom:-1.25em}
+td.tableblock>.content>:last-child.sidebarblock{margin-bottom:0}
+table.tableblock,th.tableblock,td.tableblock{border:0 solid #dedede}
+table.grid-all>thead>tr>.tableblock,table.grid-all>tbody>tr>.tableblock{border-width:0 1px 1px 0}
+table.grid-all>tfoot>tr>.tableblock{border-width:1px 1px 0 0}
+table.grid-cols>*>tr>.tableblock{border-width:0 1px 0 0}
+table.grid-rows>thead>tr>.tableblock,table.grid-rows>tbody>tr>.tableblock{border-width:0 0 1px}
+table.grid-rows>tfoot>tr>.tableblock{border-width:1px 0 0}
+table.grid-all>*>tr>.tableblock:last-child,table.grid-cols>*>tr>.tableblock:last-child{border-right-width:0}
+table.grid-all>tbody>tr:last-child>.tableblock,table.grid-all>thead:last-child>tr>.tableblock,table.grid-rows>tbody>tr:last-child>.tableblock,table.grid-rows>thead:last-child>tr>.tableblock{border-bottom-width:0}
+table.frame-all{border-width:1px}
+table.frame-sides{border-width:0 1px}
+table.frame-topbot,table.frame-ends{border-width:1px 0}
+table.stripes-all tr,table.stripes-odd tr:nth-of-type(odd),table.stripes-even tr:nth-of-type(even),table.stripes-hover tr:hover{background:#f8f8f7}
+th.halign-left,td.halign-left{text-align:left}
+th.halign-right,td.halign-right{text-align:right}
+th.halign-center,td.halign-center{text-align:center}
+th.valign-top,td.valign-top{vertical-align:top}
+th.valign-bottom,td.valign-bottom{vertical-align:bottom}
+th.valign-middle,td.valign-middle{vertical-align:middle}
+table thead th,table tfoot th{font-weight:bold}
+tbody tr th{display:table-cell;line-height:1.6;background:#f7f8f7}
+tbody tr th,tbody tr th p,tfoot tr th,tfoot tr th p{color:rgba(0,0,0,.8);font-weight:bold}
+p.tableblock>code:only-child{background:none;padding:0}
+p.tableblock{font-size:1em}
+ol{margin-left:1.75em}
+ul li ol{margin-left:1.5em}
+dl dd{margin-left:1.125em}
+dl dd:last-child,dl dd:last-child>:last-child{margin-bottom:0}
+ol>li p,ul>li p,ul dd,ol dd,.olist .olist,.ulist .ulist,.ulist .olist,.olist .ulist{margin-bottom:.625em}
+ul.checklist,ul.none,ol.none,ul.no-bullet,ol.no-bullet,ol.unnumbered,ul.unstyled,ol.unstyled{list-style-type:none}
+ul.no-bullet,ol.no-bullet,ol.unnumbered{margin-left:.625em}
+ul.unstyled,ol.unstyled{margin-left:0}
+ul.checklist{margin-left:.625em}
+ul.checklist li>p:first-child>.fa-square-o:first-child,ul.checklist li>p:first-child>.fa-check-square-o:first-child{width:1.25em;font-size:.8em;position:relative;bottom:.125em}
+ul.checklist li>p:first-child>input[type="checkbox"]:first-child{margin-right:.25em}
+ul.inline{display:-ms-flexbox;display:-webkit-box;display:flex;-ms-flex-flow:row wrap;-webkit-flex-flow:row wrap;flex-flow:row wrap;list-style:none;margin:0 0 .625em -1.25em}
+ul.inline>li{margin-left:1.25em}
+.unstyled dl dt{font-weight:400;font-style:normal}
+ol.arabic{list-style-type:decimal}
+ol.decimal{list-style-type:decimal-leading-zero}
+ol.loweralpha{list-style-type:lower-alpha}
+ol.upperalpha{list-style-type:upper-alpha}
+ol.lowerroman{list-style-type:lower-roman}
+ol.upperroman{list-style-type:upper-roman}
+ol.lowergreek{list-style-type:lower-greek}
+.hdlist>table,.colist>table{border:0;background:none}
+.hdlist>table>tbody>tr,.colist>table>tbody>tr{background:none}
+td.hdlist1,td.hdlist2{vertical-align:top;padding:0 .625em}
+td.hdlist1{font-weight:bold;padding-bottom:1.25em}
+.literalblock+.colist,.listingblock+.colist{margin-top:-.5em}
+.colist td:not([class]):first-child{padding:.4em .75em 0;line-height:1;vertical-align:top}
+.colist td:not([class]):first-child img{max-width:none}
+.colist td:not([class]):last-child{padding:.25em 0}
+.thumb,.th{line-height:0;display:inline-block;border:solid 4px #fff;-webkit-box-shadow:0 0 0 1px #ddd;box-shadow:0 0 0 1px #ddd}
+.imageblock.left{margin:.25em .625em 1.25em 0}
+.imageblock.right{margin:.25em 0 1.25em .625em}
+.imageblock>.title{margin-bottom:0}
+.imageblock.thumb,.imageblock.th{border-width:6px}
+.imageblock.thumb>.title,.imageblock.th>.title{padding:0 .125em}
+.image.left,.image.right{margin-top:.25em;margin-bottom:.25em;display:inline-block;line-height:0}
+.image.left{margin-right:.625em}
+.image.right{margin-left:.625em}
+a.image{text-decoration:none;display:inline-block}
+a.image object{pointer-events:none}
+sup.footnote,sup.footnoteref{font-size:.875em;position:static;vertical-align:super}
+sup.footnote a,sup.footnoteref a{text-decoration:none}
+sup.footnote a:active,sup.footnoteref a:active{text-decoration:underline}
+#footnotes{padding-top:.75em;padding-bottom:.75em;margin-bottom:.625em}
+#footnotes hr{width:20%;min-width:6.25em;margin:-.25em 0 .75em;border-width:1px 0 0}
+#footnotes .footnote{padding:0 .375em 0 .225em;line-height:1.3334;font-size:.875em;margin-left:1.2em;margin-bottom:.2em}
+#footnotes .footnote a:first-of-type{font-weight:bold;text-decoration:none;margin-left:-1.05em}
+#footnotes .footnote:last-of-type{margin-bottom:0}
+#content #footnotes{margin-top:-.625em;margin-bottom:0;padding:.75em 0}
+.gist .file-data>table{border:0;background:#fff;width:100%;margin-bottom:0}
+.gist .file-data>table td.line-data{width:99%}
+div.unbreakable{page-break-inside:avoid}
+.big{font-size:larger}
+.small{font-size:smaller}
+.underline{text-decoration:underline}
+.overline{text-decoration:overline}
+.line-through{text-decoration:line-through}
+.aqua{color:#00bfbf}
+.aqua-background{background:#00fafa}
+.black{color:#000}
+.black-background{background:#000}
+.blue{color:#0000bf}
+.blue-background{background:#0000fa}
+.fuchsia{color:#bf00bf}
+.fuchsia-background{background:#fa00fa}
+.gray{color:#606060}
+.gray-background{background:#7d7d7d}
+.green{color:#006000}
+.green-background{background:#007d00}
+.lime{color:#00bf00}
+.lime-background{background:#00fa00}
+.maroon{color:#600000}
+.maroon-background{background:#7d0000}
+.navy{color:#000060}
+.navy-background{background:#00007d}
+.olive{color:#606000}
+.olive-background{background:#7d7d00}
+.purple{color:#600060}
+.purple-background{background:#7d007d}
+.red{color:#bf0000}
+.red-background{background:#fa0000}
+.silver{color:#909090}
+.silver-background{background:#bcbcbc}
+.teal{color:#006060}
+.teal-background{background:#007d7d}
+.white{color:#bfbfbf}
+.white-background{background:#fafafa}
+.yellow{color:#bfbf00}
+.yellow-background{background:#fafa00}
+span.icon>.fa{cursor:default}
+a span.icon>.fa{cursor:inherit}
+.admonitionblock td.icon [class^="fa icon-"]{font-size:2.5em;text-shadow:1px 1px 2px rgba(0,0,0,.5);cursor:default}
+.admonitionblock td.icon .icon-note::before{content:"\f05a";color:#19407c}
+.admonitionblock td.icon .icon-tip::before{content:"\f0eb";text-shadow:1px 1px 2px rgba(155,155,0,.8);color:#111}
+.admonitionblock td.icon .icon-warning::before{content:"\f071";color:#bf6900}
+.admonitionblock td.icon .icon-caution::before{content:"\f06d";color:#bf3400}
+.admonitionblock td.icon .icon-important::before{content:"\f06a";color:#bf0000}
+.conum[data-value]{display:inline-block;color:#fff!important;background:rgba(0,0,0,.8);-webkit-border-radius:100px;border-radius:100px;text-align:center;font-size:.75em;width:1.67em;height:1.67em;line-height:1.67em;font-family:"Open Sans","DejaVu Sans",sans-serif;font-style:normal;font-weight:bold}
+.conum[data-value] *{color:#fff!important}
+.conum[data-value]+b{display:none}
+.conum[data-value]::after{content:attr(data-value)}
+pre .conum[data-value]{position:relative;top:-.125em}
+b.conum *{color:inherit!important}
+.conum:not([data-value]):empty{display:none}
+dt,th.tableblock,td.content,div.footnote{text-rendering:optimizeLegibility}
+h1,h2,p,td.content,span.alt{letter-spacing:-.01em}
+p strong,td.content strong,div.footnote strong{letter-spacing:-.005em}
+p,blockquote,dt,td.content,span.alt{font-size:1.0625rem}
+p{margin-bottom:1.25rem}
+.sidebarblock p,.sidebarblock dt,.sidebarblock td.content,p.tableblock{font-size:1em}
+.exampleblock>.content{background:#fffef7;border-color:#e0e0dc;-webkit-box-shadow:0 1px 4px #e0e0dc;box-shadow:0 1px 4px #e0e0dc}
+.print-only{display:none!important}
+@page{margin:1.25cm .75cm}
+@media print{*{-webkit-box-shadow:none!important;box-shadow:none!important;text-shadow:none!important}
+html{font-size:80%}
+a{color:inherit!important;text-decoration:underline!important}
+a.bare,a[href^="#"],a[href^="mailto:"]{text-decoration:none!important}
+a[href^="http:"]:not(.bare)::after,a[href^="https:"]:not(.bare)::after{content:"(" attr(href) ")";display:inline-block;font-size:.875em;padding-left:.25em}
+abbr[title]::after{content:" (" attr(title) ")"}
+pre,blockquote,tr,img,object,svg{page-break-inside:avoid}
+thead{display:table-header-group}
+svg{max-width:100%}
+p,blockquote,dt,td.content{font-size:1em;orphans:3;widows:3}
+h2,h3,#toctitle,.sidebarblock>.content>.title{page-break-after:avoid}
+#toc,.sidebarblock,.exampleblock>.content{background:none!important}
+#toc{border-bottom:1px solid #dddddf!important;padding-bottom:0!important}
+body.book #header{text-align:center}
+body.book #header>h1:first-child{border:0!important;margin:2.5em 0 1em}
+body.book #header .details{border:0!important;display:block;padding:0!important}
+body.book #header .details span:first-child{margin-left:0!important}
+body.book #header .details br{display:block}
+body.book #header .details br+span::before{content:none!important}
+body.book #toc{border:0!important;text-align:left!important;padding:0!important;margin:0!important}
+body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-break-before:always}
+.listingblock code[data-lang]::before{display:block}
+#footer{padding:0 .9375em}
+.hide-on-print{display:none!important}
+.print-only{display:block!important}
+.hide-for-print{display:none!important}
+.show-for-print{display:inherit!important}}
+@media print,amzn-kf8{#header>h1:first-child{margin-top:1.25rem}
+.sect1{padding:0!important}
+.sect1+.sect1{border:0}
+#footer{background:none}
+#footer-text{color:rgba(0,0,0,.6);font-size:.9em}}
+@media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
+</style>
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1>SWeTE Users Guide</h1>
+<div class="details">
+<span id="author" class="author">Steve Hannah</span><br>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_introduction">Introduction</a></li>
+<li><a href="#_what_is_swete_server">What is SWeTE Server?</a></li>
+<li><a href="#_how_it_works">How it works</a></li>
+<li><a href="#_requirements">Requirements</a></li>
+<li><a href="#_features">Features</a>
+<ul class="sectlevel2">
+<li><a href="#_translation_features">Translation Features</a></li>
+<li><a href="#_versioning_features">Versioning Features</a></li>
+<li><a href="#_localization_features">Localization Features</a></li>
+<li><a href="#_hosting_and_proxying_features">Hosting and Proxying Features</a></li>
+</ul>
+</li>
+<li><a href="#_installation">Installation</a>
+<ul class="sectlevel2">
+<li><a href="#_downloading_the_application">Downloading the Application</a></li>
+<li><a href="#_configuring_swete_for_the_first_time">Configuring SWeTE for the First Time</a></li>
+</ul>
+</li>
+<li><a href="#_setting_up_your_first_website">Setting Up Your First Website</a>
+<ul class="sectlevel2">
+<li><a href="#_testing_your_website">Testing Your Website</a></li>
+<li><a href="#_translating_website_content">Translating Website Content</a></li>
+</ul>
+</li>
+<li><a href="#_summary">Summary</a></li>
+<li><a href="#_the_translation_parser">The Translation Parser</a></li>
+<li><a href="#_how_the_translation_parser_works">How the Translation Parser Works</a></li>
+<li><a href="#_block_level_elements_vs_inline_elements">Block Level Elements vs Inline Elements</a>
+<ul class="sectlevel2">
+<li><a href="#_explicitly_declaring_a_tag_block_level_the_data_swete_block_attribute">Explicitly Declaring a tag block-level (the <code>data-swete-block</code> attribute)</a></li>
+<li><a href="#_explicitly_declaring_tags_inline_the_data_swete_inline_attribute">Explicitly declaring tags "inline": the <code>data-swete-inline</code> attribute</a></li>
+</ul>
+</li>
+<li><a href="#_overriding_the_parser_translate_notranslate">Overriding the Parser: <code>translate</code> &amp; <code>notranslate</code></a></li>
+<li><a href="#_string_equivalence">String Equivalence</a>
+<ul class="sectlevel2">
+<li><a href="#inline-variables">Inline Variables (using data-swete-translate)</a></li>
+<li><a href="#_dealing_with_inline_numbers">Dealing with inline Numbers</a></li>
+<li><a href="#_dealing_with_dates_and_times">Dealing with Dates and Times</a></li>
+</ul>
+</li>
+<li><a href="#_summary_2">Summary</a></li>
+<li><a href="#_using_the_rest_translation_api">Using the REST Translation API</a></li>
+<li><a href="#_enabling_the_rest_api">Enabling the REST API</a></li>
+<li><a href="#_using_the_rest_api">Using the REST API</a>
+<ul class="sectlevel2">
+<li><a href="#_output_and_error_handling">Output and Error Handling</a></li>
+<li><a href="#_sample_php_client">Sample PHP Client</a></li>
+</ul>
+</li>
+<li><a href="#_how_it_works_2">How It Works</a></li>
+<li><a href="#_preprocessing_content">Preprocessing Content</a></li>
+<li><a href="#_the_site_delegate_class">The Site Delegate Class</a>
+<ul class="sectlevel2">
+<li><a href="#_creating_the_delegate_class">Creating the Delegate Class</a></li>
+<li><a href="#_processing_order">Processing Order</a></li>
+</ul>
+</li>
+<li><a href="#_translation_management">Translation Management</a></li>
+<li><a href="#_translation_memories">Translation Memories</a>
+<ul class="sectlevel2">
+<li><a href="#_browsing_translation_memories">Browsing Translation Memories</a></li>
+</ul>
+</li>
+<li><a href="#_the_translation_miss_log_i_e_the_strings_tab">The Translation Miss Log (i.e. the "Strings" Tab)</a>
+<ul class="sectlevel2">
+<li><a href="#_searching_and_sorting_the_strings_tab">Searching and Sorting the "Strings" Tab</a></li>
+</ul>
+</li>
+<li><a href="#capturing-strings-sec">Capturing Strings</a>
+<ul class="sectlevel2">
+<li><a href="#_enabling_string_capturing">Enabling String Capturing</a></li>
+</ul>
+</li>
+<li><a href="#_translating_strings">Translating Strings</a></li>
+<li><a href="#_exporting_strings_and_translations">Exporting Strings and Translations</a>
+<ul class="sectlevel2">
+<li><a href="#_exporting_strings_as_csv">Exporting Strings as CSV</a></li>
+<li><a href="#_exporting_strings_as_xliff">Exporting Strings as XLIFF</a></li>
+</ul>
+</li>
+<li><a href="#_importing_strings_and_translations">Importing Strings and Translations</a>
+<ul class="sectlevel2">
+<li><a href="#_importing_translations_from_a_csv_file">Importing Translations from a CSV File</a></li>
+<li><a href="#_importing_translations_from_an_xliff_file">Importing Translations from an XLIFF File</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_introduction">Introduction</h2>
+<div class="sectionbody">
+
+</div>
+</div>
+<div class="sect1">
+<h2 id="_what_is_swete_server">What is SWeTE Server?</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>SWeTE stands for Simple Website Translation Engine. It is a reverse HTTP proxy that provides internationalization of the content that it serves. It allows you to easily convert your web site (or web application) from one language into another. It also provides a full administration console with forms to translate your site content. In addition it provides some powerful developer tools to allow you to manipulate the look and feel of your site in locale-specific ways using CSS, HTML, and Javascript.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_how_it_works">How it works</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>SWeTE would generally be set up on a web server and configured to proxy content from another site. For example, if we wanted to translate the site xataface.com into French, we might set up SWeTE in the directory xataface.com/fr/. Then, if we point our web browser to <a href="http://xataface.com/fr/index.html" class="bare">http://xataface.com/fr/index.html</a> it would serve the page located at <a href="http://xataface.com/index.html" class="bare">http://xataface.com/index.html</a> except that it would be translated into French. The translation itself is performed by parsing the HTML of the requested page into individual strings, then checking a translation memory for translations of those strings.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_requirements">Requirements</h2>
+<div class="sectionbody">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>PHP 5.2 or higher</p>
+</li>
+<li>
+<p>MySQL 5.0 or higher</p>
+</li>
+<li>
+<p>PHP DOM extension.</p>
+</li>
+<li>
+<p>PHP MBString extension.</p>
+</li>
+<li>
+<p>Apache Web Server with mod_rewrite installed and enabled.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_features">Features</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>SWeTE combines two simple, yet powerful, concepts to great effect: HTTP reverse proxying, and Translation Memories. These two concepts extrapolate into enormous feature potential as a platform, but they all boil down to a few key areas:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Content translation</p>
+</li>
+<li>
+<p>Content versioning</p>
+</li>
+<li>
+<p>Content localization</p>
+</li>
+<li>
+<p>Content Hosting &amp; Proxing</p>
+</li>
+</ol>
+</div>
+<div class="sect2">
+<h3 id="_translation_features">Translation Features</h3>
+<div class="paragraph">
+<p>Translation features are those features that facilitate the actual translation of site content into other languages. Some of these features include:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><em>Translation memories</em> - All strings are saved inside a translation memory. The translation memory is used to dictate how strings that are encountered by the proxy should be translated.</p>
+</li>
+<li>
+<p><em>Translation forms</em> - SWeTE provides powerful, built-in translation forms for translating the contents of webpages and translation memories.</p>
+</li>
+<li>
+<p><em>Importing and Exporting</em> - Translation memories can be exported to and from many popular formats including XLIFF, CSV, and XML. Similarly they can be imported from these formats.</p>
+</li>
+<li>
+<p><em>String Capturing</em> - SWeTE allows you to capture the content that requires translation by simply enabling content capturing, then crawling through the site. With content capturing enabled, all strings encountered as you navigate the site, are saved so that you can translate them later. Once they are translated, the next time you visit the same pages, you will see the translated content.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_versioning_features">Versioning Features</h3>
+<div class="paragraph">
+<p>Translation memories store strings down to the sentence/paragraph level. However you may want to be able to save versions of your content at the block or page level. SWeTE provides a number of features to help you version your content in this way. Some of these features include:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><em>Webpage Versioning</em> - Keep versions of your static webpages locked so that they will not be affected by changes to the source content. When you are happy with the translation, then you can make a new version the "active" version.</p>
+</li>
+<li>
+<p><em>Block-level Versioning</em> - On dynamic sites it may not be possible to lock an entire page contents. In such cases, SWeTE allows you to mark certain sections of the page to be treated as "blocks" so that they can be locked, saved, and versioned independently of the rest of the page.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_localization_features">Localization Features</h3>
+<div class="paragraph">
+<p>Preparing a website to serve different language markets involves more than just translation. It may require changes to layout, flow-control, dates, times, photos, and currencies. SWeTE, as a development platform, enables you to customize the output of your translated site in any way you see fit. Some features in this area include:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><em>Custom CSS</em> - SWeTE adds CSS classes to the <code>&lt;body&gt;</code> tag of all output which allows stylesheets to be targeted directly to a specific language. If you want different color schemes or images for your French site than you have in your English site, you can do this easily using CSS.</p>
+</li>
+<li>
+<p><em>Custom Javascript</em>- The CSS classes added to the <code>&lt;body&gt;</code> can also be used by Javascript to perform different functionality for translated sites than for the source site. This leads to infinite possiblities for divergence between different translations of your site.</p>
+</li>
+<li>
+<p><em>Pre-processing and Post-processing</em> - SWeTE allows you to also write PHP extensions that manipulate the HTML and DOM structure of pages before they are rendered. This gives you an opportunity to make changes to the source content on the fly using pattern matching and your own business logic.</p>
+</li>
+<li>
+<p><em>Strings with Variables</em> - SWeTE allows you to mark certain parts of strings as "variables" so that multiple strings with the same format can be translated as a single string. For example, if you have a shopping cart that shows the string "Welcome to the cart, Steve" when Steve logs in, and "Welcome to the cart, Ivan" when Ivan logs in, then you can wrap the name in a special tag to tell SWeTE to treat these as the same strings. This can mean the difference between translating thousands of similar strings and having to only translate one string.</p>
+</li>
+<li>
+<p><em>Text filters</em> - SWeTE allows you to specify regular expression pattern replacements to your content to help prepare it for SWeTE to process it. This can be used for such things as finding parts of strings that should be marked as variables, or wrapping dates and numbers with variables. SWeTE comes with some default filters that wrap dates and numbers into variables.</p>
+</li>
+<li>
+<p><em>Date and Time Formatting</em> - With appropriate markup, SWeTE can also convert dates from one format into another that is more acceptable to the target locale.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_hosting_and_proxying_features">Hosting and Proxying Features</h3>
+<div class="paragraph">
+<p>SWeTE Server includes a built-in reverse proxy that allows you to easily host your localized website anywhere on the internet. You can set up the proxy to run on the same host as your main website, or on a separate server. You can choose to run your proxy site on a different domain (e.g. fr.yourdomain.com), or in a subdirectory of your main site (e.g. yourdomain.com/fr/).</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_installation">Installation</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>SWeTE server is a typical LAMP (Linux-Apache-PHP-MySQL) application. If you already have a server that meets the requirements (<a href="#requirements">Requirements</a>), you can just proceed with the following installation instructions. If you need help to set up a compatible server, see xxx.</p>
+</div>
+<div class="sect2">
+<h3 id="_downloading_the_application">Downloading the Application</h3>
+<div class="paragraph">
+<p>Before you can install SWeTE, you need to download the application. The two most common distribution methods are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The ZIP/Tarball downloadable archive.</p>
+</li>
+<li>
+<p>The Subversion source-code repository. This is handy for keeping up-to-date with patches and security updates.</p>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="_method_1_downloading_the_ziptarball_distribution">Method 1: Downloading the ZIP/Tarball Distribution</h4>
+<div class="paragraph">
+<p>The most common format for obtaining SWeTE server is the ZIP and Tarball distributions. You can download the entire application as either a ZIP file or a Tar.gz file, then extract the contents somewhere on your webserver.</p>
+</div>
+<div class="paragraph">
+<p>You can download the latest version from <a href="http://swete.weblite.ca/download" class="bare">http://swete.weblite.ca/download</a>. If you decide to download the ZIP distribution, you will end up with a file named <code>swete-server-x.y.z.zip</code> (where x.y.z are the version number). If you download the Tar.Gzip distribution, the file will be called <code>swete-server-x.y.z.tar.gz</code>.</p>
+</div>
+<div class="paragraph">
+<p>Once you have downloaded this file, you will need to extract it and copy it to your web server (the order of these steps may be different depending on what kind of access you have on your web server). Upon completion you should have a <code>swete-server</code> directory located somewhere on your server in a web-accessible directory. For the remainder of these instructions, we&#8217;ll assume that you have installed it at <code>/var/www/swete-server</code>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_method_2_checking_out_from_subversion_repository">Method 2: Checking out from Subversion Repository</h4>
+<div class="paragraph">
+<p>Web Lite Solutions also hosts subversion repositories for each version-branch of SWeTE. The benefit of installing SWeTE form the subversion repository is that it allows you to, more easily, stay up-to-date with bug fixes and patches. There is a repository branch for each major release of SWeTE. These branches will only include backward compatible bug-fixes so you can be sure that updating to the latest version of your chosen branch will not cause your application to break.</p>
+</div>
+<div class="paragraph">
+<p>You can view the available branches at <a href="http://weblite.ca/svn/swete-swerver/branches" class="bare">http://weblite.ca/svn/swete-swerver/branches</a>. If you want to stay up-to-date with the latest in development you might also want to check out the source directly from the trunk. The following are some example URLs to the various repositories:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="http://weblite.ca/svn/swete-swerver/trunk/" class="bare">http://weblite.ca/svn/swete-swerver/trunk/</a> - The trunk and location of the bleeding edge of SWeTE development.</p>
+</li>
+<li>
+<p><a href="http://weblite.ca/svn/swete-swerver/branches/0.1.x" class="bare">http://weblite.ca/svn/swete-swerver/branches/0.1.x</a> - The 0.1.x branch. This contains a snapshot of the 0.1 release of SWeTE and will be maintained to include critical bug fixes in the future.</p>
+</li>
+</ul>
+</div>
+<div class="sect4">
+<h5 id="_requirements_for_working_with_subversion_repository">Requirements for Working with Subversion Repository</h5>
+<div class="paragraph">
+<p>When working off of the subversion repository, you need to have a few tools installed on your web server. This is because the source code, as it is in the repository, is incomplete, and must be "built" to include some other necessary components like Xataface and various modules. The SWeTE root directory contains a build.xml file, which is an ANT build script. This script contains all of the instructions necessary to update all of the components in SWeTE to a consistent version. Therefore, in order to build SWeTE from source, you will need at least the following tools installed on your web server.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Subversion. <a href="http://subversion.tigris.org/" class="bare">http://subversion.tigris.org/</a></p>
+</li>
+<li>
+<p>ANT. <a href="http://ant.apache.org/" class="bare">http://ant.apache.org/</a></p>
+</li>
+<li>
+<p>Your web server will need to have provide SSH access so that you can run the svn and ant applications from the command-line.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_checking_out_the_source_initially">Checking Out The Source Initially</h5>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>SSH into your web server and navigate to the parent directory of where you would like to install SWeTE. E.g. if you want SWeTE to be installed at /var/www/swete-server, you would navigate to the /var/www directory:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ cd /var/www</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Check out the branch from the SVN repository. You will need to decide which branch you want to check out. If you are working with a production application you should check out the latest stable branch. If you are wanted to work with the latest developments, then you can check out the trunk. The following example shows us checking out the 0.2.x branch:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ svn co http://weblite.ca/svn/swete-swerver/branches/0.2.x swete-server</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>What this command says is that we&#8217;re checking out the repository located at <a href="http://weblite.ca/svn/swete-swerver/branches/0.2.x" class="bare">http://weblite.ca/svn/swete-swerver/branches/0.2.x</a>, into a new directory named <code>swete-server</code> inside the current directory. After hitting enter, you should see a long list of files being downloaded:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>A    swete-server/testdb.sql
+A    swete-server/.htaccess
+A    swete-server/README.txt
+A    swete-server/swete-admin
+A    swete-server/swete-admin/include
+A    swete-server/swete-admin/include/functions.inc.php
+A    swete-server/swete-admin/livecache
+A    swete-server/swete-admin/livecache/.htaccess
+A    swete-server/swete-admin/conf
+A    swete-server/swete-admin/conf/Installer.php
+A    swete-server/swete-admin/conf/ApplicationDelegate.php
+A    swete-server/swete-admin/conf/tables
+A    swete-server/swete-admin/conf/tables/xf_tm_translation_memories
+A    swete-server/swete-admin/conf/tables/xf_tm_translation_memories/xf_tm_translation_memories.php
+A    swete-server/swete-admin/changes.txt
+A    swete-server/swete-admin/doc.prepare.php
+A    swete-server/swete-admin/css
+A    swete-server/swete-admin/css/swete
+
+etc ...</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you don&#8217;t see a stream of file paths like this, you should check to make sure that you don&#8217;t have a typo in your command. One (possibly) confusing thing is that in the repository path it is &#8220;swete-swerver&#8221; and not &#8220;swete-server&#8221;. This was a typo that was introduced early on in development, and it has just been retained through the versions.</p>
+</div>
+</li>
+<li>
+<p>Navigate to the swete-server directory that was just created, and run the ant build script. This will install all of the dependencies.</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ cd swete-server
+$ ant</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This should result in a stream of feedback to the console as all of the dependent projects are checked out.</p>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_updating_source_code">Updating Source Code</h5>
+<div class="paragraph">
+<p>Once the source code has been installed, you should periodically rerun the ant build script to ensure that you obtain all of the latest bug fixes and patches. You can update the source at any time by:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Navigate to the <code>swete-server</code> directory.</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ cd /var/www/swete-server</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Run the ant script:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ ant</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will update the <code>swete-server</code> source and all of its dependencies to the latest consistent version within your current branch.</p>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_configuring_swete_for_the_first_time">Configuring SWeTE for the First Time</h3>
+<div class="paragraph">
+<p>Once you have downloaded the source code for SWeTE, you will need to set up the database, and edit some of the configuration files in SWeTE to customize it for your environment.</p>
+</div>
+<div class="sect3">
+<h4 id="_setting_up_the_cache_directories">Setting up the Cache Directories</h4>
+<div class="paragraph">
+<p>SWeTE includes two cache directories, both of which need to be made writable by the web server. These directories are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>/var/www/swete-server/templates_c</code> . This holds the compiled Smarty templates for the application.</p>
+</li>
+<li>
+<p><code>/var/www/swete-server/livecache</code> . This stores the cached web content for the proxy.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>You need to make sure that both of these directories exist, and that they are writable by the web server. You can make them writable using the chmod command:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>$ chmod 1777 templates_c livecache</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_setting_up_the_database">Setting up the Database</h4>
+<div class="paragraph">
+<p>SWeTE uses a MySQL database to store all of its settings and translations. Before firing up SWeTE, you need to:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Create a database for SWeTE on your MySQL server.</p>
+</li>
+<li>
+<p>Create a MySQL user for SWeTE to connect to your new database.</p>
+</li>
+<li>
+<p>Rename the <code>swete-admin/conf.db.ini.sample</code> file to be <code>swete-admin/conf.db.ini</code>, and modify it with the connection settings for your database.</p>
+</li>
+</ol>
+</div>
+<div class="sect4">
+<h5 id="_creating_the_database">Creating the Database</h5>
+<div class="paragraph">
+<p>Depending on the tool that you are using to manage your MySQL database, the steps to create a new database will vary. If you are working directly from the command-line, you would use the <a href="http://dev.mysql.com/doc/refman/5.0/en/create-database.html">CREATE DATABASE</a> command. Another popular application for managing SQL databases is <a href="http://www.phpmyadmin.net/">PHPMyAdmin</a>. Many hosting providers include their own tool for creating databases. You should refer to your hosting provider the steps to do this if you are unsure.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_creating_the_mysql_user">Creating the MySQL User</h5>
+<div class="paragraph">
+<p>It is best practice to create a different MySQL user for each database in MySQL. This is to minimize the damage caused by a security breach in any one database. Just as steps vary for creating a database, the steps will also vary for creating users depending on which tool you are using. If you are working directly on the command line, you would use the <a href="http://dev.mysql.com/doc/refman/5.1/en/create-user.html">CREATE USER</a> command, and then use the <a href="http://dev.mysql.com/doc/refman/5.1/en/grant.html">GRANT</a> command to grant them access to your database.</p>
+</div>
+<div class="paragraph">
+<p>If you are using PHPMyAdmin, the steps will be different. If you are using a tool provided by your hosting provider, the steps will be different still.</p>
+</div>
+<div class="paragraph">
+<p>You will need to flush permissions after adding the user or your new user won&#8217;t be recognized. A full discussion of adding users is contained in the <a href="http://dev.mysql.com/doc/refman/5.1/en/adding-users.html">MySQL manual</a>.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_setting_up_the_conf_db_ini_file">Setting up the conf.db.ini file</h5>
+<div class="paragraph">
+<p>Once you have set up your user account and your database, you just need to make a copy of the <code>conf.db.ini.sample</code> file (in the <code>swete-admin</code> directory) to be <code>conf.db.ini</code> and change some of the connection settings. The default content will be:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>[_database]
+    host=localhost
+    name="database name here"
+    user="database username here"
+    password="password"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Just change the values on the right hand side of the &#8220;=&#8221; sign to reflect the values that you set up for your database and user.</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_running_the_install">Running the Install</h4>
+<div class="paragraph">
+<p>At this point you have an empty database with nothing in it. To populate it with the tables and views that are required for SWeTE to work, you just need to point your web browser to the swete-admin/index.php file (i.e. <a href="http://yourdomain.com/swete-server/swete-admin/index.php" class="bare">http://yourdomain.com/swete-server/swete-admin/index.php</a>), and let it run. SWeTE will automatically update the database to the latest version whenever it runs. You should receive a message saying that "The database has been successfully updated to version XXXX". If, instead you receive an error or a blank white screen, then you will need to do some troubleshooting to find out the problem. The first step in troubleshooting is always to check the error log for clues.</p>
+</div>
+<div class="paragraph">
+<p>If everything went as planned, then SWeTE should be installed now and ready to go.</p>
+</div>
+<div class="paragraph">
+<p>The next step will be to log in and create a new website in the administration section of SWeTE.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_setting_up_your_first_website">Setting Up Your First Website</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Once you have SWeTE installed, you can go ahead and set up a proxy website. As an example, let&#8217;s set up Wikipedia as our first translated website. We&#8217;ll create a French version of Wikipedia using SWeTE. The steps are as follows:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Log into swete using the default admin account. By default the admin account username is "admin" and password is "password".</p>
+</li>
+<li>
+<p>Change the admin password to something else for security reasons:</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Select admin &gt; "Change Password" (in the upper right menu).</p>
+<div class="paragraph">
+<p>The user menu in the top right. Includes option to change your password.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/ch01.usermenu.changepass.png" alt="image"></span></p>
+</div>
+</li>
+<li>
+<p>Fill in the resulting form with your new password.</p>
+<div class="paragraph">
+<p>The Change Password Form</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/ch01.changepass.png" alt="image"></span></p>
+</div>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>Click the Dashboard link on the top-left menu. This should take you to the dashboard as shown below:</p>
+<div class="paragraph">
+<p>The dashboard</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/ch01.dashboard1.png" alt="image"></span></p>
+</div>
+</li>
+<li>
+<p>Click the Create New Website button in the webpages section.</p>
+<div class="paragraph">
+<p>The New Website Form</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/ch01.newsiteform.png" alt="image"></span></p>
+</div>
+</li>
+<li>
+<p>Fill in the New Site form as follows:</p>
+<div class="olist lowerroman">
+<ol class="lowerroman" type="i">
+<li>
+<p>Enter "Wikipedia French" in the Site Name field.</p>
+</li>
+<li>
+<p>Enter "http://en.wikipedia.org/" in the Website URL field.</p>
+</li>
+<li>
+<p>Select "English" in the "Source Language" field.</p>
+</li>
+<li>
+<p>Select "French" in the "Target Language" field.</p>
+</li>
+<li>
+<p>Leave the Publish Host field as its default value.</p>
+</li>
+<li>
+<p>Append "wikipedia-fr/" to the Publish basepath field so that it is "/path/to/swete-server/wikipedia-fr/"</p>
+</li>
+<li>
+<p>At this point the form should appear as shown below:</p>
+<div class="paragraph">
+<p>New Site Form, filled in with details for our first site.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/ch01.newsiteform-filled.png" alt="image"></span></p>
+</div>
+<div class="paragraph">
+<p>Click the Save button at the bottom of the form.</p>
+</div>
+</li>
+<li>
+<p>After saving, you should see a message that says "Record Successfully Saved", and you will be returned to the Edit form for that site you just created.</p>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+<div class="sect2">
+<h3 id="_testing_your_website">Testing Your Website</h3>
+<div class="paragraph">
+<p>Now that you&#8217;ve created a website in the administration console, it is time to test it out to make sure that it works. Click on the "Dashboard" link in the top left, to return to the Dashboard. You should now see your new site listed in the Websites block as shown below:</p>
+</div>
+<div class="paragraph">
+<p>The Websites section of the dashboard after adding Wikipedia as a proxy site.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/ch01.dashboard-websites.png" alt="image"></span></p>
+</div>
+<div class="paragraph">
+<p>Click on the "French" link to go to our proxy site&#8217;s URL: <a href="http://yourdomain.com/swete-server/wikipedia-fr/" class="bare">http://yourdomain.com/swete-server/wikipedia-fr/</a>. You should see the wikipedia homepage here exactly as it appears on the actual Wikipedia site (i.e. <a href="http://en.wikipedia.org/" class="bare">http://en.wikipedia.org/</a>).</p>
+</div>
+<div class="paragraph">
+<p>Wikipedia as viewed through the proxy url.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/ch01.wikipedia-proxy.png" alt="image"></span></p>
+</div>
+<div class="paragraph">
+<p>If you do not see this, then you may have some problems with either your server settings or your site settings. Some common errors include:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><em>A ``404 Not Found'' Error</em>. If you see a 404 error, then your server probably doesn&#8217;t have mod_rewrite installed or it is not configured to work with your website.</p>
+</li>
+<li>
+<p><em>A blank white page</em>. Likely there is a server error. You should check your error log to see what the error is before proceeding.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>If you see the Wikipedia home page, you are ready to proceed to the next step: <em>Translating Website Content</em></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_translating_website_content">Translating Website Content</h3>
+<div class="paragraph">
+<p>At this point you may be underwhelmed by the results as you now just have a proxy version of Wikipedia working at your own local address. You may be wondering why none of the content has been translated into French. SWeTE doesn&#8217;t translate website content automatically. You need to first capture the strings in the website and then either have the strings translated by a professional translator, translate them yourself, or submit them to Google to be translated by a machine. Once the strings have been translated, then SWeTE will be able to apply the translations to webpages that it displays.</p>
+</div>
+<div class="paragraph">
+<p>In any case, the first step you must take is to capture the strings that you would like to translate.</p>
+</div>
+<div class="sect3">
+<h4 id="_capturing_strings">Capturing Strings</h4>
+<div class="paragraph">
+<p>In order to capture the strings that you would like to translate, first return to the dashboard. In the Webpages block, to the right of the "Wikipedia French" listing, you should see an "Actions" button with the following icon:</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/ch01.actions-button-icon.png" alt="image"></span></p>
+</div>
+<div class="paragraph">
+<p>Click on this icon to reveal a contextual menu of actions you can perform on this site:</p>
+</div>
+<div class="paragraph">
+<p>Actions contextual menu for the Wikipedia French site.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/ch01.site-actions-menu.png" alt="image"></span></p>
+</div>
+<div class="paragraph">
+<p>Click on the "Capture Strings" option in this menu.</p>
+</div>
+<div class="paragraph">
+<p>This should take you to a page with a toolbar at the top, and the Wikipedia homepage at the bottom. The toolbar contains an "Exit" link, and a string that says "String capturing is currently turned off". Click the "Turn On" link to the right to turn it on.</p>
+</div>
+<div class="paragraph">
+<p>Capturing Strings for Wikipedia</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/ch01.capture-strings-1.png" alt="image"></span></p>
+</div>
+<div class="paragraph">
+<p>Remember to turn string capturing back off after you have finished capturing all of the strings. Capturing strings is an expensive operation as it requires quite a bit of extra processing by SWeTE so you should keep it turned off unless you are in the process of capturing strings.</p>
+</div>
+<div class="paragraph">
+<p>Once string capturing is turned on, you can start navigating the site. Each time you load a page, the strings on it will be parsed and imported into SWeTE for translation. For now, let&#8217;s just load the homepage. Because string capturing was disabled when we first loaded it, we&#8217;ll need to reload the page. You can do this by clicking "Refresh" in your web browser to reload the page.</p>
+</div>
+<div class="paragraph">
+<p>After you have finished refreshing the homepage, turn string capturing back off by clicking the "Turn off" link on the top toolbar. Then click "Exit" to return to the details page for our site in the administration console.</p>
+</div>
+<div class="sect4">
+<h5 id="_reviewing_the_captured_strings">Reviewing the Captured Strings</h5>
+<div class="paragraph">
+<p>You can view the strings that have been captured in the system at any time by clicking on the "Strings" link in the top left menu bar. This will show you all of the strings that have been captured by the system.</p>
+</div>
+<div class="paragraph">
+<p>Strings list</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/ch01.strings-list.png" alt="image"></span></p>
+</div>
+<div class="paragraph">
+<p>You can search this list by keyword, webpage URL, website, whether it has been translated, or by many other criteria. You can also select one or more strings from this list to translate, either manually or automatically using the <a href="https://developers.google.com/translate/">Google Translation API</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_translating_strings_manually">Translating Strings Manually</h4>
+<div class="paragraph">
+<p>The process for manually translating strings that have been captured is as follows:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Go to the "Strings" section by clicking the "Strings" link in the top left menu bar.</p>
+</li>
+<li>
+<p>Filter the set of strings as necessary using searching and sorting to find the strings that you want to translate.</p>
+</li>
+<li>
+<p>Check the box beside each string that you want to translate. You can check all of the currently shown strings by checking the box in the table header. Checking strings on the strings list to prepare to translate them.</p>
+</li>
+<li>
+<p>Click the "Translate" button on the top menu bar. This will bring up a translation form that allows you to translate all of the strings that were selected. Translation Form</p>
+</li>
+<li>
+<p>Fill in the translation form. Translations are automatically saved as you tab out of the field.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="google-translation-api">Translating Strings with the Google Translation API</h4>
+<div class="paragraph">
+<p>SWeTE allows you to use the Google Translation API to translate strings as well. In order to activate this functionality, you must have a Google API Key. For information on obtaining a key, check out the <a href="https://developers.google.com/translate/v2/faq#access">Google Translation API FAQ</a>. If you have a key, you can configure SWeTE to use it by doing the following:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Navigate to the Edit Site form for the website you want to set up. (i.e. Go to the dashboard, click the "Actions" button next to the website in the "Websites" block, and select "Edit").</p>
+<div class="paragraph">
+<p>Edit option of the actions menu for a website.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/ch01.dashboard-website-edit.png" alt="image"></span></p>
+</div>
+</li>
+<li>
+<p>Expand the "More Details" section at the bottom of the form.</p>
+<div class="paragraph">
+<p>More options expandable heading</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/ch01.site-edit-more-details.png" alt="image"></span></p>
+</div>
+</li>
+<li>
+<p>In the "Google API Key" field, enter your Google API key.</p>
+<div class="paragraph">
+<p>More details section expanded.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/ch01.site-edit-more-details-expanded.png" alt="image"></span></p>
+</div>
+</li>
+<li>
+<p>Click the "Save" button at the bottom of the form.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Once you have entered your key in the site profile, you can return to the "Strings" section of the application and begin to translate the strings using the Google Translation API. To continue our example site from earlier (Wikipedia), we&#8217;ll translate the strings in the first page of wikipedia as follows:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Click the "Strings" link on the top-left toolbar.</p>
+</li>
+<li>
+<p>Check the box beside a few strings that we want to translate.</p>
+<div class="paragraph">
+<p>Checking strings on the strings list to prepare to translate them.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/ch01.check-strings.png" alt="image"></span></p>
+</div>
+</li>
+<li>
+<p>Click the "Google Translate" button on the top button bar. The will process for a moment and then pop up with a message saying that the translations completed. If there was a problem (e.g. invalid API key), it will let you know.</p>
+<div class="paragraph">
+<p>Google translate progress bar.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/ch01.google-translate-progress.png" alt="image"></span></p>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_checking_the_translations">Checking The Translations</h4>
+<div class="paragraph">
+<p>After performing some translations, you should be able to view your proxy (translated) site again, but this time you should see the translations incorporated into the page. You may recall the steps to view your site from earlier:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Click on "Dashboard" in the upper left menu to go to the dashboard. Then click the "French" link next to the Wikipedia site in the "Webpages" block.The Websites section of the dashboard after adding Wikipedia as a proxy site.</p>
+</li>
+<li>
+<p>You may need to refresh your browser to see the changes as your browser may have the page cached from before it was translated.</p>
+</li>
+<li>
+<p>You should see the Wikipedia main page translated into French using your translations.</p>
+<div class="paragraph">
+<p>Wikipedia after performing a few translations</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/ch01.wikipedia-semi-translated.png" alt="image"></span></p>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_summary">Summary</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This chapter introduced SWeTE Server as a reverse-proxy that provides seamless content translation and localization. SWeTE will run on a fairly typical LAMP server stack (Linux, Apache, PHP, MySQL). It can be downloaded either as an archived, all-in-one distribution or via the subversion repository. The Subversion repository is recommended for keeping up-to-date with patches and bug fixes.</p>
+</div>
+<div class="paragraph">
+<p>We listed many of the features of SWeTE in <a href="#features">Features</a>. The core functionality centers around the translation and serving of web content. It includes an advanced translation memory that can be used to import and export to many formats, including XLIFF, TMX, CSV, and XML.</p>
+</div>
+<div class="paragraph">
+<p>The chapter also includes a step-by-step tutorial on:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Downloading and Installing SWeTE</p>
+</li>
+<li>
+<p>Setting up a proxy website for Wikipedia to translate it from English to French.</p>
+</li>
+<li>
+<p>Capturing strings from the website that need to be translated.</p>
+</li>
+<li>
+<p>Translating strings manually.</p>
+</li>
+<li>
+<p>Translating strings using the Google translation API.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>At this point we have only scratched the surface. The remaining chapters will go through the features of SWeTE in greater depth. The initial release (0.2) is also meant to be a bare-bones starting point for development. Development is active and ongoing, and many more features are planned.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_the_translation_parser">The Translation Parser</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>SWeTE does a pretty good job of parsing HTML content and extracting a set of phrases to be translated. In cases where the HTML markup doesn&#8217;t make structure explicit, you can add your own HTML tags and attributes to the content to help it along.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_how_the_translation_parser_works">How the Translation Parser Works</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>A request-response cycle in SWeTE works roughly as follows:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Client makes an HTTP request for a page in the SWeTE proxy site.</p>
+</li>
+<li>
+<p>SWeTE loads the equivalent page from the source web server (or from the cache if the page is cached).</p>
+</li>
+<li>
+<p>SWeTE parses the source HTML page into a set of strings.</p>
+</li>
+<li>
+<p>For each string in the set of strings (from step 3), SWeTE checks the translation memory to see if there is a translation available for it.</p>
+</li>
+<li>
+<p>SWeTE replaces all strings in the HTML page with their appropriate translations if available.</p>
+</li>
+<li>
+<p>SWeTE returns the resulting (translated) page to the client.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>This chapter will focus mostly on step 3 (parsing a webpage into strings). It is possible to use SWeTE successfully without understanding much about how the parsing works, but you can achieve much better results if you know how it works, and thus, know how to manipulate it.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_block_level_elements_vs_inline_elements">Block Level Elements vs Inline Elements</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>SWeTE&#8217;s parsing algorithm is designed to figure out how the text of a page should be partitioned into strings. By default, SWeTE will look for what it considers to be "block-level" HTML elements. It treats the text content of each "block-level" as an atomic string (phrase) for use in translation. Block-level elements include such elements as:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>&lt;p&gt;</code> tags (paragraphs)</p>
+</li>
+<li>
+<p><code>&lt;div&gt;</code> tags</p>
+</li>
+<li>
+<p><code>&lt;li&gt;</code> tags</p>
+</li>
+<li>
+<p><code>&lt;h1&gt;</code>, <code>&lt;h2&gt;</code>, <code>&lt;h3&gt;</code>, etc&#8230;&#8203; tags (i.e. headings)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>In fact, SWeTE considers any tag that is not an "inline" tag to be a "block-level" tag. The definitive set of "inline" tags are:</p>
+</div>
+<div class="paragraph">
+<p><code>&lt;a&gt;, &lt;em&gt;, &lt;abbr&gt;, &lt;i&gt;, &lt;u&gt;,
+    &lt;b&gt;, &lt;span&gt;, &lt;strong&gt;, &lt;acronym&gt;, &lt;font&gt;,
+    &lt;sup&gt;, &lt;sub&gt;</code></p>
+</div>
+<div class="paragraph">
+<p>In addition, you can also explicitly specify that a tag should be treated as "inline" by adding the <code>data-swete-inline="1"</code> HTML attribute to it.</p>
+</div>
+<div class="paragraph">
+<p><code>++</code></p>
+</div>
+<div class="paragraph">
+<p><strong>Example Parse Tree.</strong></p>
+</div>
+<div class="paragraph">
+<p>Consider the following snippet of HTML:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>&lt;p&gt;&lt;a href="http://google.com"&gt;Google&lt;/a&gt; is one of the most &lt;em&gt;AMAZING&lt;/em&gt; search engines.&lt;/p&gt;
+&lt;p&gt;It returned the following results:&lt;/p&gt;
+&lt;ul&gt;
+    &lt;li&gt;Dogs&lt;/li&gt;
+    &lt;li&gt;Cats&lt;/li&gt;
+    &lt;li&gt;Butterflies&lt;/li&gt;
+&lt;/ul&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This would be parsed into the following strings:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>&lt;a href="http://google.com"&gt;Google&lt;/a&gt; is one of the most &lt;em&gt;AMAZING&lt;/em&gt; search engines.</p>
+</li>
+<li>
+<p>It returned the following results:</p>
+</li>
+<li>
+<p>Dogs</p>
+</li>
+<li>
+<p>Cats</p>
+</li>
+<li>
+<p>Butterflies</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>This break-down seems to follow the semantic flow of the text quite well. It keeps sentences together, and groups "inline" tags into a single string (e.g. The <code>&lt;a&gt; +`and `+&lt;em&gt;</code> tags in the first paragraph are just included inside the parent string rather than being partitioned into their own strings). This is largely because the HTML mark up is clean and following the semantics of the content. Well-written HTML should maintain this characteristic, but you may find exceptions where the HTML markup does not break-down well semantically.</p>
+</div>
+<div class="paragraph">
+<p>One common HTML construct that doesn&#8217;t fare well under the default rules are menus of <code>&lt;a&gt;</code> tags. E.g., consider the following HTML menu:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>&lt;div id="menu"&gt;
+    &lt;a href="home.html"&gt;Home&lt;/a&gt; |
+    &lt;a href="about.html"&gt;About&lt;/a&gt; |
+    &lt;a href="contact.html"&gt;Contact&lt;/a&gt;
+&lt;/div&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Because <code>&lt;a&gt;</code> tags are inline elements, SWeTE will parse this into a single string for translation. Semantically, though, each of the <code>&lt;a&gt;</code> tags should be treated as separate.</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p><strong>Note</strong></p>
+</div>
+<div class="paragraph">
+<p>Why does it matter whether a string is extracted out into its component parts or extracted as one big string? In both cases, they can be translated using SWeTE and it will work properly. The advantage of breaking it down into smaller pieces is that these pieces can be reused more easily. In the example menu above, if we translate the full menu as a single string then the translation can only be used to translate menus that are identical (i.e. same menu items and order exactly). However, if we were to extract the individual menu items ("Home", "About", and "Contact") separately, then these translations could be used any any other menus containing the same labels, even if the menu as a whole is different.</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>The difference is apparent when you place this menu into a larger context. For example, consider the following page that includes menus at the head and foot that are almost the same but have a slightly different order:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>&lt;div id="menu1"&gt;
+    &lt;a href="home.html"&gt;Home&lt;/a&gt; |
+    &lt;a href="about.html"&gt;About&lt;/a&gt; |
+    &lt;a href="contact.html"&gt;Contact&lt;/a&gt;
+&lt;/div&gt;
+&lt;div id="content"&gt;
+    &lt;p&gt;This is some page content.  Ain't it great!&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id="menu2"&gt;
+    &lt;a href="home.html"&gt;Home&lt;/a&gt; |
+    &lt;a href="example.html"&gt;Examples&lt;/a&gt; |
+    &lt;a href="about.html"&gt;About&lt;/a&gt; |
+    &lt;a href="contact.html"&gt;Contact&lt;/a&gt;
+&lt;/div&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When SWeTE parses this, it will produce three strings:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>&lt;a href="home.html"&gt;Home&lt;/a&gt; | &lt;a href="about.html"&gt;About&lt;/a&gt; | &lt;a href="contact.html"&gt;Contact&lt;/a&gt;</p>
+</li>
+<li>
+<p>This is some page content. Ain&#8217;t it great!</p>
+</li>
+<li>
+<p>&lt;a href="home.html"&gt;Home&lt;/a&gt; | &lt;a href="example.html"&gt;Examples&lt;/a&gt; | &lt;a href="about.html"&gt;About&lt;/a&gt; | &lt;a href="contact.html"&gt;Contact&lt;/a&gt;</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Notice that it extracts the menus as being distinct strings even though their content is largely the same. It would be much better if it just extracted the individual menu labels separately. In fact, this is how it would work if <code>&lt;a&gt;</code> tags were block-level. But SWeTE has no way of knowing that we intend for <strong>these</strong> particular tags to be block level, since, most of the time, <code>&lt;a&gt;</code> tags are just included in other content without disrupting the flow. Unless, that is, you give SWeTE a hint.</p>
+</div>
+<div class="sect2">
+<h3 id="_explicitly_declaring_a_tag_block_level_the_data_swete_block_attribute">Explicitly Declaring a tag block-level (the <code>data-swete-block</code> attribute)</h3>
+<div class="paragraph">
+<p>In cases, like the one above, you can specify that a tag should be treated as a block-level tag by adding the data-swete-block attribute to the tag. E.g. Consider our previous example with a header and footer menu but with the minor adjustment of adding the <code>data-swete-block</code> attribute to the <code>&lt;a&gt;</code> tags:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>&lt;div id="menu1"&gt;
+    &lt;a href="home.html" data-swete-block="1"&gt;Home&lt;/a&gt; |
+    &lt;a href="about.html" data-swete-block="1"&gt;About&lt;/a&gt; |
+    &lt;a href="contact.html" data-swete-block="1"&gt;Contact&lt;/a&gt;
+&lt;/div&gt;
+&lt;div id="content"&gt;
+    &lt;p&gt;This is some page content.  Ain't it great!&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id="menu2"&gt;
+    &lt;a href="home.html" data-swete-block="1"&gt;Home&lt;/a&gt; |
+    &lt;a href="example.html" data-swete-block="1"&gt;Examples&lt;/a&gt; |
+    &lt;a href="about.html" data-swete-block="1"&gt;About&lt;/a&gt; |
+    &lt;a href="contact.html" data-swete-block="1"&gt;Contact&lt;/a&gt;
+&lt;/div&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now, SWeTE will parse this to the following strings for translation:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Home</p>
+</li>
+<li>
+<p>About</p>
+</li>
+<li>
+<p>Contact</p>
+</li>
+<li>
+<p>This is some page content. Ain&#8217;t it great!</p>
+</li>
+<li>
+<p>Examples</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Much cleaner and easier to manage. Not only does this produce less translation work right now, it will reduce work later if the menus are modified further. With the previous structure (where the menus are extracted into a single string), any modification to the menu (i.e. changing order, adding/removing menu items, etc..) would result in having to retranslate the entire menu. Under this new structure, you would only need to translate those menu items that are added.</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p><strong>Tip</strong></p>
+</div>
+<div class="paragraph">
+<p>If you want to build HTML menus, it is best practice to use <code>&lt;ul&gt;</code> or <code>&lt;ol&gt;</code> tags with <code>&lt;li&gt;</code> children rather than just using bare <code>&lt;a&gt;</code> tags. This preserves the semantic intent of the menus and will be more compatible across devices. If you were to use this strategy then you wouldn&#8217;t need to provide any special instructions for SWeTE. It would interpret each menu item as its own string by default. The HTML for this structure would look like:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>&lt;div id="menu1"&gt;
+    &lt;ul&gt;
+        &lt;li&gt;&lt;a href="home.html"&gt;Home&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="about.html"&gt;About&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="contact.html"&gt;Contact&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+
+&lt;/div&gt;
+&lt;div id="content"&gt;
+    &lt;p&gt;This is some page content.  Ain't it great!&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id="menu2"&gt;
+    &lt;ul&gt;
+        &lt;li&gt;&lt;a href="home.html"&gt;Home&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="example.html"&gt;Examples&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="about.html"&gt;About&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="contact.html"&gt;Contact&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/div&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>While default browser styles would lay these <code>&lt;ul&gt;</code> tags (unordered lists) as lists rather than horizontal menus, it is a simple matter to customize their layout using CSS to match the look of the previous menus with simple inline <code>&lt;a&gt;</code> tags.</p>
+</div>
+</blockquote>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_explicitly_declaring_tags_inline_the_data_swete_inline_attribute">Explicitly declaring tags "inline": the <code>data-swete-inline</code> attribute</h3>
+<div class="paragraph">
+<p>There may also be cases when a tag is being treated as a "block-level" tag but you want it to be treated as an inline tag. Use the <code>data-swete-inline</code> attribute for this. For example, consider the following snippet:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>&lt;p&gt;My phone number is &lt;customtag phone="work"&gt;555-222-333&lt;/customtag&gt; but you should email me.&lt;/p&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Since this uses a custom tag (<code>&lt;customtag&gt;</code>), SWeTE will interpret it as block-level, and will parse it into the following strings:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>My phone number is</p>
+</li>
+<li>
+<p>555-222-3333</p>
+</li>
+<li>
+<p>but you should email me.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Clearly, the <code>&lt;customtag&gt;</code> is meant to be interpreted as an inline tag here, but SWeTE is interpreting it as a block-level tag (which is the default). We can rectify this by adding the <code>data-swete-inline</code> attribute:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>&lt;p&gt;My phone number is &lt;customtag phone="work" data-swete-inline="1"&gt;555-222-333&lt;/customtag&gt; but you should email me.&lt;/p&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then it will all be extracted into a single string:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>My phone number is &lt;customtag phone="work" data-swete-inline="1"&gt;555-222-333&lt;/customtag&gt; but you should email me.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_overriding_the_parser_translate_notranslate">Overriding the Parser: <code>translate</code> &amp; <code>notranslate</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In some cases you may want to be very explicit about what gets translated and how a document is partitioned into strings. SWeTE supports the <code>translate</code> and <code>notranslate</code> HTML attributes for this purpose. <code>notranslate</code> tells SWeTE not to parse anything inside of its tag. <code>translate</code> specifies that the contents of the tag should be treated as a single string, even if it contains sub elements. Using these attributes in tandem provides an alternative to the SWeTE parser. Indeed, in some cases you may want to mark the <code>&lt;body&gt;</code> tag with notranslate and then just explicitly mark the sections that you with to translate within the body.</p>
+</div>
+<div class="paragraph">
+<p>For example, consider the menu with inline <code>&lt;a&gt;</code> tags from the previous section:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>&lt;div id="menu"&gt;
+    &lt;a href="home.html"&gt;Home&lt;/a&gt; |
+    &lt;a href="about.html"&gt;About&lt;/a&gt; |
+    &lt;a href="contact.html"&gt;Contact&lt;/a&gt;
+&lt;/div&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As we saw before, SWeTE will parse all menu items into a single string, which is not optimal. Previously we saw a solution to this problem involving the <code>data-swete-block</code> attribute. You could, alternatively solve this problem using a combination of the translate and notranslate attributes as follows:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>&lt;div id="menu" notranslate="1"&gt;
+    &lt;a href="home.html" translate="1"&gt;Home&lt;/a&gt; |
+    &lt;a href="about.html" translate="1"&gt;About&lt;/a&gt; |
+    &lt;a href="contact.html" translate="1"&gt;Contact&lt;/a&gt;
+&lt;/div&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This instructs SWeTE to "not translate" anything inside the "menu" div. It then further instructs SWeTE to translate the specific individual <code>&lt;a&gt;</code> tag contents. SWeTE will parse this into the following strings:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Home</p>
+</li>
+<li>
+<p>About</p>
+</li>
+<li>
+<p>Contact</p>
+</li>
+</ul>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p><strong>Note</strong></p>
+</div>
+<div class="paragraph">
+<p>The translate and notranslate attributes should not be confused with the data-swete-translate attribute. Both translate and notranslate will cause their tag to be treated as block-level. You should not use notranslate in an inline tag, or you&#8217;ll experience unintended results. You should use the data-swete-translate="0" attribute for inline content that you want to exempt from translation.</p>
+</div>
+</blockquote>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_string_equivalence">String Equivalence</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>After SWeTE parses the strings out of an HTML page, it checks the translation memory for the site to see if there are any translations for the extracted strings. It will only use a translation if the string is an exact match. However it does have a hashing algorithm for string equivalence that factors out HTML tags, and variables (inline sections that should either be translated or not depending on the type of variable). This allows for maximum translation reuse without the possibility for incorrect translations bleeding into the output.</p>
+</div>
+<div class="paragraph">
+<p>According to SWeTE&#8217;s hashing algorithm, the following strings are equivalent:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Hello my name is &lt;a href="mailto:steve@example.com"&gt;Steve&lt;/a&gt;.</p>
+</li>
+<li>
+<p>Hello my name is &lt;span style="color:blue"&gt;Steve&lt;/span&gt;.</p>
+</li>
+<li>
+<p>Hello my name is &lt;x&gt;Steve&lt;/x&gt;.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>But these are not the same as:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Hello my name is Steve.</p>
+</li>
+<li>
+<p>Hello my name is &lt;span&gt;Steve&lt;/span&gt;</p>
+</li>
+<li>
+<p>hello my name is &lt;span&gt;Steve&lt;/span&gt;.</p>
+</li>
+<li>
+<p>Hello my name &lt;span&gt;is Steve&lt;/span&gt;.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The reason why these last 3 are not equivalent to the first three or to each other is that they are missing key elements. The first one is missing the HTML tag, so it will be recognized as a distinct string. The second one is missing the trailing punctuation point. And the third one has a lower case "h" in "hello" rather than the upper case version in the previous three. And the last one has the span tag around "is Steve" instead of just "Steve".</p>
+</div>
+<div class="paragraph">
+<p>This example shows the following rules of string equivalence:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Punctuation matters</p>
+</li>
+<li>
+<p>Strings are case-sensitive</p>
+</li>
+<li>
+<p>Different HTML tags with the same placement have no effect string equivalence. I.e. It doesn&#8217;t matter what the tag is or what attributes are in the tag. All that matters is where the tag is located within the String.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>The following page has 3 strings, but since they are all equivalent unders SWeTE&#8217;s string equivalence rules, it will only store the first one in the translation memory.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>&lt;!doctype html&gt;
+&lt;html&gt;
+    &lt;body&gt;
+
+        &lt;ul&gt;
+            &lt;li&gt;Hello my name is &lt;span&gt;Steve&lt;/span&gt;&lt;/li&gt;
+            &lt;li&gt;Hello my name is &lt;a href="home.html"&gt;Steve&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;Hello my name is &lt;name data-swete-inline="1"&gt;Steve&lt;/name&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+    &lt;/body&gt;
+&lt;/html&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Hence if we capture strings on this page, then look at the "Strings" tab in SWeTE we would only see the first string pulled in:</p>
+</div>
+<div class="paragraph">
+<p>"Hello my name is &lt;span&gt;Steve&lt;/span&gt;"</p>
+</div>
+<div class="paragraph">
+<p>If we then translate this string into French using the translation form, e.g. using the following translation:</p>
+</div>
+<div class="paragraph">
+<p>"Bonjour mon nom est &lt;span&gt;Steve&lt;/span&gt;",</p>
+</div>
+<div class="paragraph">
+<p>Then SWeTE would translate the page as follows:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>&lt;!doctype html&gt;
+&lt;html&gt;
+    &lt;body&gt;
+
+        &lt;ul&gt;
+            &lt;li&gt;Bonjour mon nom est &lt;span&gt;Steve&lt;/span&gt;&lt;/li&gt;
+            &lt;li&gt;Bonjour mon nom est &lt;a href="home.html"&gt;Steve&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;Bonjour mon nom est &lt;name data-swete-inline="1"&gt;Steve&lt;/name&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+    &lt;/body&gt;
+&lt;/html&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Notice that SWeTe preserved the tags. (i.e. even though the translation memory only contained a translation for the &lt;span&gt; tag version, it presered the &lt;a&gt; and &lt;name&gt; tags properly on translation).</p>
+</div>
+<div class="sect2">
+<h3 id="inline-variables">Inline Variables (using data-swete-translate)</h3>
+<div class="paragraph">
+<p>Many web applications use server-side technologies and templates to generate large numbers of web pages that use the same format, but have different data. For example, most sites that include a login mechanism will have some sort of status message like:</p>
+</div>
+<div class="paragraph">
+<p>"You are logged in as Steve"</p>
+</div>
+<div class="paragraph">
+<p>By default, SWeTE will probably import all of these strings separately so that your translation memory will be full of strings like:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>You are logged in as Steve</p>
+</li>
+<li>
+<p>You are logged in as Mary</p>
+</li>
+<li>
+<p>You are logged in as Anne</p>
+<div class="paragraph">
+<p>etc&#8230;&#8203;</p>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>This is not maintainable. It would be better if you could provide a translation for the string structure once, and then let SWeTE fill in the names afterwards. In fact, you can mark a section of a string as a "variable" using the data-swete-translate attribute. E.g. If you modify the output so that it says:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>You are logged in as &lt;span data-swete-translate="0"&gt;Steve&lt;/span&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then SWeTE will be be able to store the string once, and apply it to all different name variations.</p>
+</div>
+<div class="paragraph">
+<p>The following strings are equivalent for SWeTE:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>You are logged in as &lt;span data-swete-translate="0"&gt;Steve&lt;/span&gt;</p>
+</li>
+<li>
+<p>You are logged in as &lt;span data-swete-translate="0"&gt;Mary&lt;/span&gt;</p>
+</li>
+<li>
+<p>You are logged in as &lt;span data-swete-translate="0"&gt;Anne&lt;/span&gt;</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The following page has 3 strings, but since they are all equivalent unders SWeTE&#8217;s string equivalence rules, it will only store the first one in the translation memory. The equivalence relies on the use of the data-swete-translate directive to mark a section as an inline variable.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>&lt;!doctype html&gt;
+&lt;html&gt;
+    &lt;body&gt;
+
+        &lt;ul&gt;
+            &lt;li&gt;Hello my name is &lt;span data-swete-translate="0"&gt;Steve&lt;/span&gt;&lt;/li&gt;
+            &lt;li&gt;Hello my name is &lt;span data-swete-translate="0"&gt;Mary&lt;/span&gt;&lt;/li&gt;
+            &lt;li&gt;Hello my name is &lt;span data-swete-translate="0"&gt;Anne&lt;/span&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+    &lt;/body&gt;
+&lt;/html&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Hence if we capture strings on this page, then look at the "Strings" tab in SWeTE we would only see the first string pulled in:</p>
+</div>
+<div class="paragraph">
+<p>"Hello my name is &lt;span data-swete-translate="0"&gt;Steve&lt;/span&gt;"</p>
+</div>
+<div class="paragraph">
+<p>If we then translate this string into French using the translation form, e.g. using the following translation:</p>
+</div>
+<div class="paragraph">
+<p>"Bonjour mon nom est &lt;span data-swete-translate="0"&gt;Steve&lt;/span&gt;",</p>
+</div>
+<div class="paragraph">
+<p>Then SWeTE would translate the page as follows:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>&lt;!doctype html&gt;
+&lt;html&gt;
+    &lt;body&gt;
+
+        &lt;ul&gt;
+            &lt;li&gt;Bonjour mon nom est &lt;span data-swete-translate="0"&gt;Steve&lt;/span&gt;&lt;/li&gt;
+            &lt;li&gt;Bonjour mon nom est &lt;span data-swete-translate="0"&gt;Mary&lt;/span&gt;&lt;/li&gt;
+            &lt;li&gt;Bonjour mon nom est &lt;span data-swete-translate="0"&gt;Anne&lt;/span&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+    &lt;/body&gt;
+&lt;/html&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Effective use of inline variables is critical for the effective internationalization of dynamic websites. It can reduce the number of strings that need to be translated by several orders of magnitude. It may be the difference between a translation being trivial and intractable.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_dealing_with_inline_numbers">Dealing with inline Numbers</h3>
+<div class="paragraph">
+<p>When translating strings that have a mixture of words and numbers, it is desirable to be able to reuse similar translations. E.g. Consider the strings:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>I have 2 dogs and 3 cats.</p>
+</li>
+<li>
+<p>I have 4 dogs and 100 cats.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>These strings are identical at a core level so it would be nice if we could just translate the structure of the string (i.e. "I have x dogs and y cats") and have the translation applied to all variations. SWeTE doesn&#8217;t inherently factor out numbers from strings when it comes to equivalency. The two strings above are not actually equal in the eyes of the translation parser. However SWeTE makes use of a pre-processing text filter to wrap all numbers in span tags with the data-swete-translate="0" attribute so that similar strings can be treated as equivalent.</p>
+</div>
+<div class="paragraph">
+<p>The way this works is:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>SWeTE loads the source page from the source website.</p>
+</li>
+<li>
+<p>SWeTE performs pattern matching and replacement on the page content to wrap all numbers (in text nodes) with &lt;span data-swete-translate="0"&gt; tags.</p>
+</li>
+<li>
+<p>The translation parser parses the modified content.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Consider the following snippet from a web page:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>&lt;p&gt;I have 2 dogs and 3 cats.&lt;/p&gt;
+&lt;p&gt;I have 4 dogs and 100 cats.&lt;/p&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When SWeTE first loads the snippet from the source server, it will apply the text filter and convert this to:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>&lt;p&gt;I have &lt;span data-swete-translate="0"&gt;2&lt;/span&gt; dogs and\
+ &lt;span data-swete-translate="0"&gt;3&lt;/span&gt; cats.&lt;/p&gt;
+&lt;p&gt;I have &lt;span data-swete-translate="0"&gt;4&lt;/span&gt; dogs and\
+ &lt;span data-swete-translate="0"&gt;100&lt;/span&gt; cats.&lt;/p&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>(Note, the content is wrapped for readability). Now all of the numbers have been transformed in to inline variables so that when this page is parsed by the translation parser, only one string will be extracted, since both paragraphs are now deemed to be equivalent.</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p><strong>Tip</strong></p>
+</div>
+<div class="paragraph">
+<p>Text filters can be used to do much more than just convert numbers into inline variables. They can be used to recognize dates, currency, and just about any other pattern that can be matched by a regular expression. SWeTE includes a set of default text filters (e.g. for numbers and dates) that are applied to every site automatically, but you can easily add your own filters as well to help pre-process webpage content before it is parsed by the translation parser. Read more about text filters in chapter ??.</p>
+</div>
+</blockquote>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_dealing_with_dates_and_times">Dealing with Dates and Times</h3>
+<div class="paragraph">
+<p>Many applications make use of date and time in such a way that it is not practical to have a translator explicitly translate every instance. Luckily, computers can do a fine job of translating dates and times to different formats and languages. In order to allow computers to perform date translation automatically, it needs some cues from the web page to let it know where a date occurs, what format it is in (for processing purposes), and what format it should be converted to (for translation purposes). There are two HTML attributes that are supported for this purpose:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><code>+data-date-format +</code>: Specifies the format that the date is in using <a href="http://userguide.icu-project.org/formatparse/datetime">ICU date format notation</a>.</p>
+</li>
+<li>
+<p><code>data-date-format-target</code> : Specifies the format that the date should be converted to in <a href="http://userguide.icu-project.org/formatparse/datetime">ICU date format notation</a>. If this is omitted, then the format specified by the data-date-format attribute is used.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>SWeTE includes a small selection of text filters to automatically wrap any detected dates in <code>&lt;span
+      data-date-format&gt;</code> tags so that the translation processor will correctly translate the dates.</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p><strong>Note</strong></p>
+</div>
+<div class="paragraph">
+<p>You must set the source date locale and target date locale settings for the site in order for date translation to work properly. You also need to have the <a href="http://php.net/manual/en/book.intl.php">PHP intl extension</a> installed. It is included with PHP by default since 5.3, but it still needs to be set in the configure flags when building PHP for it to be included.</p>
+</div>
+</blockquote>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p><strong>Warning</strong></p>
+</div>
+<div class="paragraph">
+<p>Setting the source and target date locales currently depends on way of obtaining the available locales in the system which may not be available on Windows servers. As of 0.2.3, this has not been tested on Windows servers so there is a good chance it may not work.</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>The built-in date text filters only recognize a few common date formats. It is a good idea to modify these text filters, or create your own filters to cater to the date formats that are used in your application.</p>
+</div>
+<div class="paragraph">
+<p>The following snippet shows how the data-date-format tags work.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>&lt;p&gt;Today's date is
+    &lt;span data-date-format="MMMM d, y"&gt;
+        September 9, 2008
+    &lt;/span&gt;
+&lt;/p&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this case the <code>data-date-format</code> tag is set to "MMMM d, y" which is <a href="http://userguide.icu-project.org/formatparse/datetime">ICU date format</a> for "&lt;full month name&gt; &lt;day of month&gt;, 4 digit year". The output after SWeTE parses this snippet (assuming the source date format of the site is set to <code>en_CA</code> and the target date format is <code>fr_CA</code>) would be:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>&lt;p&gt;Today's date is
+    &lt;span data-swete-translate="0" data-date-format="MMMM d, y"&gt;
+        septembre 9, 2008
+    &lt;/span&gt;
+&lt;/p&gt;para</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note, that the format specified in <code>data-date-format</code> must match exactly the format of the date string provided inside the tag or parsing will fail and the date will not be converted. Also notice that the data-swete-translate="0" attribute is automatically added to this tag to convert it to an inline variable. That way we can translate the string "Today&#8217;s date is xxx" once in the translation memory and have it apply to all possible dates.</p>
+</div>
+<div class="paragraph">
+<p>There is still a problem with this date conversion. "septembre 9, 2008" is not the normal way that a date is formatted in French. The month name has been translated, but French native speakers would expect the date in the form "9 septembre 2008". Hence we need to specify a different output format string than for input format. We&#8217;ll add the <code>data-date-format-target</code> attribute as follows:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>&lt;p&gt;Today's date is
+    &lt;span data-date-format="MMMM d, y"
+          data-date-format-target="d MMMM y"&gt;
+        September 9, 2008
+    &lt;/span&gt;
+&lt;/p&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And the output would become:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>&lt;p&gt;Today's date is
+    &lt;span data-date-format="MMMM d, y"
+          data-date-format-target="d MMMM y"
+          data-swete-translate="0"&gt;
+        9 septembre 2008
+    &lt;/span&gt;
+&lt;/p&gt;</pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_enabling_date_conversion">Enabling Date Conversion</h4>
+<div class="paragraph">
+<p>Date conversion, in SWeTE, requires the PHP Intl extension to be installed. And even if it is installed date conversion will not happen automatically until you configure the source date locale and target date locale for the site. You can set these properties either during the creation of a new site or after creation using the site&#8217;s Edit form.</p>
+</div>
+<div class="paragraph">
+<p>Configure the date locales for an existing site as follows:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Log into the SWeTE administration panel. (i.e. <a href="http://example.com/path-to-swete/swete-admin/index.php" class="bare">http://example.com/path-to-swete/swete-admin/index.php</a>)</p>
+</li>
+<li>
+<p>Click on the "Dashboard" link in the upper right.</p>
+</li>
+<li>
+<p>Inside the "Websites" portlet, click on the "Menu" icon to the right of your site.</p>
+<div class="paragraph">
+<p><span class="image"><img src="images/ch01.menu-icon.png" alt="image"></span></p>
+</div>
+</li>
+<li>
+<p>Select "Edit" in the contextual menu.</p>
+<div class="paragraph">
+<p><span class="image"><img src="images/ch02.site-menu.png" alt="image"></span></p>
+</div>
+</li>
+<li>
+<p>On the edit form, click the "More Details&#8230;&#8203;" subheading at the bottom of the form to reveal the advanced options. This will reveal two select lists that will allow you to select the locales to use for parsing and formatting dates.</p>
+<div class="paragraph">
+<p><span class="image"><img src="images/ch02.date_locale_fields.png" alt="image"></span></p>
+</div>
+</li>
+<li>
+<p>Click "Save"</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>At this point, SWeTE should properly convert dates that have been marked with the <code>data-date-format</code> and <code>data-date-format-target</code> attributes.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_automatic_date_wrapping">Automatic Date Wrapping</h4>
+<div class="paragraph">
+<p>Wrapping dates explicitly in your source HTML may be cumbersome, or not even possible if you don&#8217;t have access to change the source HTML. A better way to handle dates is to implement text filters to automatically wrap all dates in the appropriate tags prior to translation.</p>
+</div>
+<div class="paragraph">
+<p>Text filters are regular expressions that are applied to the source HTML in the preprocessing step (i.e. before SWeTE parses the page for translation). SWeTE comes with a small set of default text filters that wrap such things as numbers, month names, days of week, and a small set of date formats. It is recommended that you take stock of the date formats that appear in your site, and set up explicit text filters for those formats.</p>
+</div>
+<div class="sect4">
+<h5 id="_browsing_a_sites_text_filters">Browsing a Site&#8217;s Text Filters</h5>
+<div class="paragraph">
+<p>You can see your site&#8217;s text filters by:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Clicking on "Sites" in the top menu bar.</p>
+</li>
+<li>
+<p>Click on your site in the list to access the site details.</p>
+</li>
+<li>
+<p>Click on the "Text Filters" sub-tab under your site&#8217;s details.</p>
+<div class="paragraph">
+<p><span class="image"><img src="images/ch02.text-filters.png" alt="image"></span></p>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>You&#8217;ll notice a list of default text filters that are applied to every page before it is parsed. Most of these filters have to do with date in some capacity. The filter_order column specifies the order in which a filter is applied. Generally we want the most specific filters to be applied first. E.g. We would want filters that recognize a full date like "September 2, 2002" to be applied before a filter for month names or numbers, because if the month is converted first, it would change the date to a form that the date filter wouldn&#8217;t recognize.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_anatomy_of_a_filter">Anatomy of a Filter</h5>
+<div class="paragraph">
+<p>Click on the "English Dates with Full Month Names" filter to see how this filter is set up.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/ch02.filter-details.png" alt="image"></span></p>
+</div>
+<div class="paragraph">
+<p>The key to this lies in the "Pattern" and "Replacement" field. The pattern is a <a href="http://php.net/manual/en/book.pcre.php">PERL compatible regular expression</a>. Notice that it begins and ends in a '/' character. In this case it is set up to explicitly look for dates of the form "MonthName day, year". The replacement field is the text that matching strings should be replaced with. Just like PHP&#8217;s preg_replace() function, this accepts callback variables to include portions of the original string in the output.</p>
+</div>
+<div class="paragraph">
+<p>You&#8217;ll notice that this particular pattern would convert strings like:</p>
+</div>
+<div class="paragraph">
+<p><code>September 9, 2008</code></p>
+</div>
+<div class="paragraph">
+<p>to</p>
+</div>
+<div class="paragraph">
+<p><code>&lt;span data-swete-translate="0"
+          data-date-format="MMMM d,y"&gt;September 9,
+          2008&lt;/span&gt;</code></p>
+</div>
+<div class="paragraph">
+<p>Hence, with this filter activated in the site (which it is by default) all dates of this form will automatically be converted to the target language&#8217;s equivalent.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_summary_2">Summary</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In this chapter, we discussed the SWeTE translation parser and showed how it can be manipulated to partition content in the ways of our choosing. We also discussed string equivalence and introduced some strategies for minimizing the number of unique strings that are required to be held by our translation memories (e.g. using inline variables and automatic date formatting).</p>
+</div>
+<div class="paragraph">
+<p>Using a combination of source content design (i.e. adding SWeTE meta tags directly into your source content), preprocessing, and post-processing it should be possible to efficiently manage the internationalization and translation of the most complex web application.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_using_the_rest_translation_api">Using the REST Translation API</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>As of version 0.3, SWeTE now includes a REST (Representational State Transfer) web service API for translating strings. Using this API, you can pass HTML or plain text content to SWeTE over HTTP and retrieve translated versions of the content as output.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_enabling_the_rest_api">Enabling the REST API</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Before you can start using the REST API for a website, you&#8217;ll need to create a secret web-service key for the site in the site profile. This key will be used by your REST clients as a sort of password to access the API.</p>
+</div>
+<div class="paragraph">
+<p>The steps are as follows:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Log into your SWeTE instance&#8217;s administration console (e.g. <a href="http://example.com/swete-admin/index.php" class="bare">http://example.com/swete-admin/index.php</a>).</p>
+</li>
+<li>
+<p>From the "Dashboard", click on the "Tools" icon</p>
+<div class="paragraph">
+<p><span class="image"><img src="images/ch01.menu-icon.png" alt="image"></span></p>
+</div>
+<div class="paragraph">
+<p>next to the site you want to activate, then select "Edit" from the contextual menu.</p>
+</div>
+</li>
+<li>
+<p>Click the "More Details" section header to see the advanced options on the edit form. This should reveal some additional fields including "Webservice secret key".</p>
+</li>
+<li>
+<p>Enter a phrase into this field. It may contain letters, numbers, punctuation, or special characters, and it can be up to 255 characters in length.</p>
+<div class="paragraph">
+<p><span class="image"><img src="images/webservice-secret-key-field.png" alt="image"></span></p>
+</div>
+</li>
+<li>
+<p>Click "Save"</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_using_the_rest_api">Using the REST API</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Once you have activated the REST API for a site, you should be able to send HTTP requests to the service with strings that you wish to translate. The HTTP requests should be POST requests to a URL in the proxy site with the following POST parameters:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. POST Parameters for REST API</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Key</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">swete:input</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The content that you wish to have translated. This may be an HTML page, an HTML fragment, or plain text.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">swete:content-type</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The type of the content provided in swete:input. Default is <code>text/html</code>, but if you pass plain text, then you should set this parameter to <code>text/plain</code>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">swete:salt</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A seed unix time stamp (i.e. number of seconds since epoch). This should reflect the time that the request was initiated. If this timestamp is more than 1 hour different than the server&#8217;s time, then the request will be denied.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">swete:key</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">This should be a SHA1 hash of the concatenation of the swete:salt parameter and your web site&#8217;s secret web service key. The format of this key should match the output of thehttp://php.net/manual/en/function.sha1.php[PHP&#8217;s <code>sha1()</code> function]. I.e. It should be a 40-character hexadecimal string. Case is insensitive. An example SHA1 hash is: <code>7faa2f0b39563dc66f1fd580b21c57dfac061ec9</code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="sect2">
+<h3 id="_output_and_error_handling">Output and Error Handling</h3>
+<div class="paragraph">
+<p>There are three possible outputs for the REST API:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><em>The translated content.</em> If SWeTE&#8217;s translation memory contains translations for the input string, then the output will simply be a translated version of the input string. It will not be contained in a data structure of any kind. It will just be a plain string.</p>
+</li>
+<li>
+<p><em>The original content</em>. If the translation memory doesn&#8217;t contain any matching translations for the input content, then it is possible that the API will simply return the same content that was passed to it. It will not be contained in a data structure of any kind. It will just be a plain string.</p>
+</li>
+<li>
+<p><em>An error message</em>. If there are any errors (e.g. incorrect key, expired or invalid salt, etc..), then it will output the error message as a single string, preceded by the string <code>[ERROR].</code> I.e. All errors will be returned in the format:</p>
+<div class="paragraph">
+<p><code>[ERROR] Error Message</code></p>
+</div>
+<div class="paragraph">
+<p>e.g.</p>
+</div>
+<div class="paragraph">
+<p><code>[ERROR] Incorrect Key</code></p>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_sample_php_client">Sample PHP Client</h3>
+<div class="paragraph">
+<p>Below is a sample PHP client that is set to use the REST API:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>&lt;?php
+/**
+ * @param string $content The content to be translated.
+ *
+ * @param string $url The URL of the SWeTE proxy site.
+ *      Can be any URL in the proxy but will be treated
+ *      as the Base HREF for the page content.
+ *
+ * @param string $password The webservice secret key.
+ *      Should match the value of the webservice_secret_key
+ *     field of the website in SWeTE.
+ *
+ * @returns string Translated version of $content.
+ */
+function translateContent($content, $url, $password, $contentType='text/html'){
+    // Salt should be current time (unix timestamp).
+    $salt = time();
+
+    // Key should be sha1 hash of salt concatenated with password
+    $key = sha1($salt.$password);
+
+    // POST parameters to pass to the web service
+    $data = array(
+        'swete:input' =&gt; $content,
+        'swete:salt' =&gt; $salt,
+        'swete:key' =&gt; $key,
+        'swete:content-type' =&gt; $contentType
+    );
+
+    // use key 'http' even if you send the request to https://...
+    $options = array(
+        'http' =&gt; array(
+            'header'  =&gt; "Content-type: application/x-www-form-urlencoded\r\n",
+            'method'  =&gt; 'POST',
+            'content' =&gt; http_build_query($data),
+        )
+    );
+    $context  = stream_context_create($options);
+    $result = file_get_contents($url, false, $context);
+    return $result;
+}
+
+function translatePlainText($text, $url, $password){
+    return translateContent($text, $url, $password, 'text/plain');
+}
+
+function translateHtml($html, $url, $password){
+    return translateContent($html, $url, $password, 'text/html');
+}</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This client is very simple. It creates a POST request and sends it to a SWeTE proxy site. Let&#8217;s take a moment to go through this example so that it is clear what is happening.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>It begins by getting the current time in seconds. This will be used for the <code>swete:salt</code> parameter, and for building the <code>swete:key</code> parameter.</p>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p><strong>Warning</strong></p>
+</div>
+<div class="paragraph">
+<p>Make sure that your salt represents the number of <strong>seconds</strong> since epoch and not some other figure. Many languages provide "current time" functions that return milliseconds. If you provide a salt that is in milliseconds, the request will fail.</p>
+</div>
+</blockquote>
+</div>
+</li>
+<li>
+<p>Next it creates a key (to be used as the <code>swete:key</code> parameter) by concatenating the salt with the password.</p>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p><strong>Note</strong></p>
+</div>
+<div class="paragraph">
+<p>In this example the <code>$password</code> parameter is expected to match the web service secret key value that was entered into the site profile in SWeTE.</p>
+</div>
+</blockquote>
+</div>
+</li>
+<li>
+<p>Next it creates the payload by placing all of the relevant parameters into an associative array.</p>
+</li>
+<li>
+<p>When the actual HTTP request is made, it is a POST request. GET requests will be completely ignored.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>This example client is written in PHP, but you could write a client in any language (e.g. Python, Ruby, Java, C#, C, etc&#8230;&#8203;) that allows you to make HTTP requests.</p>
+</div>
+<div class="sect3">
+<h4 id="_example_usage_of_php_client">Example usage of PHP Client</h4>
+<div class="paragraph">
+<p>The following snippet shows a couple of simple examples of using the PHP client that we created above. The first usage translates an HTML snippet. The second translates some plain text content:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>$result = translateContent(
+&lt;&lt;&lt;END
+    &lt;h3&gt;Hello World&lt;/h3&gt;
+    &lt;p&gt;Hello, my name is &lt;span data-swete-translate="0"&gt;Steve Hannah&lt;/span&gt;.
+       The &lt;span data-swete-translate="1"&gt;Blue Jays&lt;/span&gt; are my favourite team.
+    &lt;/p&gt;
+END
+,
+    'http://example.com/demosite4/index.html',
+    'foobar'
+);
+
+echo "First Result:\n";
+echo $result;
+
+
+$result2 = translatePlainText(
+    'Hello World',
+    'http://test.swetedemo.weblite.ca/demosite4/index.html',
+    'foobar'
+);
+
+
+echo "\r\n\r\nSecond Result:\n";
+echo $result2;
+
+// Try a request with an incorrect key.
+$errorResult = translatePlainText(
+    'Hello World',
+    'http://test.swetedemo.weblite.ca/demosite4/index.html',
+    'foobarxyz'
+);
+
+
+echo "\r\n\r\nThird Result:\n";
+echo $errorResult;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The output of this snippet would be as follows:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>First Result:
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd"&gt;
+&lt;html&gt;
+    &lt;body class=" x-swete-translation-fr"&gt;
+        &lt;h3&gt;Bonjour Monde&lt;/h3&gt;
+        &lt;p&gt;Bonjour, mon nom est
+            &lt;span data-swete-translate="0"&gt;Steve Hannah&lt;/span&gt; .
+            Les &lt;span data-swete-translate="1"&gt;Blue Jays&lt;/span&gt;
+            sont mon equippe favorite.
+        &lt;/p&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+
+
+Second Result:
+Bonjour Monde
+
+Third Result:
+[Error] Incorrect Key</pre>
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p><strong>Note</strong></p>
+</div>
+<div class="paragraph">
+<p>Some of the HTML formatting has been changed to fit the page better in print mode, but the document structure is accurate.</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>One important thing to notice here is that <code>&lt;!doctype&gt;</code> and <code>&lt;html&gt;</code> tags have been added to the HTML output, even though the input was just a snippet. Keep this in mind as you may need to parse out just the body of the response if you want to to match the content exactly.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_how_it_works_2">How It Works</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>REST requests are processed by SWeTE in exactly the same way that regular web requests are processed. The only difference is that the content to be translated is fetched from the POST parameters instead of making a background request to the equivalent page on the source site. This means that the content provided in a REST request goes through all of the same preprocessing steps that standard content goes through. It also means that string capturing works exactly the same way. I.e. if you have "log translation misses" enabled in the site configuration, then you perform a REST API request with some content that hasn&#8217;t yet been translated, then the untranslated strings will be added to the translation miss log and appear under the "strings" tab to be translated.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_preprocessing_content">Preprocessing Content</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Generally, SWeTE will do a pretty good job of parsing and translating website content out of the box. Sometimes, however, you may feel the need to make changes to the page content to help make it easier to deal with. Some examples of such situations include:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><em>Tagging content</em>. Some strings may include both static and dynamic parts. You may want to explicitly mark the dynamic parts using <code>&lt;span
+data-swete-translate="0"&gt;</code> tags so that you only need to translate the static string once, or add `+notranslate="1"
++`to some sections to prevent translation altogether.</p>
+</li>
+<li>
+<p><em>Fixing malformed HTML</em>. Many web sites include invalid HTML that SWeTE is having problems parsing. When you spot this type of problem, you may want to fix the HTML using standard pattern matching before the content is parsed by the SWeTE DOM parser.</p>
+</li>
+<li>
+<p><em>Modifying the headers</em>. In some cases you may want to add, remove, or modify headers before they are processed by SWeTE. <code>++</code></p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>There are three ways to modify input content to make it more amenable to SWeTE&#8217;s preferences:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><em>Make changes to the source site</em>. From a performance and maintenance perspective this is the best option as it doesn&#8217;t require any changes to SWeTE itself. An example of this type of change is if you wanted a section to be marked as "do not translate", you can just add a <code>notranslate="1"</code> parameter to the tag in the source content. Performance hit: ZERO.</p>
+</li>
+<li>
+<p><em>Text Filters</em>. SWeTE allows you to add text filters which are regular expressions for replacing certain patterns. All sites come with a set of default filters (e.g. for wrapping numeric values in <code>&lt;span data-swete-translate="0"&gt;</code> and dates), but you can create your own filters as well to modify almost anything. You should try not to create too many text filters because each text node in a document is compared to every filter once per request. I.e. For each new filter, SWeTE may need to perform hundreds of regular expression comparisons per request. Performance hit: Moderate.</p>
+<div class="paragraph">
+<p>See <a href="#automatic-date-wrapping">???</a> for more information about text filters.</p>
+</div>
+</li>
+<li>
+<p><em>PHP Event Handlers</em>. SWeTE allows you to define a delegate class for each site where you can implement functions that will be called at various stages of the request-response cycle.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>This chapter focuses on the last option: PHP Event Handlers.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_the_site_delegate_class">The Site Delegate Class</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>SWeTE allows you to define a delegate class corresponding to each site in the SWeTE instance. This delegate class can contain the following methods:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><code>fixHtml(string $html) : string</code> . A method that takes the string content of a webpage as it has been received from the source site, and is expected to return string content that has been modified (or not modified) and ready to pass to the DOM parser.</p>
+</li>
+<li>
+<p><code>preprocess(DOMDocument $document) : void</code>. A method that takes the DOMDocument as parsed from the source web page content and is expected to use the PHP DOM methods to make changes to the document as required for your site&#8217;s purposes.</p>
+</li>
+<li>
+<p><code>preprocessHeaders(array &amp;$headers) : void</code> . A method that allows you to process/modify the headers that have been retrieved from the source site. It takes a reference to an array of HTTP headers (strings) which can then be modified.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Using these three hooks, you should be able to arbitrarily modify the input content to suit your purposes.</p>
+</div>
+<div class="sect2">
+<h3 id="_creating_the_delegate_class">Creating the Delegate Class</h3>
+<div class="paragraph">
+<p>SWeTE uses a file path convention for finding the delegate class for each site. It expects to find your site&#8217;s delegate class named <code>sites_&lt;site_id&gt;_Delegate</code> at:</p>
+</div>
+<div class="paragraph">
+<p>swete-admin/sites/<code>&lt;site_id&gt;</code>/Delegate.php</p>
+</div>
+<div class="paragraph">
+<p>Where <code>&lt;site_id&gt;</code> is the Site ID of your the web site profile in SWeTE.</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p><strong>Tip</strong></p>
+</div>
+<div class="paragraph">
+<p>You can find the Site ID for a site by clicking on the "Sites" tab in the top menu. The Site ID will be located in the column labelled "Website ID" in the list of sites in your system.</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>E.g. If your website has site ID 428, then your Delegate class would be named <code>sites_428_Delegate</code> and would be located at:</p>
+</div>
+<div class="paragraph">
+<p>swete-admin/sites/428/Delegate.php</p>
+</div>
+<div class="paragraph">
+<p>A minimal delegate class without any methods defined would look like:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>&lt;?php
+class sites_428_Delegate {
+}</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>but a more complete Delegate class, with preprocessing methods implemented might look something like:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>&lt;?php
+class sites_429_Delegate {
+
+    /**
+     * Called before page is processed.  Fixes HTML.
+     */
+    function fixHtml($html){
+
+        $html = preg_replace(
+            '/Logged in as &lt;b&gt;([^&lt;]*)&lt;\/b&gt;/',
+            'Logged in as &lt;span data-swete-translate="0" '.
+            'style="font-weight:bold"&gt;$1&lt;/span&gt;',
+            $html
+        );
+
+        return $html;
+    }
+
+
+    /**
+     * Preprocesses HTTP headers before they are handled by SWeTE.
+     */
+    function preprocessHeaders(&amp;$headers){
+        foreach ( $headers as $k=&gt;$h ){
+            // WARNING:  This rule is ONLY FOR DEVELOPMENT MODE
+            // When we go live we should remove this rule and
+            // make the proxy so that it will work properly with
+            // HTTPS
+            $headers[$k] = preg_replace(
+                '#https://www.example.com.com#',
+                'http://www.example.com',
+                $h
+            );
+        }
+    }
+
+
+    /**
+     * Preprocesses the DOM before it is run through SWeTE's
+     * processor for translation and proxification.
+     */
+    function preprocess(DOMDocument $dom){
+
+        // We don't need to translate building locations
+        $xpath = new DOMXPath($dom);
+        $buildLocations = $xpath-&gt;query(
+            "//select[@id='buildLocations']/option[@value!='']"
+        );
+        foreach ($buildLocations as $o){
+            $o-&gt;setAttribute('notranslate','1');
+        }
+
+
+        // We don't need to translate employee names that appear
+        // in the employee dropdown
+        $employees = $xpath-&gt;query(
+            "//select[@id='employee']/option[@value!='']"
+        );
+        foreach ( $employees as $o ){
+            $o-&gt;setAttribute('notranslate','1');
+        }
+
+        // The product list page includes a p-id div for each
+        // product that is hidden. There is no need to translate this
+        $pids = $xpath-&gt;query("//div[@id='p-id']");
+        foreach ($pids as $pid){
+            $pid-&gt;setAttribute('notranslate', '1');
+        }
+
+        // Order Review Page
+
+        $shippingAddresses = $xpath-&gt;query(
+            "//td[@class='CheckoutReviewShipTo']"
+        );
+        foreach ( $shippingAddresses as $a ){
+            $a-&gt;setAttribute('notranslate', '1');
+        }
+
+
+        $billToTable = $xpath-&gt;query("//table[@id='BillToTable']");
+        foreach ( $billToTable as $b){
+            $b-&gt;setAttribute('notranslate', '1');
+            $heading = $xpath-&gt;query('//h6', $b);
+            foreach ($heading as $h){
+                $h-&gt;setAttribute('translate', '1');
+            }
+        }
+
+
+        // Order Confirmation Page
+
+        $shipTo = $xpath-&gt;query("//td[@id='customerinforight']");
+        foreach ( $shipTo as $s){
+            $s-&gt;setAttribute('notranslate', '1');
+            // still translate the heading
+            $bs = $xpath-&gt;query('//b', $s);
+            foreach ($bs as $b){
+            $b-&gt;setAttribute('translate', '1');
+            }
+        }
+
+    }
+}</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_processing_order">Processing Order</h3>
+<div class="paragraph">
+<p>A typical SWeTE HTTP request is processed as follows:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Client makes HTTP request for the proxy site (i.e. the SWeTE translated site).</p>
+</li>
+<li>
+<p>SWeTE performs background HTTP request for associated content in the source site.</p>
+</li>
+<li>
+<p>SWeTE preprocesses the content received from the source site:</p>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>SWeTE calls <code>fixHtml()</code> of the delegate class to fix any problematic HTML and provide an opportunity to perform pattern matching and replacement as desired.</p>
+</li>
+<li>
+<p>SWeTE parses the fixed HTML into a <code>DOMDocument</code> tree.</p>
+</li>
+<li>
+<p>SWeTE calls the delegate class' preprocess() method on the parsed <code>DOMDocument</code> to give it an opportunity to modify the document structure as desired.</p>
+</li>
+<li>
+<p>SWeTE performs the site&#8217;s text filters on all of the text nodes (except style and script nodes) in the <code>DOMDocument</code>. (e.g. to wrap numbers and dates in the appropriate tags).</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>SWeTE proxifies and translates the content.</p>
+</li>
+<li>
+<p>SWeTE calls the preprocessHeaders() method of the delegate class on the response headers that were received from the source site to give it an opportunity to make changes as desired.</p>
+</li>
+<li>
+<p>SWeTE proxifies the response headers (e.g. to convert <code>Location</code> headers to point to the proxy site instead of the source site).</p>
+</li>
+<li>
+<p>SWeTE outputs the final content back to the client.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_translation_management">Translation Management</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>One of the most difficult aspects of managing a multilingual web site is managing the translation of the content. This includes such activities as:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Monitoring the source site for changes that require translation or retranslation.</p>
+</li>
+<li>
+<p>Providing access to people who are qualified to translate the content.</p>
+</li>
+<li>
+<p>Translating the content.</p>
+</li>
+<li>
+<p>Approving the translated content.</p>
+</li>
+<li>
+<p>Publishing the translated content on the live site.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>SWeTE provides several features that can help to make these activities painless (or at least less painful than they would normally be). Some of these include:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A web-based translation form for editing translations directly inside SWeTE.</p>
+</li>
+<li>
+<p>Importing and exporting translations to CSV and XLIFF format, so that other computer assisted translation (CAT) tools can be used to perform the translations.</p>
+</li>
+<li>
+<p>Google translation support.</p>
+</li>
+<li>
+<p>Translation "miss" logging to easily track when new strings are added that require translation.</p>
+</li>
+<li>
+<p>RSS support to be notified when strings are added to the translation miss log.</p>
+</li>
+<li>
+<p>Pluggable translation memories allow you to easily copy translations from one site to another.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>This chapter presents some of SWeTE&#8217;s translation management features and suggests some strategies managing translations in different types of web sites and applications.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_translation_memories">Translation Memories</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>One of the most fundamental concepts in SWeTE is the translation memory. A translation memory is just a dictionary that maps strings in one language to the equivalent string in another language. A translation memory may include more than one translation for a string, but only one of those translations can be active at a time. When SWeTE processes web requests, it parses out all of the strings in the page and compares them to the site&#8217;s translation memory. If it finds any matching translations, it replaces the original string with its translation, and then outputs the page to the client.</p>
+</div>
+<div class="paragraph">
+<p>SWeTE assigns one translation memory per website. It is possible to share the same translation memory between two websites as long as those websites have the same source and target languages. Future versions of SWeTE may add the ability to use more than one translation memory in a single site (e.g. different translation memory for different pages), but currently (as of version 0.3) you are limited to a single translation memory. This should be sufficient for most websites.</p>
+</div>
+<div class="sect2">
+<h3 id="_browsing_translation_memories">Browsing Translation Memories</h3>
+<div class="paragraph">
+<p>You can see the available translation memories in your SWeTE instance by clicking on the "Translation Memories" link in the top menu bar. This will bring you to a list of translation memories in the system. Typically there will be one translation memory for each website you have.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/ch04.translation_memories.png" alt="image"></span></p>
+</div>
+<div class="paragraph">
+<p>You can see more details about an individual translation memory by clicking on any of the text in its row.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/c04.translation_memories.details.png" alt="image"></span></p>
+</div>
+<div class="paragraph">
+<p>Some of the key properties of a translation memory include:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><em>Translation memory uuid</em>. This is a globally unique ID for the translation memory so that you can keep translation memories in separate SWeTE installations in sync. This is used mostly for exporting and importing so that you can be sure that you are inserting translations into the correct memory.</p>
+</li>
+<li>
+<p><em>Translation memory name</em>. A user-friendly name for the translation memory. Typically this will be named <code>&lt;Website Name&gt; Dictionary</code>, but you can change it to anything you like.</p>
+</li>
+<li>
+<p><em>Source language</em>. The language of the source web site. (i.e. the language from which we are translating).</p>
+</li>
+<li>
+<p><em>Target language</em>. The language of the translated web site. (i.e. the language to which we are translating).</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>You can also view the current translations in a translation memory by clicking on the "Translations" tab under the translation memory heading.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/ch04.translation_memories.translations.png" alt="image"></span></p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p><strong>Note</strong></p>
+</div>
+<div class="paragraph">
+<p>Only strings that have been translated appear in the "Translations" tab of a translation memory. This is different than what you see in the global "Strings" tab which, essentially, shows the translation miss log.</p>
+</div>
+</blockquote>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_the_translation_miss_log_i_e_the_strings_tab">The Translation Miss Log (i.e. the "Strings" Tab)</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><span class="image"><img src="images/ch04.translation_miss_log.png" alt="image"></span></p>
+</div>
+<div class="paragraph">
+<p>The "Strings" tab of SWeTE shows all of the strings that have been loaded into the system. This table is sometimes referred to as the "Translation Miss Log" because the primary way that strings are loaded into it is by SWeTE inserting strings for which it cannot find a translation during its web page translation cycle. Over time it became apparent that this "log" was very useful for being able to manage strings in the system, so the tab label was changed to "Strings". Some of the useful activities that can be performed in this tab include:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Searching/filtering and sorting strings based on keywords, dates entered, web sites, web page URLs (from which the string was loaded), and translation memories.</p>
+</li>
+<li>
+<p>Exporting strings to CSV or XLIFF format so that they can be sent to a translator for translation.</p>
+</li>
+<li>
+<p>Importing strings from a CSV file (and possibly other formats in the future).</p>
+</li>
+<li>
+<p>Translating groups of strings in SWeTE&#8217;s web-based translation form.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The translation miss log is insulated from the actual translation memories. If you delete a string from the log, it won&#8217;t have any effect on the string&#8217;s translation, which is stored inside a translation memory. In fact you can delete the entire translation miss log table (i.e. every record in the "Strings" tab), and your proxy site will still function perfectly.</p>
+</div>
+<div class="sect2">
+<h3 id="_searching_and_sorting_the_strings_tab">Searching and Sorting the "Strings" Tab</h3>
+<div class="paragraph">
+<p>The "Strings" tab provides you with a lot of power when it comes to searching and sorting the strings. This is very important for large web applications as you could be dealing with hundreds of thousands or even millions of strings. Some common things you may want to do include:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Find strings that haven&#8217;t been translated.</p>
+</li>
+<li>
+<p>Find strings that have been inserted in a particular date range (e.g. strings inserted since last Wednesday).</p>
+</li>
+<li>
+<p>Find strings that were imported from a particular URL.</p>
+</li>
+<li>
+<p>Find strings the contain certain keywords.</p>
+</li>
+<li>
+<p>Find strings that have a particular number of words.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Once you have found a set of strings, you can decide to export them, translate them manually, or translate them using the Google translation API.</p>
+</div>
+<div class="sect3">
+<h4 id="_keyword_searches">Keyword Searches</h4>
+<div class="paragraph">
+<p>The easiest type of search you can perform in the Strings tab is a keyword search. This type of search is performed by entering a keyword or phrase into the "Search" box at the top of the page, and clicking "Search".</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/ch04-keyword-search.png" alt="image"></span></p>
+</div>
+<div class="paragraph">
+<p>This will match all rows for which every key word in the search phrase exists in at least one column of the row. E.g. Consider a row in the "Strings" tab with the following field values:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Hello</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Translation</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Bonjour</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Request URL</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="http://example.com/homepage" class="bare">http://example.com/homepage</a></p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>A keyword search for "Hello" would match this row, as would a search for "Bonjour", or a search for "home". In addition it would be matched by "Hello Bonjour", "Hello home" and "jour home".</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_single_column_searches">Single-Column Searches</h4>
+<div class="paragraph">
+<p>In some cases, you may want to limit your search to particular columns of the "Strings" tab. SWeTE supports column searches either by clicking the "Advanced Search" link next to the top "Search Strings" button, or by revealing the search fields in the table header, which is usually quicker and easier than using the advanced search form.</p>
+</div>
+<div class="paragraph">
+<p>You can reveal the search fields in the table header by clicking the background of any cell in the table heading row.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/ch04-strings-header-row.png" alt="image"></span></p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p><strong>Note</strong></p>
+</div>
+<div class="paragraph">
+<p>Make sure to click the background of the header row and not on the label text. If you click on the label, it will sort the table on that column instead of revealing the search fields.</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>After clicking on the header row background, you should see a row of search fields appear just below the heading:</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/ch04-strings-search-fields.png" alt="image"></span></p>
+</div>
+<div class="paragraph">
+<p>To filter the results based on keywords in a particular column, just enter the phrase in the appropriate search field and hit "Enter". E.g. If you type "Hello" into the search field in the "String column, it will filter the results to only show those rows for which the source string contains "Hello". I.e. it would match "Hello World", "Dhello", etc.., but would not match "hello" or "ello".</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_multi_word_searches">Multi-word Searches</h4>
+<div class="paragraph">
+<p>It is worth noting that search phrases comprised of multiple words do not require that the content contains the exact ordering of the words. E.g. If you searched the "String" column for the phrase "Hello World", it would match any of "Hello World", "World Hello", "This is Hello World time", or "The World of Hellos". I.e. it isn&#8217;t strict about order. It just demands that each of the words in the search phrase occurs in the content.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_exact_matches_only">Exact Matches Only</h4>
+<div class="paragraph">
+<p>By default, single-column searches don&#8217;t require exact matching. Rows only need contain the individual words of the search phrase in order to included in the found set. E.g. A search in the "Strings" column for "dogs" would match "dogs", "brown dogs", or "the dogsled". You can force exact matching by prepending an "=" to the search phrase. E.g. Searching for "=dogs" would only match "dogs", and not "brown dogs" nor "the dogsled".</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_finding_empty_columns">Finding "Empty" Columns</h4>
+<div class="paragraph">
+<p>A special case of exact matching that is very frequently needed is a search for "empty". E.g. if you wanted to find all strings for which there is no translation, you might perform a single-column search in the "Current Translation" field for "=". This means that you want to match all rows for which the current translation is nothing.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_range_searches">Range Searches</h4>
+<div class="paragraph">
+<p>SWeTE also supports range searches which are especially helpful for columns contain numerical or date data.</p>
+</div>
+<div class="paragraph">
+<p>To match rows whose value in a row is "less than" the search term, you would prefix the search term with a "&lt;". E.g. To find all strings that have less than 10 words, you could search in the "Num Words" field for "&lt;10".</p>
+</div>
+<div class="paragraph">
+<p>Similarly, to match rows whose value is "greater than" the search term, you would prefix "&gt;". SWeTE also supports "less-than-or-equal" and "greater-than-or-equal" searches using the "&#8656;" and "&gt;=" prefixes respectively.</p>
+</div>
+<div class="paragraph">
+<p>Finally, SWeTE supports full range searches (i.e. matches values between a lower and upper bound) using the "&lt;lower bound&gt;..&lt;upper bound&gt;" notation. E.g. To find all strings that have more than 10 words and fewer than 100 words, you could search the "Num Words" field with "10..100".</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_pattern_matching_searches">Pattern Matching Searches</h4>
+<div class="paragraph">
+<p>If the default matching behaviour is not precise enough for you, and exact matching is too specific, you may find SWeTE&#8217;s pattern matching search to be useful. If you prefix a search phrase with "~", it will be treated as an exact search, except that it will support wild cards as part of the search. E.g. You could search the "String" field for "~A%" to find all rows for which the string Starts with A. This would match "Ape", "Are we there yet", "Abcdefg&#8230;&#8203;", etc.. A search for "~A%B" would match all strings that begin with A and end with B. This would match things like "About to end B", "AB", and "A O B", but would not match "The A of B" or "Car ABC".</p>
+</div>
+<div class="paragraph">
+<p>The above examples demonstrate the use of the '%' wildcard to match 0 or more characters. It also supports the '?' wildcard to match a single character only. E.g. a search for '~A?B' would match "ACB", but not "ACCB".</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_date_searches">Date Searches</h4>
+<div class="paragraph">
+<p>Searching on Date fields can be tricky because they require the date to be entered in a specific format:</p>
+</div>
+<div class="paragraph">
+<p>YYYY-MM-DD HH:ii:ss</p>
+</div>
+<div class="paragraph">
+<p>The time portion is optional, but if you not performing a range search you may need to include time, or you might not find any matches. You can use the "Date Inserted" field to find all strings that have been inserted in a particular date range or since a particular time. E.g. To find strings that were inserted on or after July 7, 2012, you would search for "&gt;=2012-07-07". To find strings added between July 7, 2012 and July 9, 2012, you would search for "2012-07-07..2012-07-09".</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_combining_multiple_single_column_searches">Combining Multiple Single-Column Searches</h4>
+<div class="paragraph">
+<p>If you combine searches in multiple columns, they are interpreted as "AND" searches. I.e. If you enter "Hello" in the "String" search field, and "Bonjour" in the "Current Translation" search field, it will only match rows where "String" contains "Hello", <em>and</em> "Current Translation" contains "Bonjour".</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="capturing-strings-sec">Capturing Strings</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>There are three ways to add new "strings" and translations into SWeTE:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Enter them manually into a translation memory or in the translation log. You will almost never do this.</p>
+</li>
+<li>
+<p>Import them in a CSV or XLIFF file that have been generated by another SWeTE instance.</p>
+</li>
+<li>
+<p>Capture them in the process of translating a web page.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>CSV and XLIFF importing will be covered in a later section. In this section I will focus on how the capture process works (when translating a web page).</p>
+</div>
+<div class="sect2">
+<h3 id="_enabling_string_capturing">Enabling String Capturing</h3>
+<div class="paragraph">
+<p>Under normal circumstances, if you request a web page through SWeTE, it will try to translate each of the strings that it finds, and will just leave them untranslated if no appropriate translation is found. It doesn&#8217;t log the failures and makes no effort to notify you that it failed to translate a string. Its priority is just to publish the page as quickly and lightly as possible. You can instruct SWeTE to log these translation failures by enabling the "Log Translation Misses" flag in your website settings. With this feature activated, SWeTE will insert all "untranslated" strings it encounters during the translation of a web page into the translation miss log (i.e. the "Strings" tab).</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p><strong>Warning</strong></p>
+</div>
+<div class="paragraph">
+<p>You should only leave the "Log Translation Misses" feature activated while you are capturing strings. It causes SWeTE to use far more resources and your site will perform much slower than it does normally.</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>The steps to enable string capturing are as follows:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Click on the "Sites" tab on the top menu bar.</p>
+</li>
+<li>
+<p>Click on the website for which you want to enable string capturing.</p>
+</li>
+<li>
+<p>Click on the "Edit" button on the top button bar to access the "Edit" form for the website.</p>
+</li>
+<li>
+<p>Click the [+] icon next to the "More Details" subheading to expand the advanced options.</p>
+</li>
+<li>
+<p>Check the box labelled "Log translation misses"</p>
+<div class="paragraph">
+<p><span class="image"><img src="images/ch04.log_translation_misses.png" alt="image"></span></p>
+</div>
+</li>
+<li>
+<p>Click "Save"</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>See also <a href="#capturing-strings">???</a> for further instructions on enabling string capturing.</p>
+</div>
+<div class="paragraph">
+<p>Once you have string capturing enabled, you can just load any of the pages in your proxy site (i.e. the translated version of the website) and any strings for which there is no translation will be automatically be added to the "Strings" tab so that you can translate them.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_translating_strings">Translating Strings</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>There are 3 primary ways to translate strings in SWeTE:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Send them to Google for machine translation. See <a href="#google-translation-api">???</a> for an example of this process.</p>
+</li>
+<li>
+<p>Exporting them to CSV or XLIFF format, sending it to a translator, the importing the translated results.</p>
+</li>
+<li>
+<p>Translating them directly using SWeTE translation form. See <a href="#translating-strings-manually">???</a> for an example of this process.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_exporting_strings_and_translations">Exporting Strings and Translations</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If your translator prefers to use his own CAT (computer assisted translation) tool for translating site content you will need to export the strings you wish to have translated to an external file format. SWeTE allows you to export in CSV (comma-separated value) and XLIFF (XML Localisation Interchange File Format). Your choice of format will depend on the tool-chain you and your translator intend to use. CSV is handy because it is simple. It can be opened and edited by any spread-sheet program.</p>
+</div>
+<div class="paragraph">
+<p>XLIFF is an XML-based format created to standardize the way localizable data are passed between tools during the localization process. The problem with XLIFF is that it isn&#8217;t yet fully supported by many of the most popular CAT tools. SWeTE uses XLIFF standard placeholder tags in place of HTML tags that may be embedded in its strings and translations. These placeholders need to be maintained throughout the translation process if you want to be able to import the resulting translations back into SWeTE and have them "work" properly. If your CAT tool only supports XLIFF as an import source and export target, then these tags are likely to get lost in translation (pardon the pun). Even if the CAT tool is advertised to work with XLIFF natively it may not support the full specification, and thus may strip out these special tags.</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p><strong>Warning</strong></p>
+</div>
+<div class="paragraph">
+<p>Before you commit to a translation workflow, make sure you test out the round-trip process with a small set of translations before you proceed with the bulk of the work. There is nothing worse than receiving a corrupted file from a translator, and having to paste the translations back into SWeTE one-by-one.</p>
+</div>
+</blockquote>
+</div>
+<div class="sect2">
+<h3 id="_exporting_strings_as_csv">Exporting Strings as CSV</h3>
+<div class="paragraph">
+<p>Exporting strings to CSV format is quite simple. In the "Strings" tab, you can just perform a search for the subset of strings that you want to export. Once you are happy with your found set, simply select "Export" &gt; "Export CSV".</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/ch04.export-csv-menu.png" alt="image"></span></p>
+</div>
+<div class="paragraph">
+<p>This will cause a CSV file named "translation_miss_log_results_xxxx.csv" to be downloaded to your browser.</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p><strong>Note</strong></p>
+</div>
+<div class="paragraph">
+<p>For large found sets it may take some time to generate and download the CSV file. You will need to be patient.</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>The format of this file is exactly the same format that is required by the Import CSV form. You can open this file in any spreadsheet program (e.g. MS Excel, Open Office, etc..).</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/ch04.csv-export.png" alt="image"></span></p>
+</div>
+<div class="paragraph">
+<p>Notice that the first row serves as the field names. These correspond exactly with the field names in the translation_miss_log table of the database. The exact columns are as follows:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 2. Columns in the CSV file produced by "Export CSV" in the Strings tab</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Field Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">normalized_string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The source string normalized and encoded so that all HTML tags are replaced with the appropriate <code>&lt;g&gt;</code>, <code>&lt;x&gt;</code>, and <code>&lt;v&gt;</code> placeholders.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">normalized_translation_value</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The current translation (may be blank) for the string normalized and encoded so that HTML tags are replaced with the appropriate <code>&lt;g&gt;</code>, <code>&lt;x&gt;</code>, and <code>&lt;v&gt;</code> placeholders.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">num_words</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The number of words in the source string.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">translation_memory_uuid</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The UUID (universal ID) of the translation memory to which the string belongs.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string_id</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The string ID of the string within the xf_tm_strings table. Two strings which are identical should share the same string ID. (i.e. Strings are immutable).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">source_language</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The language code of the source language of the string. (E.g. en for English, fr for French, etc&#8230;&#8203;).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">destination_language</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The language code of the translation language. (e.g. en for English, fr for French, etc&#8230;&#8203;).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">webpage_id</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Not used currently.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">request_url</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If the string was captured from a particular web page, the URL to this page may be here. The URL reflects the URL within the proxy site, not the source site. This may be blank if the string was inserted by some other method.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">website_id</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The website ID to which this string belongs.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">date_inserted</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The date that the string was inserted.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="sect3">
+<h4 id="_sample_csv_file">Sample CSV File</h4>
+<div class="paragraph">
+<p>You can view a sample exported CSV file in the docs/samples/translation_miss_log_results_2013_07_05_00_11_28.csv file with the SWeTE distribution. You can also view it <a href="https://raw.github.com/shannah/swete/master/docs/samples/translation_miss_log_results_2013_07_05_00_11_28.csv">here</a> on github.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_exporting_strings_as_xliff">Exporting Strings as XLIFF</h3>
+<div class="paragraph">
+<p>XLIFF is also a viable method of getting strings and translations in and out of SWeTE. There are three variations of exporting to XLIFF:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Export Found Strings to XLIFF. This option is used in the "Strings" tab to export the entire current found set as an XLIFF file.</p>
+</li>
+<li>
+<p>Export Selected Strings to XLIFF. This option, also used in the "Strings" tab, is used to export only those strings that have been checked the list of strings.</p>
+</li>
+<li>
+<p>Export Translation Memory as XLIFF. This option will export an entire translation memory as an XLIFF file. This is handy if you want to back up a translation memory, or to copy a translation memory from one site to another.</p>
+</li>
+</ol>
+</div>
+<div class="sect3">
+<h4 id="_exporting_found_strings_as_xliff">Exporting Found Strings as XLIFF</h4>
+<div class="paragraph">
+<p>The "Strings" tab provides a lot of flexibility in the way of filtering and sorting strings and translation. You can search for keywords, or strings that were inserted on a particular date or in a date range. You can even search for strings for which there is no translation, or where the number of words in the source in in a particular range. Once you have found the strings that you want to export, you can select "Export" &gt; "Export found strings as XLIFF". This will cause your browser to download an XLIFF file including all of the strings in the current found set along with their associated translations.</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p><strong>Note</strong></p>
+</div>
+<div class="paragraph">
+<p>Support for XLIFF files varies across CAT tools. Currently <a href="http://www.omegat.org/">OmegaT</a> is the only tool that has been tested and verified to fully support the XLIFF files produced by SWeTE without corrupting them or causing data loss.</p>
+</div>
+</blockquote>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_exporting_selected_strings_as_xliff">Exporting Selected Strings as XLIFF</h4>
+<div class="paragraph">
+<p>In cases where you just want to select a few specific strings to export as XLIFF, you can use the "Export Selected Strings as XLIFF" option. To use this option, simply check the box beside each string that you want to include in the XLIFF file, then select "Export" &gt; "Export Selected Strings as XLIFF".</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_exporting_a_translation_memory_as_xliff">Exporting A Translation Memory as XLIFF</h4>
+<div class="paragraph">
+<p>A third way to produce an XLIFF file is to export a full translation memory. You can do this by:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Click on the "Translation Memories" tab.</p>
+</li>
+<li>
+<p>Click on the translation memory that you wish to export.</p>
+</li>
+<li>
+<p>Click on "Export" &gt; "Export XLIFF" on the top button bar.</p>
+<div class="paragraph">
+<p><span class="image"><img src="images/ch04-export-xliff.png" alt="image"></span></p>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>The resulting XLIFF file will contain all of strings (which have translations) in the translation memory.</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p><strong>Note</strong></p>
+</div>
+<div class="paragraph">
+<p>You may notice that translation memories only contain strings that have been translated. This contrasts the strings as seen in the "Strings" tab, which includes all strings that have been imported into the system, whether they have been translated or not.</p>
+</div>
+</blockquote>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_importing_strings_and_translations">Importing Strings and Translations</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In order to provide a workflow between external CAT tools and SWeTE, you must be able to re-import the files that had previously been exported - but have had translations added to them. SWeTE supports importing of both CSV and XLIFF files as long as they are in the same format as SWeTE produces in its export operations.</p>
+</div>
+<div class="sect2">
+<h3 id="_importing_translations_from_a_csv_file">Importing Translations from a CSV File</h3>
+<div class="paragraph">
+<p>CSV is one of the simplest, most reliable formats for transferring translations. SWeTE accepts CSV files as long as they are in the same format as as SWeTE uses for exporting CSV files. The strings need to be fully-encoded, with HTML tags replaced with the appropriate SWeTE placeholders. In order for the strings to be useful, they must be in a format consistent with a preprocessed string from the proxy site. In order to understand this, it may help to quickly review how SWeTE processes web pages.</p>
+</div>
+<div class="paragraph">
+<p>When a request is made for a web page in SWeTE, it first loads the webpage from the source site. Then it passes the page contents through a set of prefilters to prepare the page to be processed by the translation parser. Finally, just before each string is passed to the translation parser, it replaces all HTML tags with placeholder tags so that strings with different HTML tags but in the same place will match. These placeholders are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>&lt;g id="n"&gt;xxx&lt;/g&gt;</code>, for HTML tags that have both an opening and closing tag. E.g. [<code>I am
+&lt;a href="foobar.html"&gt;Steve&lt;/a&gt;</code>] would be converted to [<code>I am &lt;g
+id="1"&gt;Steve&lt;/g&gt;</code>]. [<code>We are &lt;a
+href="foobar.html"&gt;Steve&lt;/a&gt; and &lt;a
+href="foobar2.html"&gt;Jack&lt;/a&gt;</code>] would be converted to [<code>We are &lt;g id="1"&gt;Steve&lt;/g&gt; and &lt;g
+id="2"&gt;Jack&lt;/g&gt;</code>].</p>
+</li>
+<li>
+<p><code>&lt;x id="n"/&gt;</code>, for HTML tags that don&#8217;t have a closing tag. E.g. [<code>I am Steve &lt;br/&gt; and this
+&lt;br/&gt; is Jack</code>] would be converted to [<code>I am
+Steve &lt;x id="1"/&gt; and this &lt;x id="2"/&gt; is
+Jack</code>].</p>
+</li>
+<li>
+<p>&lt;v id="n"&gt;&lt;/v&gt;, to mark variables, i.e. HTML tags that include the data-swete-translate attribute. See <a href="#inline-variables">???</a> for more information about data-swete-translate and inline variables. The default website profile includes a number of text filters wrap replace numbers and dates in these inline variable tags.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Due to these transformations, it is safest to only work with strings that have already been captured by SWeTE using the string capture step (See <a href="#capturing-strings-sec">Capturing Strings</a> for more information on capturing strings), and exported using the export CSV step. If you have a raw CSV file with strings that you want to import from a database or external corpus you should build a web page with this CSV file and capture the page using SWeTE. (In future versions there may be an import path without having to do this, but for now, it is the safest method of importing raw strings).</p>
+</div>
+<div class="paragraph">
+<p>Steps to import a set of translations from a CSV file.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Click on the "Strings" tab on the top menu bar.</p>
+<div class="paragraph">
+<p><span class="image"><img src="images/ch04-top-menubar.png" alt="image"></span></p>
+</div>
+</li>
+<li>
+<p>Click on the "Import Translations" button on the left menu bar.</p>
+<div class="paragraph">
+<p><span class="image"><img src="images/ch04-import-translations-button.png" alt="image"></span></p>
+</div>
+</li>
+<li>
+<p>This will show a form to upload your CSV file as follows:</p>
+<div class="paragraph">
+<p><span class="image"><img src="images/ch04-import-form.png" alt="image"></span></p>
+</div>
+</li>
+<li>
+<p>Use the "File" field to select the CSV file that contains your translations.</p>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p><strong>Note</strong></p>
+</div>
+<div class="paragraph">
+<p>It should be in the same format as SWeTE exports. The top row must contain the column names exactly as they are included in the SWeTE CSV export option. See <a href="#exporting-strings-as-csv">title_title</a> for details about the required columns. You can view a sample exported CSV file in the docs/samples/translation_miss_log_results_2013_07_05_00_11_28.csv file with the SWeTE distribution. You can also view it <a href="https://raw.github.com/shannah/swete/master/docs/samples/translation_miss_log_results_2013_07_05_00_11_28.csv">here</a> on github.</p>
+</div>
+</blockquote>
+</div>
+</li>
+<li>
+<p>Select "CSV" in the "File Format" field.</p>
+</li>
+<li>
+<p>If you want to target a specific translation memory into which to insert all translations, then select that translation memory in the "Target Translation Memory" field. If you do not select a translation memory, it will use the translation_memory_uuid column of the CSV file to identify the translation memory to which the string belongs, and try to use it. If the system doesn&#8217;t have a matching translation memory, then it will fail to import that string.</p>
+</li>
+<li>
+<p>Click Save when you are done.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_importing_translations_from_an_xliff_file">Importing Translations from an XLIFF File</h3>
+
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2020-09-19 07:37:09 -0700
+</div>
+</div>
+</body>
+</html>

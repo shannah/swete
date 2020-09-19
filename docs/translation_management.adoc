@@ -1,0 +1,347 @@
+== Translation Management
+
+One of the most difficult aspects of managing a multilingual web site is managing the translation of the content. This includes such activities as:
+
+* Monitoring the source site for changes that require translation or retranslation.
+* Providing access to people who are qualified to translate the content.
+* Translating the content.
+* Approving the translated content.
+* Publishing the translated content on the live site.
+
+SWeTE provides several features that can help to make these activities painless (or at least less painful than they would normally be). Some of these include:
+
+* A web-based translation form for editing translations directly inside SWeTE.
+* Importing and exporting translations to CSV and XLIFF format, so that other computer assisted translation (CAT) tools can be used to perform the translations.
+* Google translation support.
+* Translation "miss" logging to easily track when new strings are added that require translation.
+* RSS support to be notified when strings are added to the translation miss log.
+* Pluggable translation memories allow you to easily copy translations from one site to another.
+
+This chapter presents some of SWeTE's translation management features and suggests some strategies managing translations in different types of web sites and applications.
+
+== Translation Memories
+
+One of the most fundamental concepts in SWeTE is the translation memory. A translation memory is just a dictionary that maps strings in one language to the equivalent string in another language. A translation memory may include more than one translation for a string, but only one of those translations can be active at a time. When SWeTE processes web requests, it parses out all of the strings in the page and compares them to the site's translation memory. If it finds any matching translations, it replaces the original string with its translation, and then outputs the page to the client.
+
+SWeTE assigns one translation memory per website. It is possible to share the same translation memory between two websites as long as those websites have the same source and target languages. Future versions of SWeTE may add the ability to use more than one translation memory in a single site (e.g. different translation memory for different pages), but currently (as of version 0.3) you are limited to a single translation memory. This should be sufficient for most websites.
+
+=== Browsing Translation Memories
+
+You can see the available translation memories in your SWeTE instance by clicking on the "Translation Memories" link in the top menu bar. This will bring you to a list of translation memories in the system. Typically there will be one translation memory for each website you have.
+
+image:images/ch04.translation_memories.png[image]
+
+You can see more details about an individual translation memory by clicking on any of the text in its row.
+
+image:images/c04.translation_memories.details.png[image]
+
+Some of the key properties of a translation memory include:
+
+* _Translation memory uuid_. This is a globally unique ID for the translation memory so that you can keep translation memories in separate SWeTE installations in sync. This is used mostly for exporting and importing so that you can be sure that you are inserting translations into the correct memory.
+* _Translation memory name_. A user-friendly name for the translation memory. Typically this will be named `+<Website Name> Dictionary+`, but you can change it to anything you like.
+* _Source language_. The language of the source web site. (i.e. the language from which we are translating).
+* _Target language_. The language of the translated web site. (i.e. the language to which we are translating).
+
+You can also view the current translations in a translation memory by clicking on the "Translations" tab under the translation memory heading.
+
+image:images/ch04.translation_memories.translations.png[image]
+
+____
+*Note*
+
+Only strings that have been translated appear in the "Translations" tab of a translation memory. This is different than what you see in the global "Strings" tab which, essentially, shows the translation miss log.
+____
+
+== The Translation Miss Log (i.e. the "Strings" Tab)
+
+image:images/ch04.translation_miss_log.png[image]
+
+The "Strings" tab of SWeTE shows all of the strings that have been loaded into the system. This table is sometimes referred to as the "Translation Miss Log" because the primary way that strings are loaded into it is by SWeTE inserting strings for which it cannot find a translation during its web page translation cycle. Over time it became apparent that this "log" was very useful for being able to manage strings in the system, so the tab label was changed to "Strings". Some of the useful activities that can be performed in this tab include:
+
+* Searching/filtering and sorting strings based on keywords, dates entered, web sites, web page URLs (from which the string was loaded), and translation memories.
+* Exporting strings to CSV or XLIFF format so that they can be sent to a translator for translation.
+* Importing strings from a CSV file (and possibly other formats in the future).
+* Translating groups of strings in SWeTE's web-based translation form.
+
+The translation miss log is insulated from the actual translation memories. If you delete a string from the log, it won't have any effect on the string's translation, which is stored inside a translation memory. In fact you can delete the entire translation miss log table (i.e. every record in the "Strings" tab), and your proxy site will still function perfectly.
+
+=== Searching and Sorting the "Strings" Tab
+
+The "Strings" tab provides you with a lot of power when it comes to searching and sorting the strings. This is very important for large web applications as you could be dealing with hundreds of thousands or even millions of strings. Some common things you may want to do include:
+
+[arabic]
+. Find strings that haven't been translated.
+. Find strings that have been inserted in a particular date range (e.g. strings inserted since last Wednesday).
+. Find strings that were imported from a particular URL.
+. Find strings the contain certain keywords.
+. Find strings that have a particular number of words.
+
+Once you have found a set of strings, you can decide to export them, translate them manually, or translate them using the Google translation API.
+
+==== Keyword Searches
+
+The easiest type of search you can perform in the Strings tab is a keyword search. This type of search is performed by entering a keyword or phrase into the "Search" box at the top of the page, and clicking "Search".
+
+image:images/ch04-keyword-search.png[image]
+
+This will match all rows for which every key word in the search phrase exists in at least one column of the row. E.g. Consider a row in the "Strings" tab with the following field values:
+
+[cols=",",]
+|===
+|String |Hello
+|Translation |Bonjour
+|Request URL |http://example.com/homepage
+|===
+
+A keyword search for "Hello" would match this row, as would a search for "Bonjour", or a search for "home". In addition it would be matched by "Hello Bonjour", "Hello home" and "jour home".
+
+==== Single-Column Searches
+
+In some cases, you may want to limit your search to particular columns of the "Strings" tab. SWeTE supports column searches either by clicking the "Advanced Search" link next to the top "Search Strings" button, or by revealing the search fields in the table header, which is usually quicker and easier than using the advanced search form.
+
+You can reveal the search fields in the table header by clicking the background of any cell in the table heading row.
+
+image:images/ch04-strings-header-row.png[image]
+
+____
+*Note*
+
+Make sure to click the background of the header row and not on the label text. If you click on the label, it will sort the table on that column instead of revealing the search fields.
+____
+
+After clicking on the header row background, you should see a row of search fields appear just below the heading:
+
+image:images/ch04-strings-search-fields.png[image]
+
+To filter the results based on keywords in a particular column, just enter the phrase in the appropriate search field and hit "Enter". E.g. If you type "Hello" into the search field in the "String column, it will filter the results to only show those rows for which the source string contains "Hello". I.e. it would match "Hello World", "Dhello", etc.., but would not match "hello" or "ello".
+
+==== Multi-word Searches
+
+It is worth noting that search phrases comprised of multiple words do not require that the content contains the exact ordering of the words. E.g. If you searched the "String" column for the phrase "Hello World", it would match any of "Hello World", "World Hello", "This is Hello World time", or "The World of Hellos". I.e. it isn't strict about order. It just demands that each of the words in the search phrase occurs in the content.
+
+==== Exact Matches Only
+
+By default, single-column searches don't require exact matching. Rows only need contain the individual words of the search phrase in order to included in the found set. E.g. A search in the "Strings" column for "dogs" would match "dogs", "brown dogs", or "the dogsled". You can force exact matching by prepending an "=" to the search phrase. E.g. Searching for "=dogs" would only match "dogs", and not "brown dogs" nor "the dogsled".
+
+==== Finding "Empty" Columns
+
+A special case of exact matching that is very frequently needed is a search for "empty". E.g. if you wanted to find all strings for which there is no translation, you might perform a single-column search in the "Current Translation" field for "=". This means that you want to match all rows for which the current translation is nothing.
+
+==== Range Searches
+
+SWeTE also supports range searches which are especially helpful for columns contain numerical or date data.
+
+To match rows whose value in a row is "less than" the search term, you would prefix the search term with a "<". E.g. To find all strings that have less than 10 words, you could search in the "Num Words" field for "<10".
+
+Similarly, to match rows whose value is "greater than" the search term, you would prefix ">". SWeTE also supports "less-than-or-equal" and "greater-than-or-equal" searches using the "<=" and ">=" prefixes respectively.
+
+Finally, SWeTE supports full range searches (i.e. matches values between a lower and upper bound) using the "<lower bound>..<upper bound>" notation. E.g. To find all strings that have more than 10 words and fewer than 100 words, you could search the "Num Words" field with "10..100".
+
+==== Pattern Matching Searches
+
+If the default matching behaviour is not precise enough for you, and exact matching is too specific, you may find SWeTE's pattern matching search to be useful. If you prefix a search phrase with "~", it will be treated as an exact search, except that it will support wild cards as part of the search. E.g. You could search the "String" field for "~A%" to find all rows for which the string Starts with A. This would match "Ape", "Are we there yet", "Abcdefg...", etc.. A search for "~A%B" would match all strings that begin with A and end with B. This would match things like "About to end B", "AB", and "A O B", but would not match "The A of B" or "Car ABC".
+
+The above examples demonstrate the use of the '%' wildcard to match 0 or more characters. It also supports the '?' wildcard to match a single character only. E.g. a search for '~A?B' would match "ACB", but not "ACCB".
+
+==== Date Searches
+
+Searching on Date fields can be tricky because they require the date to be entered in a specific format:
+
+YYYY-MM-DD HH:ii:ss
+
+The time portion is optional, but if you not performing a range search you may need to include time, or you might not find any matches. You can use the "Date Inserted" field to find all strings that have been inserted in a particular date range or since a particular time. E.g. To find strings that were inserted on or after July 7, 2012, you would search for ">=2012-07-07". To find strings added between July 7, 2012 and July 9, 2012, you would search for "2012-07-07..2012-07-09".
+
+==== Combining Multiple Single-Column Searches
+
+If you combine searches in multiple columns, they are interpreted as "AND" searches. I.e. If you enter "Hello" in the "String" search field, and "Bonjour" in the "Current Translation" search field, it will only match rows where "String" contains "Hello", _and_ "Current Translation" contains "Bonjour".
+
+[[capturing-strings-sec]]
+== Capturing Strings
+
+There are three ways to add new "strings" and translations into SWeTE:
+
+[arabic]
+. Enter them manually into a translation memory or in the translation log. You will almost never do this.
+. Import them in a CSV or XLIFF file that have been generated by another SWeTE instance.
+. Capture them in the process of translating a web page.
+
+CSV and XLIFF importing will be covered in a later section. In this section I will focus on how the capture process works (when translating a web page).
+
+=== Enabling String Capturing
+
+Under normal circumstances, if you request a web page through SWeTE, it will try to translate each of the strings that it finds, and will just leave them untranslated if no appropriate translation is found. It doesn't log the failures and makes no effort to notify you that it failed to translate a string. Its priority is just to publish the page as quickly and lightly as possible. You can instruct SWeTE to log these translation failures by enabling the "Log Translation Misses" flag in your website settings. With this feature activated, SWeTE will insert all "untranslated" strings it encounters during the translation of a web page into the translation miss log (i.e. the "Strings" tab).
+
+____
+*Warning*
+
+You should only leave the "Log Translation Misses" feature activated while you are capturing strings. It causes SWeTE to use far more resources and your site will perform much slower than it does normally.
+____
+
+The steps to enable string capturing are as follows:
+
+[arabic]
+. Click on the "Sites" tab on the top menu bar.
+. Click on the website for which you want to enable string capturing.
+. Click on the "Edit" button on the top button bar to access the "Edit" form for the website.
+. Click the [+] icon next to the "More Details" subheading to expand the advanced options.
+. Check the box labelled "Log translation misses"
++
+image:images/ch04.log_translation_misses.png[image]
+. Click "Save"
+
+See also link:#capturing-strings[???] for further instructions on enabling string capturing.
+
+Once you have string capturing enabled, you can just load any of the pages in your proxy site (i.e. the translated version of the website) and any strings for which there is no translation will be automatically be added to the "Strings" tab so that you can translate them.
+
+== Translating Strings
+
+There are 3 primary ways to translate strings in SWeTE:
+
+[arabic]
+. Send them to Google for machine translation. See link:#google-translation-api[???] for an example of this process.
+. Exporting them to CSV or XLIFF format, sending it to a translator, the importing the translated results.
+. Translating them directly using SWeTE translation form. See link:#translating-strings-manually[???] for an example of this process.
+
+== Exporting Strings and Translations
+
+If your translator prefers to use his own CAT (computer assisted translation) tool for translating site content you will need to export the strings you wish to have translated to an external file format. SWeTE allows you to export in CSV (comma-separated value) and XLIFF (XML Localisation Interchange File Format). Your choice of format will depend on the tool-chain you and your translator intend to use. CSV is handy because it is simple. It can be opened and edited by any spread-sheet program.
+
+XLIFF is an XML-based format created to standardize the way localizable data are passed between tools during the localization process. The problem with XLIFF is that it isn't yet fully supported by many of the most popular CAT tools. SWeTE uses XLIFF standard placeholder tags in place of HTML tags that may be embedded in its strings and translations. These placeholders need to be maintained throughout the translation process if you want to be able to import the resulting translations back into SWeTE and have them "work" properly. If your CAT tool only supports XLIFF as an import source and export target, then these tags are likely to get lost in translation (pardon the pun). Even if the CAT tool is advertised to work with XLIFF natively it may not support the full specification, and thus may strip out these special tags.
+
+____
+*Warning*
+
+Before you commit to a translation workflow, make sure you test out the round-trip process with a small set of translations before you proceed with the bulk of the work. There is nothing worse than receiving a corrupted file from a translator, and having to paste the translations back into SWeTE one-by-one.
+____
+
+=== Exporting Strings as CSV
+
+Exporting strings to CSV format is quite simple. In the "Strings" tab, you can just perform a search for the subset of strings that you want to export. Once you are happy with your found set, simply select "Export" > "Export CSV".
+
+image:images/ch04.export-csv-menu.png[image]
+
+This will cause a CSV file named "translation_miss_log_results_xxxx.csv" to be downloaded to your browser.
+
+____
+*Note*
+
+For large found sets it may take some time to generate and download the CSV file. You will need to be patient.
+____
+
+The format of this file is exactly the same format that is required by the Import CSV form. You can open this file in any spreadsheet program (e.g. MS Excel, Open Office, etc..).
+
+image:images/ch04.csv-export.png[image]
+
+Notice that the first row serves as the field names. These correspond exactly with the field names in the translation_miss_log table of the database. The exact columns are as follows:
+
+.Columns in the CSV file produced by "Export CSV" in the Strings tab
+[cols=",",options="header",]
+|===
+|Field Name |Description
+|normalized_string |The source string normalized and encoded so that all HTML tags are replaced with the appropriate `+<g>+`, `+<x>+`, and `+<v>+` placeholders.
+|normalized_translation_value |The current translation (may be blank) for the string normalized and encoded so that HTML tags are replaced with the appropriate `+<g>+`, `+<x>+`, and `+<v>+` placeholders.
+|num_words |The number of words in the source string.
+|translation_memory_uuid |The UUID (universal ID) of the translation memory to which the string belongs.
+|string_id |The string ID of the string within the xf_tm_strings table. Two strings which are identical should share the same string ID. (i.e. Strings are immutable).
+|source_language |The language code of the source language of the string. (E.g. en for English, fr for French, etc...).
+|destination_language |The language code of the translation language. (e.g. en for English, fr for French, etc...).
+|webpage_id |Not used currently.
+|request_url |If the string was captured from a particular web page, the URL to this page may be here. The URL reflects the URL within the proxy site, not the source site. This may be blank if the string was inserted by some other method.
+|website_id |The website ID to which this string belongs.
+|date_inserted |The date that the string was inserted.
+|===
+
+==== Sample CSV File
+
+You can view a sample exported CSV file in the docs/samples/translation_miss_log_results_2013_07_05_00_11_28.csv file with the SWeTE distribution. You can also view it https://raw.github.com/shannah/swete/master/docs/samples/translation_miss_log_results_2013_07_05_00_11_28.csv[here] on github.
+
+=== Exporting Strings as XLIFF
+
+XLIFF is also a viable method of getting strings and translations in and out of SWeTE. There are three variations of exporting to XLIFF:
+
+[arabic]
+. Export Found Strings to XLIFF. This option is used in the "Strings" tab to export the entire current found set as an XLIFF file.
+. Export Selected Strings to XLIFF. This option, also used in the "Strings" tab, is used to export only those strings that have been checked the list of strings.
+. Export Translation Memory as XLIFF. This option will export an entire translation memory as an XLIFF file. This is handy if you want to back up a translation memory, or to copy a translation memory from one site to another.
+
+==== Exporting Found Strings as XLIFF
+
+The "Strings" tab provides a lot of flexibility in the way of filtering and sorting strings and translation. You can search for keywords, or strings that were inserted on a particular date or in a date range. You can even search for strings for which there is no translation, or where the number of words in the source in in a particular range. Once you have found the strings that you want to export, you can select "Export" > "Export found strings as XLIFF". This will cause your browser to download an XLIFF file including all of the strings in the current found set along with their associated translations.
+
+____
+*Note*
+
+Support for XLIFF files varies across CAT tools. Currently http://www.omegat.org/[OmegaT] is the only tool that has been tested and verified to fully support the XLIFF files produced by SWeTE without corrupting them or causing data loss.
+____
+
+==== Exporting Selected Strings as XLIFF
+
+In cases where you just want to select a few specific strings to export as XLIFF, you can use the "Export Selected Strings as XLIFF" option. To use this option, simply check the box beside each string that you want to include in the XLIFF file, then select "Export" > "Export Selected Strings as XLIFF".
+
+==== Exporting A Translation Memory as XLIFF
+
+A third way to produce an XLIFF file is to export a full translation memory. You can do this by:
+
+[arabic]
+. Click on the "Translation Memories" tab.
+. Click on the translation memory that you wish to export.
+. Click on "Export" > "Export XLIFF" on the top button bar.
++
+image:images/ch04-export-xliff.png[image]
+
+The resulting XLIFF file will contain all of strings (which have translations) in the translation memory.
+
+____
+*Note*
+
+You may notice that translation memories only contain strings that have been translated. This contrasts the strings as seen in the "Strings" tab, which includes all strings that have been imported into the system, whether they have been translated or not.
+____
+
+== Importing Strings and Translations
+
+In order to provide a workflow between external CAT tools and SWeTE, you must be able to re-import the files that had previously been exported - but have had translations added to them. SWeTE supports importing of both CSV and XLIFF files as long as they are in the same format as SWeTE produces in its export operations.
+
+=== Importing Translations from a CSV File
+
+CSV is one of the simplest, most reliable formats for transferring translations. SWeTE accepts CSV files as long as they are in the same format as as SWeTE uses for exporting CSV files. The strings need to be fully-encoded, with HTML tags replaced with the appropriate SWeTE placeholders. In order for the strings to be useful, they must be in a format consistent with a preprocessed string from the proxy site. In order to understand this, it may help to quickly review how SWeTE processes web pages.
+
+When a request is made for a web page in SWeTE, it first loads the webpage from the source site. Then it passes the page contents through a set of prefilters to prepare the page to be processed by the translation parser. Finally, just before each string is passed to the translation parser, it replaces all HTML tags with placeholder tags so that strings with different HTML tags but in the same place will match. These placeholders are:
+
+* `+<g id="n">xxx</g>+`, for HTML tags that have both an opening and closing tag. E.g. [`+I am
+          <a href="foobar.html">Steve</a>+`] would be converted to [`+I am <g
+          id="1">Steve</g>+`]. [`+We are <a
+          href="foobar.html">Steve</a> and <a
+          href="foobar2.html">Jack</a>+`] would be converted to [`+We are <g id="1">Steve</g> and <g
+          id="2">Jack</g>+`].
+* `+<x id="n"/>+`, for HTML tags that don't have a closing tag. E.g. [`+I am Steve <br/> and this
+          <br/> is Jack+`] would be converted to [`+I am
+          Steve <x id="1"/> and this <x id="2"/> is
+          Jack+`].
+* <v id="n"></v>, to mark variables, i.e. HTML tags that include the data-swete-translate attribute. See link:#inline-variables[???] for more information about data-swete-translate and inline variables. The default website profile includes a number of text filters wrap replace numbers and dates in these inline variable tags.
+
+Due to these transformations, it is safest to only work with strings that have already been captured by SWeTE using the string capture step (See link:#capturing-strings-sec[Capturing Strings] for more information on capturing strings), and exported using the export CSV step. If you have a raw CSV file with strings that you want to import from a database or external corpus you should build a web page with this CSV file and capture the page using SWeTE. (In future versions there may be an import path without having to do this, but for now, it is the safest method of importing raw strings).
+
+Steps to import a set of translations from a CSV file.
+
+[arabic]
+. Click on the "Strings" tab on the top menu bar.
++
+image:images/ch04-top-menubar.png[image]
+. Click on the "Import Translations" button on the left menu bar.
++
+image:images/ch04-import-translations-button.png[image]
+. This will show a form to upload your CSV file as follows:
++
+image:images/ch04-import-form.png[image]
+. Use the "File" field to select the CSV file that contains your translations.
++
+____
+*Note*
+
+It should be in the same format as SWeTE exports. The top row must contain the column names exactly as they are included in the SWeTE CSV export option. See link:#exporting-strings-as-csv[title_title] for details about the required columns. You can view a sample exported CSV file in the docs/samples/translation_miss_log_results_2013_07_05_00_11_28.csv file with the SWeTE distribution. You can also view it https://raw.github.com/shannah/swete/master/docs/samples/translation_miss_log_results_2013_07_05_00_11_28.csv[here] on github.
+____
+. Select "CSV" in the "File Format" field.
+. If you want to target a specific translation memory into which to insert all translations, then select that translation memory in the "Target Translation Memory" field. If you do not select a translation memory, it will use the translation_memory_uuid column of the CSV file to identify the translation memory to which the string belongs, and try to use it. If the system doesn't have a matching translation memory, then it will fail to import that string.
+. Click Save when you are done.
+
+=== Importing Translations from an XLIFF File

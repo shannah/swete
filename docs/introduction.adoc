@@ -1,0 +1,410 @@
+== Introduction
+
+== What is SWeTE Server?
+
+SWeTE stands for Simple Website Translation Engine. It is a reverse HTTP proxy that provides internationalization of the content that it serves. It allows you to easily convert your web site (or web application) from one language into another. It also provides a full administration console with forms to translate your site content. In addition it provides some powerful developer tools to allow you to manipulate the look and feel of your site in locale-specific ways using CSS, HTML, and Javascript.
+
+== How it works
+
+SWeTE would generally be set up on a web server and configured to proxy content from another site. For example, if we wanted to translate the site xataface.com into French, we might set up SWeTE in the directory xataface.com/fr/. Then, if we point our web browser to http://xataface.com/fr/index.html it would serve the page located at http://xataface.com/index.html except that it would be translated into French. The translation itself is performed by parsing the HTML of the requested page into individual strings, then checking a translation memory for translations of those strings.
+
+== Requirements
+
+[arabic]
+. PHP 5.2 or higher
+. MySQL 5.0 or higher
+. PHP DOM extension.
+. PHP MBString extension.
+. Apache Web Server with mod_rewrite installed and enabled.
+
+== Features
+
+SWeTE combines two simple, yet powerful, concepts to great effect: HTTP reverse proxying, and Translation Memories. These two concepts extrapolate into enormous feature potential as a platform, but they all boil down to a few key areas:
+
+[arabic]
+. Content translation
+. Content versioning
+. Content localization
+. Content Hosting & Proxing
+
+=== Translation Features
+
+Translation features are those features that facilitate the actual translation of site content into other languages. Some of these features include:
+
+* _Translation memories_ - All strings are saved inside a translation memory. The translation memory is used to dictate how strings that are encountered by the proxy should be translated.
+* _Translation forms_ - SWeTE provides powerful, built-in translation forms for translating the contents of webpages and translation memories.
+
+* _Importing and Exporting_ - Translation memories can be exported to and from many popular formats including XLIFF, CSV, and XML. Similarly they can be imported from these formats.
+* _String Capturing_ - SWeTE allows you to capture the content that requires translation by simply enabling content capturing, then crawling through the site. With content capturing enabled, all strings encountered as you navigate the site, are saved so that you can translate them later. Once they are translated, the next time you visit the same pages, you will see the translated content.
+
+=== Versioning Features
+
+Translation memories store strings down to the sentence/paragraph level. However you may want to be able to save versions of your content at the block or page level. SWeTE provides a number of features to help you version your content in this way. Some of these features include:
+
+* _Webpage Versioning_ - Keep versions of your static webpages locked so that they will not be affected by changes to the source content. When you are happy with the translation, then you can make a new version the "active" version.
+* _Block-level Versioning_ - On dynamic sites it may not be possible to lock an entire page contents. In such cases, SWeTE allows you to mark certain sections of the page to be treated as "blocks" so that they can be locked, saved, and versioned independently of the rest of the page.
+
+=== Localization Features
+
+Preparing a website to serve different language markets involves more than just translation. It may require changes to layout, flow-control, dates, times, photos, and currencies. SWeTE, as a development platform, enables you to customize the output of your translated site in any way you see fit. Some features in this area include:
+
+* _Custom CSS_ - SWeTE adds CSS classes to the `+<body>+` tag of all output which allows stylesheets to be targeted directly to a specific language. If you want different color schemes or images for your French site than you have in your English site, you can do this easily using CSS.
+* _Custom Javascript_- The CSS classes added to the `+<body>+` can also be used by Javascript to perform different functionality for translated sites than for the source site. This leads to infinite possiblities for divergence between different translations of your site.
+* _Pre-processing and Post-processing_ - SWeTE allows you to also write PHP extensions that manipulate the HTML and DOM structure of pages before they are rendered. This gives you an opportunity to make changes to the source content on the fly using pattern matching and your own business logic.
+* _Strings with Variables_ - SWeTE allows you to mark certain parts of strings as "variables" so that multiple strings with the same format can be translated as a single string. For example, if you have a shopping cart that shows the string "Welcome to the cart, Steve" when Steve logs in, and "Welcome to the cart, Ivan" when Ivan logs in, then you can wrap the name in a special tag to tell SWeTE to treat these as the same strings. This can mean the difference between translating thousands of similar strings and having to only translate one string.
+* _Text filters_ - SWeTE allows you to specify regular expression pattern replacements to your content to help prepare it for SWeTE to process it. This can be used for such things as finding parts of strings that should be marked as variables, or wrapping dates and numbers with variables. SWeTE comes with some default filters that wrap dates and numbers into variables.
+* _Date and Time Formatting_ - With appropriate markup, SWeTE can also convert dates from one format into another that is more acceptable to the target locale.
+
+=== Hosting and Proxying Features
+
+SWeTE Server includes a built-in reverse proxy that allows you to easily host your localized website anywhere on the internet. You can set up the proxy to run on the same host as your main website, or on a separate server. You can choose to run your proxy site on a different domain (e.g. fr.yourdomain.com), or in a subdirectory of your main site (e.g. yourdomain.com/fr/).
+
+== Installation
+
+SWeTE server is a typical LAMP (Linux-Apache-PHP-MySQL) application. If you already have a server that meets the requirements (link:#requirements[Requirements]), you can just proceed with the following installation instructions. If you need help to set up a compatible server, see xxx.
+
+=== Downloading the Application
+
+Before you can install SWeTE, you need to download the application. The two most common distribution methods are:
+
+* The ZIP/Tarball downloadable archive.
+* The Subversion source-code repository. This is handy for keeping up-to-date with patches and security updates.
+
+==== Method 1: Downloading the ZIP/Tarball Distribution
+
+The most common format for obtaining SWeTE server is the ZIP and Tarball distributions. You can download the entire application as either a ZIP file or a Tar.gz file, then extract the contents somewhere on your webserver.
+
+You can download the latest version from http://swete.weblite.ca/download. If you decide to download the ZIP distribution, you will end up with a file named `+swete-server-x.y.z.zip+` (where x.y.z are the version number). If you download the Tar.Gzip distribution, the file will be called `+swete-server-x.y.z.tar.gz+`.
+
+Once you have downloaded this file, you will need to extract it and copy it to your web server (the order of these steps may be different depending on what kind of access you have on your web server). Upon completion you should have a `+swete-server+` directory located somewhere on your server in a web-accessible directory. For the remainder of these instructions, we'll assume that you have installed it at `+/var/www/swete-server+`.
+
+==== Method 2: Checking out from Subversion Repository
+
+Web Lite Solutions also hosts subversion repositories for each version-branch of SWeTE. The benefit of installing SWeTE form the subversion repository is that it allows you to, more easily, stay up-to-date with bug fixes and patches. There is a repository branch for each major release of SWeTE. These branches will only include backward compatible bug-fixes so you can be sure that updating to the latest version of your chosen branch will not cause your application to break.
+
+You can view the available branches at http://weblite.ca/svn/swete-swerver/branches. If you want to stay up-to-date with the latest in development you might also want to check out the source directly from the trunk. The following are some example URLs to the various repositories:
+
+* http://weblite.ca/svn/swete-swerver/trunk/ - The trunk and location of the bleeding edge of SWeTE development.
+* http://weblite.ca/svn/swete-swerver/branches/0.1.x - The 0.1.x branch. This contains a snapshot of the 0.1 release of SWeTE and will be maintained to include critical bug fixes in the future.
+
+===== Requirements for Working with Subversion Repository
+
+When working off of the subversion repository, you need to have a few tools installed on your web server. This is because the source code, as it is in the repository, is incomplete, and must be "built" to include some other necessary components like Xataface and various modules. The SWeTE root directory contains a build.xml file, which is an ANT build script. This script contains all of the instructions necessary to update all of the components in SWeTE to a consistent version. Therefore, in order to build SWeTE from source, you will need at least the following tools installed on your web server.
+
+* Subversion. http://subversion.tigris.org/
+* ANT. http://ant.apache.org/
+* Your web server will need to have provide SSH access so that you can run the svn and ant applications from the command-line.
+
+===== Checking Out The Source Initially
+
+[arabic]
+. SSH into your web server and navigate to the parent directory of where you would like to install SWeTE. E.g. if you want SWeTE to be installed at /var/www/swete-server, you would navigate to the /var/www directory:
++
+....
+$ cd /var/www
+....
+. Check out the branch from the SVN repository. You will need to decide which branch you want to check out. If you are working with a production application you should check out the latest stable branch. If you are wanted to work with the latest developments, then you can check out the trunk. The following example shows us checking out the 0.2.x branch:
++
+....
+$ svn co http://weblite.ca/svn/swete-swerver/branches/0.2.x swete-server
+....
++
+What this command says is that we're checking out the repository located at http://weblite.ca/svn/swete-swerver/branches/0.2.x, into a new directory named `+swete-server+` inside the current directory. After hitting enter, you should see a long list of files being downloaded:
++
+....
+A    swete-server/testdb.sql
+A    swete-server/.htaccess
+A    swete-server/README.txt
+A    swete-server/swete-admin
+A    swete-server/swete-admin/include
+A    swete-server/swete-admin/include/functions.inc.php
+A    swete-server/swete-admin/livecache
+A    swete-server/swete-admin/livecache/.htaccess
+A    swete-server/swete-admin/conf
+A    swete-server/swete-admin/conf/Installer.php
+A    swete-server/swete-admin/conf/ApplicationDelegate.php
+A    swete-server/swete-admin/conf/tables
+A    swete-server/swete-admin/conf/tables/xf_tm_translation_memories
+A    swete-server/swete-admin/conf/tables/xf_tm_translation_memories/xf_tm_translation_memories.php
+A    swete-server/swete-admin/changes.txt
+A    swete-server/swete-admin/doc.prepare.php
+A    swete-server/swete-admin/css
+A    swete-server/swete-admin/css/swete
+
+etc ...
+....
++
+If you don't see a stream of file paths like this, you should check to make sure that you don't have a typo in your command. One (possibly) confusing thing is that in the repository path it is "`+swete-swerver+`" and not "`+swete-server+`". This was a typo that was introduced early on in development, and it has just been retained through the versions.
+. Navigate to the swete-server directory that was just created, and run the ant build script. This will install all of the dependencies.
++
+....
+$ cd swete-server
+$ ant
+....
++
+This should result in a stream of feedback to the console as all of the dependent projects are checked out.
+
+===== Updating Source Code
+
+Once the source code has been installed, you should periodically rerun the ant build script to ensure that you obtain all of the latest bug fixes and patches. You can update the source at any time by:
+
+[arabic]
+. Navigate to the `+swete-server+` directory.
++
+....
+$ cd /var/www/swete-server
+....
+. Run the ant script:
++
+....
+$ ant
+....
++
+This will update the `+swete-server+` source and all of its dependencies to the latest consistent version within your current branch.
+
+=== Configuring SWeTE for the First Time
+
+Once you have downloaded the source code for SWeTE, you will need to set up the database, and edit some of the configuration files in SWeTE to customize it for your environment.
+
+==== Setting up the Cache Directories
+
+SWeTE includes two cache directories, both of which need to be made writable by the web server. These directories are:
+
+* `+/var/www/swete-server/templates_c+` . This holds the compiled Smarty templates for the application.
+* `+/var/www/swete-server/livecache+` . This stores the cached web content for the proxy.
+
+You need to make sure that both of these directories exist, and that they are writable by the web server. You can make them writable using the chmod command:
+
+....
+$ chmod 1777 templates_c livecache
+....
+
+==== Setting up the Database
+
+SWeTE uses a MySQL database to store all of its settings and translations. Before firing up SWeTE, you need to:
+
+[arabic]
+. Create a database for SWeTE on your MySQL server.
+. Create a MySQL user for SWeTE to connect to your new database.
+. Rename the `+swete-admin/conf.db.ini.sample+` file to be `+swete-admin/conf.db.ini+`, and modify it with the connection settings for your database.
+
+===== Creating the Database
+
+Depending on the tool that you are using to manage your MySQL database, the steps to create a new database will vary. If you are working directly from the command-line, you would use the http://dev.mysql.com/doc/refman/5.0/en/create-database.html[CREATE DATABASE] command. Another popular application for managing SQL databases is http://www.phpmyadmin.net/[PHPMyAdmin]. Many hosting providers include their own tool for creating databases. You should refer to your hosting provider the steps to do this if you are unsure.
+
+===== Creating the MySQL User
+
+It is best practice to create a different MySQL user for each database in MySQL. This is to minimize the damage caused by a security breach in any one database. Just as steps vary for creating a database, the steps will also vary for creating users depending on which tool you are using. If you are working directly on the command line, you would use the http://dev.mysql.com/doc/refman/5.1/en/create-user.html[CREATE USER] command, and then use the http://dev.mysql.com/doc/refman/5.1/en/grant.html[GRANT] command to grant them access to your database.
+
+If you are using PHPMyAdmin, the steps will be different. If you are using a tool provided by your hosting provider, the steps will be different still.
+
+You will need to flush permissions after adding the user or your new user won't be recognized. A full discussion of adding users is contained in the http://dev.mysql.com/doc/refman/5.1/en/adding-users.html[MySQL manual].
+
+===== Setting up the conf.db.ini file
+
+Once you have set up your user account and your database, you just need to make a copy of the `+conf.db.ini.sample+` file (in the `+swete-admin+` directory) to be `+conf.db.ini+` and change some of the connection settings. The default content will be:
+
+....
+[_database]
+    host=localhost
+    name="database name here"
+    user="database username here"
+    password="password"
+....
+
+Just change the values on the right hand side of the "`+=+`" sign to reflect the values that you set up for your database and user.
+
+==== Running the Install
+
+At this point you have an empty database with nothing in it. To populate it with the tables and views that are required for SWeTE to work, you just need to point your web browser to the swete-admin/index.php file (i.e. http://yourdomain.com/swete-server/swete-admin/index.php), and let it run. SWeTE will automatically update the database to the latest version whenever it runs. You should receive a message saying that "The database has been successfully updated to version XXXX". If, instead you receive an error or a blank white screen, then you will need to do some troubleshooting to find out the problem. The first step in troubleshooting is always to check the error log for clues.
+
+If everything went as planned, then SWeTE should be installed now and ready to go.
+
+The next step will be to log in and create a new website in the administration section of SWeTE.
+
+== Setting Up Your First Website
+
+Once you have SWeTE installed, you can go ahead and set up a proxy website. As an example, let's set up Wikipedia as our first translated website. We'll create a French version of Wikipedia using SWeTE. The steps are as follows:
+
+[arabic]
+. Log into swete using the default admin account. By default the admin account username is "admin" and password is "password".
+. Change the admin password to something else for security reasons:
+[loweralpha]
+.. Select admin > "Change Password" (in the upper right menu).
++
+The user menu in the top right. Includes option to change your password.
++
+image:images/ch01.usermenu.changepass.png[image]
+.. Fill in the resulting form with your new password.
++
+The Change Password Form
++
+image:images/ch01.changepass.png[image]
+. Click the Dashboard link on the top-left menu. This should take you to the dashboard as shown below:
++
+The dashboard
++
+image:images/ch01.dashboard1.png[image]
+. Click the Create New Website button in the webpages section.
++
+The New Website Form
++
+image:images/ch01.newsiteform.png[image]
+. Fill in the New Site form as follows:
+[lowerroman]
+.. Enter "Wikipedia French" in the Site Name field.
+.. Enter "http://en.wikipedia.org/" in the Website URL field.
+.. Select "English" in the "Source Language" field.
+.. Select "French" in the "Target Language" field.
+.. Leave the Publish Host field as its default value.
+.. Append "wikipedia-fr/" to the Publish basepath field so that it is "/path/to/swete-server/wikipedia-fr/"
+.. At this point the form should appear as shown below:
++
+New Site Form, filled in with details for our first site.
++
+image:images/ch01.newsiteform-filled.png[image]
++
+Click the Save button at the bottom of the form.
+.. After saving, you should see a message that says "Record Successfully Saved", and you will be returned to the Edit form for that site you just created.
+
+=== Testing Your Website
+
+Now that you've created a website in the administration console, it is time to test it out to make sure that it works. Click on the "Dashboard" link in the top left, to return to the Dashboard. You should now see your new site listed in the Websites block as shown below:
+
+The Websites section of the dashboard after adding Wikipedia as a proxy site.
+
+image:images/ch01.dashboard-websites.png[image]
+
+Click on the "French" link to go to our proxy site's URL: http://yourdomain.com/swete-server/wikipedia-fr/. You should see the wikipedia homepage here exactly as it appears on the actual Wikipedia site (i.e. http://en.wikipedia.org/).
+
+Wikipedia as viewed through the proxy url.
+
+image:images/ch01.wikipedia-proxy.png[image]
+
+If you do not see this, then you may have some problems with either your server settings or your site settings. Some common errors include:
+
+* _A ``404 Not Found'' Error_. If you see a 404 error, then your server probably doesn't have mod_rewrite installed or it is not configured to work with your website.
+* _A blank white page_. Likely there is a server error. You should check your error log to see what the error is before proceeding.
+
+If you see the Wikipedia home page, you are ready to proceed to the next step: _Translating Website Content_
+
+=== Translating Website Content
+
+At this point you may be underwhelmed by the results as you now just have a proxy version of Wikipedia working at your own local address. You may be wondering why none of the content has been translated into French. SWeTE doesn't translate website content automatically. You need to first capture the strings in the website and then either have the strings translated by a professional translator, translate them yourself, or submit them to Google to be translated by a machine. Once the strings have been translated, then SWeTE will be able to apply the translations to webpages that it displays.
+
+In any case, the first step you must take is to capture the strings that you would like to translate.
+
+==== Capturing Strings
+
+In order to capture the strings that you would like to translate, first return to the dashboard. In the Webpages block, to the right of the "Wikipedia French" listing, you should see an "Actions" button with the following icon:
+
+image:images/ch01.actions-button-icon.png[image]
+
+Click on this icon to reveal a contextual menu of actions you can perform on this site:
+
+Actions contextual menu for the Wikipedia French site.
+
+image:images/ch01.site-actions-menu.png[image]
+
+Click on the "Capture Strings" option in this menu.
+
+This should take you to a page with a toolbar at the top, and the Wikipedia homepage at the bottom. The toolbar contains an "Exit" link, and a string that says "String capturing is currently turned off". Click the "Turn On" link to the right to turn it on.
+
+Capturing Strings for Wikipedia
+
+image:images/ch01.capture-strings-1.png[image,scaledwidth=50.0%]
+
+Remember to turn string capturing back off after you have finished capturing all of the strings. Capturing strings is an expensive operation as it requires quite a bit of extra processing by SWeTE so you should keep it turned off unless you are in the process of capturing strings.
+
+Once string capturing is turned on, you can start navigating the site. Each time you load a page, the strings on it will be parsed and imported into SWeTE for translation. For now, let's just load the homepage. Because string capturing was disabled when we first loaded it, we'll need to reload the page. You can do this by clicking "Refresh" in your web browser to reload the page.
+
+After you have finished refreshing the homepage, turn string capturing back off by clicking the "Turn off" link on the top toolbar. Then click "Exit" to return to the details page for our site in the administration console.
+
+===== Reviewing the Captured Strings
+
+You can view the strings that have been captured in the system at any time by clicking on the "Strings" link in the top left menu bar. This will show you all of the strings that have been captured by the system.
+
+Strings list
+
+image:images/ch01.strings-list.png[image]
+
+You can search this list by keyword, webpage URL, website, whether it has been translated, or by many other criteria. You can also select one or more strings from this list to translate, either manually or automatically using the https://developers.google.com/translate/[Google Translation API].
+
+==== Translating Strings Manually
+
+The process for manually translating strings that have been captured is as follows:
+
+[arabic]
+. Go to the "Strings" section by clicking the "Strings" link in the top left menu bar.
+. Filter the set of strings as necessary using searching and sorting to find the strings that you want to translate.
+. Check the box beside each string that you want to translate. You can check all of the currently shown strings by checking the box in the table header. Checking strings on the strings list to prepare to translate them.
+. Click the "Translate" button on the top menu bar. This will bring up a translation form that allows you to translate all of the strings that were selected. Translation Form
+. Fill in the translation form. Translations are automatically saved as you tab out of the field.
+
+[[google-translation-api]]
+==== Translating Strings with the Google Translation API
+
+SWeTE allows you to use the Google Translation API to translate strings as well. In order to activate this functionality, you must have a Google API Key. For information on obtaining a key, check out the https://developers.google.com/translate/v2/faq#access[Google Translation API FAQ]. If you have a key, you can configure SWeTE to use it by doing the following:
+
+[arabic]
+. Navigate to the Edit Site form for the website you want to set up. (i.e. Go to the dashboard, click the "Actions" button next to the website in the "Websites" block, and select "Edit").
++
+Edit option of the actions menu for a website.
++
+image:images/ch01.dashboard-website-edit.png[image]
+. Expand the "More Details" section at the bottom of the form.
++
+More options expandable heading
++
+image:images/ch01.site-edit-more-details.png[image]
+. In the "Google API Key" field, enter your Google API key.
++
+More details section expanded.
++
+image:images/ch01.site-edit-more-details-expanded.png[image]
+. Click the "Save" button at the bottom of the form.
+
+Once you have entered your key in the site profile, you can return to the "Strings" section of the application and begin to translate the strings using the Google Translation API. To continue our example site from earlier (Wikipedia), we'll translate the strings in the first page of wikipedia as follows:
+
+[arabic]
+. Click the "Strings" link on the top-left toolbar.
+. Check the box beside a few strings that we want to translate.
++
+Checking strings on the strings list to prepare to translate them.
++
+image:images/ch01.check-strings.png[image]
+. Click the "Google Translate" button on the top button bar. The will process for a moment and then pop up with a message saying that the translations completed. If there was a problem (e.g. invalid API key), it will let you know.
++
+Google translate progress bar.
++
+image:images/ch01.google-translate-progress.png[image]
+
+==== Checking The Translations
+
+After performing some translations, you should be able to view your proxy (translated) site again, but this time you should see the translations incorporated into the page. You may recall the steps to view your site from earlier:
+
+[arabic]
+. Click on "Dashboard" in the upper left menu to go to the dashboard. Then click the "French" link next to the Wikipedia site in the "Webpages" block.The Websites section of the dashboard after adding Wikipedia as a proxy site.
+. You may need to refresh your browser to see the changes as your browser may have the page cached from before it was translated.
+. You should see the Wikipedia main page translated into French using your translations.
++
+Wikipedia after performing a few translations
++
+image:images/ch01.wikipedia-semi-translated.png[image]
+
+== Summary
+
+This chapter introduced SWeTE Server as a reverse-proxy that provides seamless content translation and localization. SWeTE will run on a fairly typical LAMP server stack (Linux, Apache, PHP, MySQL). It can be downloaded either as an archived, all-in-one distribution or via the subversion repository. The Subversion repository is recommended for keeping up-to-date with patches and bug fixes.
+
+We listed many of the features of SWeTE in link:#features[Features]. The core functionality centers around the translation and serving of web content. It includes an advanced translation memory that can be used to import and export to many formats, including XLIFF, TMX, CSV, and XML.
+
+The chapter also includes a step-by-step tutorial on:
+
+[arabic]
+. Downloading and Installing SWeTE
+. Setting up a proxy website for Wikipedia to translate it from English to French.
+. Capturing strings from the website that need to be translated.
+. Translating strings manually.
+. Translating strings using the Google translation API.
+
+At this point we have only scratched the surface. The remaining chapters will go through the features of SWeTE in greater depth. The initial release (0.2) is also meant to be a bare-bones starting point for development. Development is active and ongoing, and many more features are planned.
