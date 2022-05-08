@@ -2,7 +2,7 @@
 ;
 ;debug=1
 ;debug_sql=1
-__include__="conf.db.ini"
+__include__="conf.db.ini.php"
 multilingual_content=1
 enable_static=0
 enable_jobs=0
