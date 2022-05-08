@@ -14,7 +14,7 @@
     ],
     "minimum-stability": "dev",
     "scripts": {
-      "post-package-install": [
+      "post-create-project-cmd": [
           "cd bin && bash setup.sh"
       ]
     }
