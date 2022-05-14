@@ -18,6 +18,7 @@
 //require <jquery.packed.js>
 //require <swete/Website/toggleCaptureStrings.js>
 //require <xataface/Comet.js>
+//require <xatajax.core.js>
 (function(){
 	var $ = jQuery;
 	var Website = XataJax.load('swete.Website');

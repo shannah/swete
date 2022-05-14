@@ -17,6 +17,7 @@
  */
 //require <jquery.packed.js>
 //require-css <swete/BackgroundProcess.css>
+//require <xatajax.core.js>
 (function(){
 		
 	var $ = jQuery;

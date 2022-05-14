@@ -17,6 +17,7 @@
  */
 //require <jquery.packed.js>
 //require <swete/PageApprover.js>
+//require <xatajax.core.js>
 (function(){
 	var $ = jQuery;
 	var getSelectedIds = XataJax.load('XataJax.actions.getSelectedIds');

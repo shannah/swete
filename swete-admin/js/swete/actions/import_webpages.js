@@ -21,7 +21,7 @@
 //require <swete/PageImporter.js>
 //require-css <swete/actions/import_webpages.css>
 
-
+//require <xatajax.core.js>
 
 
 (function(){

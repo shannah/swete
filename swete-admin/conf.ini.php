@@ -23,6 +23,7 @@ title="SWeTE Server"
 	
 	
 [_modules]
+	modules_XataJax=modules/XataJax/XataJax.php
 	modules_ckeditor=modules/ckeditor/ckeditor.php
 	modules_tm=modules/tm/tm.php
 	;modules_testrunner=modules/testrunner/testrunner.php

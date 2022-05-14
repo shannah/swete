@@ -19,7 +19,7 @@
 //require <jquery-ui.min.js>
 //require-css <jquery-ui/jquery-ui.css>
 //require <swete/JobCompiler.js>
-
+//require <xatajax.core.js>
 (function(){
 
 	var $ = jQuery;

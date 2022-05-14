@@ -17,6 +17,8 @@
  */
 //require <swete/Website.js>
 //require <xataface/IO.js>
+//require <xatajax.core.js>
+
 (function(){
 	var $ = jQuery;
 	var Website = XataJax.load('swete.Website');

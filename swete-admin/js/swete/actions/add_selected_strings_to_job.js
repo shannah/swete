@@ -18,7 +18,7 @@
 //require <jquery.packed.js>
 //require <jquery-ui.min.js>
 //require-css <jquery-ui/jquery-ui.css>
-
+//require <xatajax.core.js>
 (function(){
 
 	var $ = jQuery;
