@@ -10,3 +10,5 @@ swete-admin/sites
 .lamprunner
 .lamprunner.data
 /swete-admin/app
+/swete-admin/vendor
+/vendor

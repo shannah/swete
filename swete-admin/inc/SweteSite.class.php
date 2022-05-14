@@ -50,6 +50,7 @@ class SweteSite {
 	public static function loadSiteByUrl($url){
 
 		$parts = parse_url($url);
+		$port = !empty($parts['port']) ? sprintf(':%s', $parts['port']) : '';
 		$res = SweteDb::q("
 			select
 			website_id
@@ -65,6 +66,8 @@ class SweteSite {
 			and
 			(
 				`host`='".addslashes($parts['host'])."'
+				or
+				`host`='".addslashes($parts['host'].$port)."'
 				or
 				`host` is null
 				or

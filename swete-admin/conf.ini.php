@@ -1,4 +1,4 @@
-;<?php exit;
+;<?php exit;?>
 ;
 ;debug=1
 ;debug_sql=1
@@ -23,20 +23,18 @@ title="SWeTE Server"
 	
 	
 [_modules]
-    modules_g2=modules/g2/g2.php
 	modules_ckeditor=modules/ckeditor/ckeditor.php
 	modules_tm=modules/tm/tm.php
 	;modules_testrunner=modules/testrunner/testrunner.php
-	modules_g2=modules/g2/g2.php
-        modules_uitk=modules/uitk/uitk.php
+    modules_uitk=modules/uitk/uitk.php
 	;modules_scaler=modules/scaler/scaler.php
-        modules_excel=modules/excel/excel.php
+    modules_excel=modules/excel/excel.php
 	
 [_allowed_tables]
 	translation_memories=xf_tm_translation_memories
 	
 [Dataface_JavascriptTool]
-	debug=1
+	debug=0
 	
 [_auth]
      users_table=users
@@ -57,4 +55,3 @@ title="SWeTE Server"
     
 [_prefs]
     disable_master_detail=1
-	
