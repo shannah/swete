@@ -61,3 +61,5 @@ body.loading {
 body.loading .modal {
     display: block;
 }
+
+#total-words-found {float:right;width: 200px; clear:right; text-align:right; margin-top:10px}

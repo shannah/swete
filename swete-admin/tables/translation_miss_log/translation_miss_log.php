@@ -53,7 +53,6 @@ class tables_translation_miss_log {
 		$res = df_q($sql);
 		$row = xf_db_fetch_row($res);
 		@xf_db_free_result($res);
-		$app->addHeadContent('<style type="text/css">#total-words-found {float:right;width: 200px;}</style>');
 		echo '<div id="total-words-found">Total Words: '.$row[0].'</div>';
 		Dataface_JavascriptTool::getInstance()->import('swete/actions/batch_google_translate.js');
 	}
