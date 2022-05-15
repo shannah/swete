@@ -39,7 +39,6 @@ class actions_swete_export_found_strings_as_xliff
 		$numProcessed = 0;
 		$writer = NULL;
 		$outFile = NULL;
-
 		//do only if there are results to export
 		if($numRecords > 0)
 		{
@@ -74,7 +73,11 @@ class actions_swete_export_found_strings_as_xliff
 				if ( !$target ){
 				    $target = $source;
 				}
-				$writer->setFile($originalFile);
+				if ($originalFile) {
+					$writer->setFile($originalFile);
+				} else {
+					$writer->setFile('TranslationMissLog');
+				}
 				$writer->addTranslation($source, $target);
 				$numProcessed++;
 
