@@ -1,0 +1,13 @@
+.git
+.github
+.gitmodules
+.DS_Store
+.lamprunner
+.lamprunner.data
+docs/
+*.md
+swete-admin/templates_c/
+swete-admin/livecache/
+swete-admin/snapshots/
+swete-admin/conf.db.ini.php
+swete-admin/conf.db.ini
