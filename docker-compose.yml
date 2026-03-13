@@ -14,15 +14,12 @@ services:
     restart: unless-stopped
 
   db:
-    image: mysql:8.0
-    command: >
-      --default-authentication-plugin=mysql_native_password
-      --sql-mode=""
+    image: mariadb:10.5
     environment:
-      MYSQL_DATABASE: swete
-      MYSQL_USER: swete
-      MYSQL_PASSWORD: swete
-      MYSQL_ROOT_PASSWORD: rootpassword
+      MARIADB_DATABASE: swete
+      MARIADB_USER: swete
+      MARIADB_PASSWORD: swete
+      MARIADB_ROOT_PASSWORD: rootpassword
     volumes:
       - db_data:/var/lib/mysql
     healthcheck:
