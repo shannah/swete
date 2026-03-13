@@ -2,7 +2,7 @@ services:
   app:
     build: .
     ports:
-      - "8080:80"
+      - "${SWETE_PORT:-8080}:80"
     environment:
       DB_HOST: db
       DB_NAME: swete
