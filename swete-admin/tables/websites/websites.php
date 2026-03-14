@@ -146,6 +146,7 @@ class tables_websites {
 
   function afterSave(Dataface_Record $record) {
       if (isset($record->pouch['current_snapshot_id'])) {
+          require_once dirname(__FILE__) . '/../../inc/CloudRunCompat.php';
           $snapshotId = intval($record->pouch['current_snapshot_id']);
           $snapshotsDir = SWETE_DATA_ROOT . DIRECTORY_SEPARATOR . 'snapshots';
           if (!file_exists($snapshotsDir)) {
@@ -161,7 +162,7 @@ class tables_websites {
               }
           }
           $snapshotFile = $snapshotDir.DIRECTORY_SEPARATOR."index.txt";
-          file_put_contents($snapshotFile, "".$snapshotId, LOCK_EX);
+          CloudRunCompat::filePutContents($snapshotFile, "".$snapshotId);
 
       }
   }

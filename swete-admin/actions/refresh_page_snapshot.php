@@ -58,10 +58,11 @@ class actions_refresh_page_snapshot {
 	
 
     public function handleImpl() {
-    
-        
-    
+
+
+
         import('inc/SweteSite.class.php');
+        require_once dirname(__FILE__) . '/../inc/CloudRunCompat.php';
         $page = trim($_POST['page']);
 
         if (!$page) {
@@ -72,14 +73,13 @@ class actions_refresh_page_snapshot {
         if (!$snapshotId) {
             throw new Exception("No snapshot specified");
         }
-        $maxSleep = 15;
-        while  (!$this->mutex('refresh_page_snapshot'.basename($snapshotId)) ){
-			sleep(2);
-			$maxSleep -= 2;
-			if ($maxSleep < 0) {
-			    throw new Exception("Timed out waiting for the mutex.  There must be another client performing an update.  Try again later.");
-			}
-		}
+        $mutexName = 'refresh_page_snapshot' . basename($snapshotId);
+        $this->mutex = CloudRunCompat::acquireMutex($mutexName, 15);
+        if (!$this->mutex) {
+            throw new Exception("Timed out waiting for the mutex.  There must be another client performing an update.  Try again later.");
+        }
+        $this->mutexName = $mutexName;
+        register_shutdown_function(array($this, 'clear_mutex'));
 
         $snapshot = df_get_record('snapshots', array('snapshot_id'=>'='.$snapshotId));
         if (!$snapshot) {
@@ -253,7 +253,7 @@ class actions_refresh_page_snapshot {
 				}
             }
 			
-            if (!file_put_contents($path, $contents, LOCK_EX)) {
+            if (!CloudRunCompat::filePutContents($path, $contents)) {
                 throw new Exception("Failed to write contents from $proxyUrl to disk");
             }
             
@@ -316,63 +316,17 @@ class actions_refresh_page_snapshot {
 
     }
     
-    static function getMutexType(){
-		$app = Dataface_Application::getInstance();
-		$mutexType = 'mkdir';
-		
-		if ( @$app->_conf['mutex_type']){
-			$mutexType = $conf['mutex_type'];
-		}
-		return $mutexType;
-	}
-    
-    
     private $mutex;
-    function mutex($name){
+    private $mutexName;
 
-		$dir = is_writable(sys_get_temp_dir()) ? sys_get_temp_dir() : 'templates_c';
-		$this->mutex = $dir.'/'.basename($name).'.mutex';
-		error_log("Acquiring mutex" . $this->mutex);
-		$mt = self::getMutexType();
-		if ( $mt === 'flock' ){
-			$this->mutex = fopen($path, 'w');
-			if ( flock($this->mutex, LOCK_EX | LOCK_NB) ){
-				register_shutdown_function(array($this,'clear_mutex'));
-				return true;
-			} else {
-				error_log("Failed to acquire mutex");
-				return false;
-			}
-		} else {
-			if ( @mkdir($this->mutex, 0777) ){
-				register_shutdown_function(array($this,'clear_mutex'));
-				return true;
-			} else {
-				if (!file_exists($this->mutex)) {
-					// If we failed to create the mutex, but the file
-					// actually doesn't exist, then maybe we just don't have
-					// permission to create that directory.
-
-				}
-				error_log("Failed to acquire mutex using mkdir");
-				return false;
-			}
-		}
-
-	}
-	
 	/**
 	 * Clears the most recently acquired mutex.
 	 */
 	function clear_mutex(){
-
-		if ( $this->mutex ){
-			if ( self::getMutexType() == 'flock' ){
-				fclose($this->mutex);
-			} else {
-				@rmdir($this->mutex);
-			}
+		if ($this->mutex && $this->mutexName) {
+			CloudRunCompat::releaseMutex($this->mutexName, $this->mutex);
 			$this->mutex = null;
+			$this->mutexName = null;
 		}
 	}
 	
